@@ -1,15 +1,21 @@
-"""!
-This is the user interface.
-"""
-
-
-from tkinter import Tk, Label, Button, Entry, IntVar, END, W, E
+from multiprocessing import Queue
+from tkinter import Tk, Label, Button, Entry, IntVar, END, W, E, StringVar
 
 class GrowSpaceGUI:
 
-    def __init__(self, master):
+    queue:Queue = None
+    master = None
+
+    def __init__(self, master, queue, endCommand):
+        self.queue = queue
         self.master = master
         master.title("Grow Space")
+
+        # Add features to the GUI
+        self.stop_button = Button(master, text="EXIT", command=endCommand)
+        self.soil_1_text = StringVar()
+        self.soil_1_text.set("No data yet")
+        self.soil_1_label = Label(master, textvariable=self.soil_1_text)
 
         self.total = 0
         self.entered_number = 0
@@ -30,12 +36,13 @@ class GrowSpaceGUI:
         # LAYOUT
         self.label.grid(row=0, column=0, sticky=W)
         self.total_label.grid(row=0, column=1, columnspan=2, sticky=E)
-
         self.entry.grid(row=1, column=0, columnspan=3, sticky=W+E)
-
         self.add_button.grid(row=2, column=0)
         self.subtract_button.grid(row=2, column=1)
         self.reset_button.grid(row=2, column=2, sticky=W+E)
+        self.stop_button.grid(row=3, column=1, columnspan=1, sticky=E)
+        self.soil_1_label.grid(row=4, column=1, columnspan=2, sticky=E)
+
 
     def validate(self, new_text):
         if not new_text: # the field is being cleared
@@ -59,8 +66,17 @@ class GrowSpaceGUI:
         self.total_label_text.set(self.total)
         self.entry.delete(0, END)
 
-root = Tk()
-w, h = root.winfo_screenwidth(), root.winfo_screenheight()
-root.geometry("%dx%d+0+0" % (w, h))
-my_gui = GrowSpaceGUI(root)
-root.mainloop()
+    def processIncoming(self):
+        """! 
+        If any data is coming back to the main processes,
+        receive it here and display it
+        """
+        while not self.queue.empty():
+            msg = self.queue.get()
+
+            # Print to console whatever it gets
+            print("Received from", msg[0] + ":", msg[1])
+
+            # Display the data accordingly
+            if msg[0] == "soil moisture sensor #1":
+                self.soil_1_text.set(msg[1])
