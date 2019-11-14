@@ -1,0 +1,11 @@
+1. Clone this directory
+git clone https://github.com/m-rubik/Grow-Space.git
+
+2. Open the directory
+cd Grow-Space
+
+3. If you don't already have pipenv, install it:
+pip install pipenv
+
+4. Install the virtual environment from the Pipfile
+pipenv install --sequential
