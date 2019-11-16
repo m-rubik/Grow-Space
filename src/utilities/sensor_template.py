@@ -6,6 +6,7 @@ Therefore, each sensor is a worker class of this template.
 This will run as a seperate process from the main thread.
 """
 
+import os
 from multiprocessing import Queue
 
 class Sensor():
@@ -39,6 +40,8 @@ class Sensor():
             self.queue.put(msg)
             
             # Step 2: Log the read value
+            if not os.path.exists('logs'):
+                os.mkdir('logs')
             with open("logs/"+self.name+".txt","a+") as f:
                 f.write(str(current_time)+":"+str(self.current_val)+"\n")
 

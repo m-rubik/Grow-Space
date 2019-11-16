@@ -7,5 +7,12 @@ cd Grow-Space
 3. If you don't already have pipenv, install it:
 pip install pipenv
 
+IF on rpi:
+	Delete the tkinter requirement in pipfile
+
 4. Install the virtual environment from the Pipfile
 pipenv install --sequential
+
+Possibly you might need to do:
+sudo nano .env
+PYTHONPATH=${PYTHONPATH}:src

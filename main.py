@@ -28,7 +28,7 @@ class ThreadedClient:
         self.master = master
 
         self.soil_queue = Queue()
-        self.soil = Sensor(name="soil moisture sensor #1", queue=self.soil_queue)
+        self.soil = Sensor(name="soil_moisture_sensor_1", queue=self.soil_queue)
 
         self.queue = Queue()
         # Set up the GUI part

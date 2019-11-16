@@ -78,5 +78,5 @@ class GrowSpaceGUI:
             print("Received from", msg[0] + ":", msg[1])
 
             # Display the data accordingly
-            if msg[0] == "soil moisture sensor #1":
+            if msg[0] == "soil_moisture_sensor_1":
                 self.soil_1_text.set(msg[1])
