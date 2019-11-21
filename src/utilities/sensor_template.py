@@ -1,59 +1,84 @@
 """!
-This is a template class for any sensor input.
-Each sensor will be inherit this class, and override/add any methods as required.
-Therefore, each sensor is a worker class of this template.
+This is the template class for any sensor.
+Each sensor will be an instance of this class.
 
-This will run as a seperate process from the main thread.
+This will run as a seperate process from the main thread,
+and will run until signalled to stop by received the string
+"STOP" in its queue. Since this thread runs indefinitely
+until told to stop, it is a worker thread.
 """
 
-import os
+import time
 from multiprocessing import Queue
 
 class Sensor():
+    """!
+    This is the class that all sensors are instances of.
+    @param name: The name of the sensor. Must be unique.
+    @param previous_val: The previous value that the sensor read.
+    @param current_val: The current value that the sensor just read.
+    @param queue: The queue between the main thread and the sensor thread.
+    @param polling_interval: The time between sensor measurements in seconds.
+    """
 
-    name:str = "Default"
-    last_val:int = None
-    current_val:int = None
-    queue:Queue = None
+    name: str = "Default"
+    previous_val: int = None
+    current_val: int = None
+    queue: Queue = None
+    polling_interval: int = None
 
-    def __init__(self, name="default", queue=None):
+    def __init__(self, name="default", queue=None, polling_interval=1):
+        """!
+        Standard initialization.
+        @param name: The name of the sensor. Must be unique.
+        @param queue: The queue between the main thread and the sensor thread.
+        @param polling_interval: The time between sensor measurements in seconds.
+        """
+
         self.name = name
         self.queue = queue
+        self.polling_interval = polling_interval
 
     def run(self):
         """!
         This is the main loop for any sensor.
-        It will read the value and report it back to the main 
+        Based on the polling_interval, it will read data and report it by placing it into the queue.
         """
 
         while True:
-            # Step 1: Read & Relay the sensor input.
-            # For testing, to simulate asynchronous I/O, we create a random number at random intervals
-            import random
-            import time
-            rand = random.Random()
-            time.sleep(rand.random() * 1.5)
-            current_time = time.time()
-            self.last_val = self.current_val
-            self.current_val = rand.random() 
-            msg = [self.name, self.current_val]
-            self.queue.put(msg)
-            
-            # Step 2: Log the read value
-            if not os.path.exists('logs'):
-                os.mkdir('logs')
-            with open("logs/"+self.name+".txt","a+") as f:
-                f.write(str(current_time)+":"+str(self.current_val)+"\n")
-
-            # (Do other stuff)
+            # Check if it receiving a message from the main thread.
+            if not self.queue.empty(): # If there is a message from the main thread...
+                msg = self.queue.get()
+                if msg == "STOP":
+                    return 0
+            self.read_and_report()
+            time.sleep(self.polling_interval)
 
     def poll(self):
         """!
-        This is a manualy triggered capture & reporting of data.
+        This method allows for manualy triggered capture & reporting of sensor data.
         """
-        # Read sensor value
-        # Update current/last val
-        # Log val 
-        # (Do other stuff)
-        # Report to main thread
-        pass
+        self.read_and_report()
+
+    def read_and_report(self):
+        """!
+        This method is called periodically to read sensor data and report
+        it back to the main thread.
+        """
+
+        # Step 1: Take a reading.
+        # For testing, to simulate asynchronous I/O, we create a random number at random intervals
+        import random
+        rand = random.Random()
+        current_time = time.time()
+        self.previous_val = self.current_val
+        self.current_val = rand.random()
+
+        # TODO Step 1.5: Run algorithms with the data??? 
+
+        # Step 2: Relay the reading
+        self.queue.put(self.current_val)
+        
+        # Step 3: Log the reading
+        with open("logs/"+self.name+".txt","a+") as f:
+            f.write(str(current_time)+":"+str(self.current_val)+"\n")

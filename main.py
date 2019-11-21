@@ -1,82 +1,101 @@
 """!
-This is the main thread.
-
+This is the main thread from which the program is started/runs.
 This thread will periodically call the sensor worker threads to 
 poll for their data. This data is returned here, so it can be analysed
 and control signals can be generated.
 """
 
 import sys
-from tkinter import Tk
-from src.GUI.GUI import GrowSpaceGUI
-from multiprocessing import Queue
 import threading
+import time
+import os
+from tkinter import Tk
+from multiprocessing import Queue
+from src.GUI.GUI import GrowSpaceGUI
 from src.utilities.sensor_template import Sensor
 
 class ThreadedClient:
+    """!
+    This is the main thread class.
+    In the future, when more boxes are implemented, there would be multiple
+    instances of this class used, where each instance is for 1 box.
+    @param gui: This is the main GUI
+    @param master_queue: Queue between this thread and the GUI
+    @param sensors: A dictionary mapping all Sensor class instances to a unique name. These are the sensors of the system.
+    @param sensor_threads: A dictionary mapping all Sensor worker threads to a unique name. These are the sensor threads of the system.
     """
-    Launch the main part of the GUI and the worker thread. periodicCall and
-    endApplication could reside in the GUI part, but putting them here
-    means that you have all the thread controls in a single place.
-    """
+
+    gui: GrowSpaceGUI = None
+    master_queue: Queue = Queue()
+    sensors: dict = dict()
+    sensor_threads: dict = dict()
+
     def __init__(self, master):
+        """!
+        Launches the GUI and the asynchronous worker threads (1 for each sensor).
+        @param master: The root (instance) of a Tkinter top-level widget
         """
-        Start the GUI and the asynchronous threads. We are in the main
-        (original) thread of the application, which will later be used by
-        the GUI as well. We spawn a new thread for each sensor (I/O worker).
+
+        self.gui = GrowSpaceGUI(master, self.master_queue, self.end_application)
+        
+        self.sensors['soil_moisture_sensor_1'] = Sensor(name="soil_moisture_sensor_1", queue=Queue())
+        self.sensor_threads['soil_moisture_sensor_1'] = threading.Thread(target=self.sensors['soil_moisture_sensor_1'].run)
+        self.sensor_threads['soil_moisture_sensor_1'].start()
+
+        self.main_running = True
+
+        # Ensure that there is a directory for log files to go to.
+        if not os.path.exists('logs'):
+            os.mkdir('logs')
+
+        # Start the periodic call in the GUI to check if the queue contains anything
+        self.periodic_call()
+
+    def periodic_call(self, gui_refresh_interval=200):
+        """!
+        This is the "main loop" of the main thread. Based on the refresh interval,
+        it will periodically get data from the sensors and pass it to the GUI to be displayed, then call itself
+        to run again.
+        @param gui_refresh_interval: Polling time (in miliseconds) of the sensors
         """
-        self.master = master
 
-        self.soil_queue = Queue()
-        self.soil = Sensor(name="soil_moisture_sensor_1", queue=self.soil_queue)
+        # TODO: Investigate switching this from a polling update to an event driven update
 
-        self.queue = Queue()
-        # Set up the GUI part
-        self.gui = GrowSpaceGUI(master, self.queue, self.endApplication)
-
-        # Set up the thread to do asynchronous I/O
-        # More threads can also be created and used, if necessary
-        self.running = 1
-        self.thread1 = threading.Thread(target=self.soil.run)
-        self.thread1.start()
-
-        # Start the periodic call in the GUI to check if the queue contains
-        # anything
-        self.periodicCall()
-
-    def periodicCall(self):
-        """
-        Check every 200 ms if there is something new in the queue.
-        """
         self.gui.processIncoming()
-        if not self.running:
-            # Cleanup time!
-            # For each thread, pass it a STOP signal
-            self.soil_queue.put("STOP")
-
+        if not self.main_running:
+            # Close the GUI
+            self.gui.master.destroy()
+            # Cleanup time! For each thread, pass it a STOP signal
+            self.sensors['soil_moisture_sensor_1'].queue.put("STOP")
+            # Wait for the threads to stop
+            time.sleep(5)
             # Brutal system exit. Make sure everything is cleaned up first!
+            # TODO: This doesn't seem to be closing everything properly yet...
             sys.exit(0)
 
-        # For each sensor thread, check if it has data
-        if not self.soil_queue.empty():
-            msg = self.soil_queue.get()
+        # For each sensor, check if there is any data in its queue
+        for sensor_name, sensor in self.sensors.items():
+            if not sensor.queue.empty():
+                msg = [sensor_name, sensor.queue.get()]
 
-            # Do stuff with the data
-            # ...
+                # TODO: Do stuff with the data here
 
-            # Relay the data to the GUI so the user can see it
-            self.queue.put(msg)
+                # Relay the data to the GUI so the user can see it
+                self.master_queue.put(msg)
 
-        # Wait 200ms
-        self.master.after(200, self.periodicCall)
+        # Wait for the requested time and then call itself
+        self.gui.master.after(gui_refresh_interval, self.periodic_call)
 
-    def endApplication(self):
-        self.running = 0
+    def end_application(self):
+        """!
+        This method simply flags main_running as False.
+        The "main loop" a.k.a periodic_call will notice this and begin shutdown
+        """
+        self.main_running = False
 
 if __name__ == "__main__":
-    root = Tk()
-    w, h = root.winfo_screenwidth(), root.winfo_screenheight()
-    root.geometry("%dx%d+0+0" % (w, h))
-
-    client = ThreadedClient(root)
-    root.mainloop()
+    ROOT = Tk()
+    WIDTH, HEIGHT = ROOT.winfo_screenwidth(), ROOT.winfo_screenheight()
+    ROOT.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
+    CLIENT = ThreadedClient(ROOT)
+    ROOT.mainloop()
