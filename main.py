@@ -13,6 +13,7 @@ from tkinter import Tk
 from multiprocessing import Queue
 from src.GUI.GUI import GrowSpaceGUI
 from src.utilities.sensor_template import Sensor
+from src.sensors.temperature_sensor import TemperatureSensor
 
 class ThreadedClient:
     """!
@@ -39,8 +40,12 @@ class ThreadedClient:
         self.gui = GrowSpaceGUI(master, self.master_queue, self.end_application)
         
         self.sensors['soil_moisture_sensor_1'] = Sensor(name="soil_moisture_sensor_1", queue=Queue())
+        self.sensors['temperature_sensor'] = TemperatureSensor(name="temperature_sensor", queue=Queue())
         self.sensor_threads['soil_moisture_sensor_1'] = threading.Thread(target=self.sensors['soil_moisture_sensor_1'].run)
-        self.sensor_threads['soil_moisture_sensor_1'].start()
+        self.sensor_threads['temperature_sensor'] = threading.Thread(target=self.sensors['temperature_sensor'].run)
+        
+        for sensor in self.sensor_threads.values():
+            sensor.start()
 
         self.main_running = True
 
@@ -96,7 +101,7 @@ class ThreadedClient:
 if __name__ == "__main__":
     ROOT = Tk()
     WIDTH, HEIGHT = ROOT.winfo_screenwidth(), ROOT.winfo_screenheight()
-    # ROOT.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
-    ROOT.geometry("250x150")
+    ROOT.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
+    # ROOT.geometry("250x150")
     CLIENT = ThreadedClient(ROOT)
     ROOT.mainloop()

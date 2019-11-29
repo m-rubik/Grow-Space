@@ -5,7 +5,7 @@ The GUI is based on a Tkinter widget.
 
 
 from multiprocessing import Queue
-from tkinter import Tk, Label, Button, Entry, IntVar, END, W, E, StringVar
+from tkinter import Tk, Label, Button, Entry, IntVar, END, W, E, N, S, StringVar
 from tkinter.filedialog import askopenfile, asksaveasfile
 
 class GrowSpaceGUI:
@@ -25,50 +25,61 @@ class GrowSpaceGUI:
         self.master.configure(background="Black")
 
         # Declare constants
-        self.soil_1_text = StringVar()
-        self.soil_1_text.set("Soil Moisture Sensor 1:")
         self.configuration_text = StringVar()
         self.configuration_text.set("Current Environment:")
         self.overall_status_text = StringVar()
         self.overall_status_text.set("Environment Status:")
+        self.temperature_text = StringVar()
+        self.temperature_text.set("Temperature:")
+        self.soil_1_text = StringVar()
+        self.soil_1_text.set("Soil Moisture Sensor 1:")
 
         # Declare all variables
-        self.total = 0
-        self.entered_number = 0
-        self.soil_1_val = StringVar()
         self.configuration_val = StringVar()
         self.overall_status_val = StringVar()
+        self.soil_1_val = StringVar()
+        self.temperature_val = StringVar()
 
         # Set initial variable values
-        self.soil_1_val.set("-")
         self.configuration_val.set("Basil World 1.0")
         self.overall_status_val.set("Good")
+        self.soil_1_val.set("-")
+        self.temperature_val.set("-")
 
         # Add GUI components
         self.stop_button = Button(master, text="EXIT", bg="Red", command=endCommand)
-
-        self.soil_1_label = Label(master, bg="Black", fg="White", textvariable=self.soil_1_text)
-        self.soil_1_val_label = Label(master, bg="Black", fg="White", textvariable=self.soil_1_val)
         self.configuration_label = Label(master, bg="Black", fg="White", textvariable=self.configuration_text)
         self.configuration_val_label = Label(master, bg="Black", fg="White", textvariable=self.configuration_val)
         self.overall_status_text_label = Label(master, bg="Black", fg="Green", textvariable=self.overall_status_val)
         self.overall_status_label = Label(master, bg="Black", fg="White", textvariable=self.overall_status_text)
+        self.soil_1_label = Label(master, bg="Black", fg="White", textvariable=self.soil_1_text)
+        self.soil_1_val_label = Label(master, bg="Black", fg="White", textvariable=self.soil_1_val)
+        self.temperature_label = Label(master, bg="Black", fg="White", textvariable=self.temperature_text)
+        self.temperature_val_label = Label(master, bg="Black", fg="White", textvariable=self.temperature_val)
 
         # Layout the GUI components
         self.configuration_label.grid(row=0, column=0, columnspan=1, sticky=W)
         self.configuration_val_label.grid(row=0, column=1, columnspan=1, sticky=E)
         self.overall_status_label.grid(row=1, column=0, columnspan=1, sticky=W)
         self.overall_status_text_label.grid(row=1, column=1, columnspan=1, sticky=E)
-        self.soil_1_label.grid(row=2, column=0, columnspan=1, sticky=W)
-        self.soil_1_val_label.grid(row=2, column=1, columnspan=1, sticky=E)
+
+        # self.master.grid_rowconfigure(2, weight=1, minsize=1) # Empty Row
+
+        self.soil_1_label.grid(row=3, column=0, columnspan=1, sticky=W)
+        self.soil_1_val_label.grid(row=3, column=1, columnspan=1, sticky=E)
+        self.temperature_label.grid(row=4, column=0, columnspan=1, sticky=W)
+        self.temperature_val_label.grid(row=4, column=1, columnspan=1, sticky=E)
 
         self.button = Button(master, text="Load", command=self.load_file, width=10)
-        self.button.grid(row=4, column=0, sticky=W)
+        self.button.grid(row=5, column=0, sticky=W)
         self.button = Button(master, text="Save", command=self.save_file, width=10)
-        self.button.grid(row=4, column=1, sticky=E)
-        self.stop_button.grid(row=5, column=0, columnspan=2, sticky=W)
+        self.button.grid(row=5, column=1, sticky=E)
+        self.stop_button.grid(row=6, column=0, columnspan=2, sticky=W)
+
 
         ## TODO: REMOVE THIS. This is just the stuff from the sample GUI
+        # self.total = 0
+        # self.entered_number = 0
         # self.total_label_text = IntVar()
         # self.total_label_text.set(self.total)
         # self.total_label = Label(master, textvariable=self.total_label_text)
@@ -103,6 +114,10 @@ class GrowSpaceGUI:
         If any data is coming back to the main processes,
         receive it here and display it
         """
+
+        warning_flags = {}
+        error_flags = {}
+
         while not self.queue.empty():
             msg = self.queue.get()
 
@@ -114,12 +129,34 @@ class GrowSpaceGUI:
                 self.soil_1_val.set(str(msg[1])+"%")
                 if msg[1] < 65:
                     self.soil_1_val_label.config(fg="Red")
-                    self.overall_status_text_label.config(fg="Yellow")
-                    self.overall_status_val.set("Needs Watering")
+                    warning_flags["soil_moisture_sensor_1"] = "Needs Watering"
                 else:
                     self.soil_1_val_label.config(fg="Green")
-                    self.overall_status_text_label.config(fg="Green")
-                    self.overall_status_val.set("Good")
+                    warning_flags.pop('soil_moisture_sensor_1', None)
+            if msg[0] == "temperature_sensor":
+                self.temperature_val.set(str(msg[1])+"°C")
+                if msg[1] < 20:
+                    self.temperature_val_label.config(fg="Red")
+                    warning_flags["temperature_sensor"] = "Too Cold"
+                elif msg[1] > 30:
+                    self.temperature_val_label.config(fg="Red")
+                    warning_flags["temperature_sensor"] = "Too Hot"
+                else:
+                    self.temperature_val_label.config(fg="Green")
+                    warning_flags.pop('temperature_sensor', None)
+
+            if error_flags:
+                self.overall_status_text_label.config(fg="Red")
+                self.overall_status_val.set(','.join(str(x) for x in error_flags.values()))
+            elif warning_flags:
+                self.overall_status_text_label.config(fg="Yellow")
+                self.overall_status_val.set(','.join(str(x) for x in warning_flags.values()))
+            else:
+                self.overall_status_text_label.config(fg="Green")
+                self.overall_status_val.set('Good')
+            
+                
+
 
     ## TODO: REMOVE. This is only from the sample GUI
     # def validate(self, new_text):
