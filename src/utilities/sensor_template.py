@@ -72,7 +72,7 @@ class Sensor():
         rand = random.Random()
         current_time = time.time()
         self.previous_val = self.current_val
-        self.current_val = rand.random()
+        self.current_val = round(rand.random()*100,2)
 
         # TODO Step 1.5: Run algorithms with the data??? 
 

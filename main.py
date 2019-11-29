@@ -96,6 +96,7 @@ class ThreadedClient:
 if __name__ == "__main__":
     ROOT = Tk()
     WIDTH, HEIGHT = ROOT.winfo_screenwidth(), ROOT.winfo_screenheight()
-    ROOT.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
+    # ROOT.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
+    ROOT.geometry("250x150")
     CLIENT = ThreadedClient(ROOT)
     ROOT.mainloop()

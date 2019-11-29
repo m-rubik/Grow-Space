@@ -6,6 +6,7 @@ The GUI is based on a Tkinter widget.
 
 from multiprocessing import Queue
 from tkinter import Tk, Label, Button, Entry, IntVar, END, W, E, StringVar
+from tkinter.filedialog import askopenfile, asksaveasfile
 
 class GrowSpaceGUI:
     """!
@@ -23,67 +24,79 @@ class GrowSpaceGUI:
         self.master.title("Grow Space")
         self.master.configure(background="Black")
 
-        # Declare all variables used by the GUI
+        # Declare constants
+        self.soil_1_text = StringVar()
+        self.soil_1_text.set("Soil Moisture Sensor 1:")
+        self.configuration_text = StringVar()
+        self.configuration_text.set("Current Environment:")
+        self.overall_status_text = StringVar()
+        self.overall_status_text.set("Environment Status:")
+
+        # Declare all variables
         self.total = 0
         self.entered_number = 0
+        self.soil_1_val = StringVar()
+        self.configuration_val = StringVar()
+        self.overall_status_val = StringVar()
+
+        # Set initial variable values
+        self.soil_1_val.set("-")
+        self.configuration_val.set("Basil World 1.0")
+        self.overall_status_val.set("Good")
 
         # Add GUI components
         self.stop_button = Button(master, text="EXIT", bg="Red", command=endCommand)
 
-        self.soil_1_text = StringVar()
-        self.soil_1_text.set("Soil Moisture Sensor 1:")
         self.soil_1_label = Label(master, bg="Black", fg="White", textvariable=self.soil_1_text)
-
-        self.soil_1_val = StringVar()
-        self.soil_1_val.set("-")
-        self.soil_1_val_label = Label(master, bg="Black", textvariable=self.soil_1_val)
-
-        self.total_label_text = IntVar()
-        self.total_label_text.set(self.total)
-        self.total_label = Label(master, textvariable=self.total_label_text)
-
-        self.label = Label(master, text="Total:")
-
-        vcmd = master.register(self.validate) # we have to wrap the command
-        self.entry = Entry(master, validate="key", validatecommand=(vcmd, '%P'))
-
-        self.add_button = Button(master, text="+", command=lambda: self.update("add"))
-        self.subtract_button = Button(master, text="-", command=lambda: self.update("subtract"))
-        self.reset_button = Button(master, text="Reset", command=lambda: self.update("reset"))
+        self.soil_1_val_label = Label(master, bg="Black", fg="White", textvariable=self.soil_1_val)
+        self.configuration_label = Label(master, bg="Black", fg="White", textvariable=self.configuration_text)
+        self.configuration_val_label = Label(master, bg="Black", fg="White", textvariable=self.configuration_val)
+        self.overall_status_text_label = Label(master, bg="Black", fg="Green", textvariable=self.overall_status_val)
+        self.overall_status_label = Label(master, bg="Black", fg="White", textvariable=self.overall_status_text)
 
         # Layout the GUI components
-        self.label.grid(row=0, column=0, sticky=W) # Use a grid
-        self.total_label.grid(row=0, column=1, columnspan=2, sticky=E)
-        self.entry.grid(row=1, column=0, columnspan=3, sticky=W+E)
-        self.add_button.grid(row=2, column=0)
-        self.subtract_button.grid(row=2, column=1)
-        self.reset_button.grid(row=2, column=2, sticky=W+E)
-        self.stop_button.grid(row=3, column=1, columnspan=1, sticky=E)
-        self.soil_1_label.grid(row=4, column=0, columnspan=2, sticky=W)
-        self.soil_1_val_label.grid(row=4, column=3, columnspan=1, sticky=E)
+        self.configuration_label.grid(row=0, column=0, columnspan=1, sticky=W)
+        self.configuration_val_label.grid(row=0, column=1, columnspan=1, sticky=E)
+        self.overall_status_label.grid(row=1, column=0, columnspan=1, sticky=W)
+        self.overall_status_text_label.grid(row=1, column=1, columnspan=1, sticky=E)
+        self.soil_1_label.grid(row=2, column=0, columnspan=1, sticky=W)
+        self.soil_1_val_label.grid(row=2, column=1, columnspan=1, sticky=E)
 
+        self.button = Button(master, text="Load", command=self.load_file, width=10)
+        self.button.grid(row=4, column=0, sticky=W)
+        self.button = Button(master, text="Save", command=self.save_file, width=10)
+        self.button.grid(row=4, column=1, sticky=E)
+        self.stop_button.grid(row=5, column=0, columnspan=2, sticky=W)
 
-    def validate(self, new_text):
-        if not new_text: # the field is being cleared
-            self.entered_number = 0
-            return True
+        ## TODO: REMOVE THIS. This is just the stuff from the sample GUI
+        # self.total_label_text = IntVar()
+        # self.total_label_text.set(self.total)
+        # self.total_label = Label(master, textvariable=self.total_label_text)
+        # self.label = Label(master, text="Total:")
+        # vcmd = master.register(self.validate) # we have to wrap the command
+        # self.entry = Entry(master, validate="key", validatecommand=(vcmd, '%P'))
+        # self.add_button = Button(master, text="+", command=lambda: self.update("add"))
+        # self.subtract_button = Button(master, text="-", command=lambda: self.update("subtract"))
+        # self.reset_button = Button(master, text="Reset", command=lambda: self.update("reset"))
+        # self.label.grid(row=0, column=0, sticky=W) # Use a grid
+        # self.total_label.grid(row=0, column=1, columnspan=2, sticky=E)
+        # self.entry.grid(row=1, column=0, columnspan=3, sticky=W+E)
+        # self.add_button.grid(row=2, column=0)
+        # self.subtract_button.grid(row=2, column=1)
+        # self.reset_button.grid(row=2, column=2, sticky=W+E)
 
-        try:
-            self.entered_number = int(new_text)
-            return True
-        except ValueError:
-            return False
-
-    def update(self, method):
-        if method == "add":
-            self.total += self.entered_number
-        elif method == "subtract":
-            self.total -= self.entered_number
-        else: # reset
-            self.total = 0
-
-        self.total_label_text.set(self.total)
-        self.entry.delete(0, END)
+    def load_file(self):
+        config_file = askopenfile(filetypes=(("Configuration files", "*.cfg"), ("All files", "*.*")))
+        print(config_file)
+           
+    def save_file(self): 
+        files = [("Configuration files", "*.cfg"), ('All Files', '*.*')] 
+        f = asksaveasfile(filetypes = files, defaultextension = files)
+        if f is None: # User closes the dialog with "cancel"
+            return
+        text2save = "UHHHHHH"
+        f.write(text2save)
+        f.close()
 
     def processIncoming(self):
         """! 
@@ -98,8 +111,35 @@ class GrowSpaceGUI:
 
             # Display the data accordingly
             if msg[0] == "soil_moisture_sensor_1":
-                self.soil_1_val.set(msg[1])
-                if msg[1] > 0.5:
+                self.soil_1_val.set(str(msg[1])+"%")
+                if msg[1] < 65:
                     self.soil_1_val_label.config(fg="Red")
+                    self.overall_status_text_label.config(fg="Yellow")
+                    self.overall_status_val.set("Needs Watering")
                 else:
                     self.soil_1_val_label.config(fg="Green")
+                    self.overall_status_text_label.config(fg="Green")
+                    self.overall_status_val.set("Good")
+
+    ## TODO: REMOVE. This is only from the sample GUI
+    # def validate(self, new_text):
+    #     if not new_text: # the field is being cleared
+    #         self.entered_number = 0
+    #         return True
+
+    #     try:
+    #         self.entered_number = int(new_text)
+    #         return True
+    #     except ValueError:
+    #         return False
+
+    # def update(self, method):
+    #     if method == "add":
+    #         self.total += self.entered_number
+    #     elif method == "subtract":
+    #         self.total -= self.entered_number
+    #     else: # reset
+    #         self.total = 0
+
+    #     self.total_label_text.set(self.total)
+    #     self.entry.delete(0, END)
