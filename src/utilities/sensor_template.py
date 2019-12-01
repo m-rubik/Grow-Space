@@ -4,8 +4,8 @@ Each sensor will be an instance of this class.
 
 This will run as a seperate process from the main thread,
 and will run until signalled to stop by received the string
-"STOP" in its queue. Since this thread runs indefinitely
-until told to stop, it is a worker thread.
+"STOP" in its queue. Since this process runs indefinitely
+until told to stop, it is a worker process.
 """
 
 import time
@@ -17,7 +17,7 @@ class Sensor():
     @param name: The name of the sensor. Must be unique.
     @param previous_val: The previous value that the sensor read.
     @param current_val: The current value that the sensor just read.
-    @param queue: The queue between the main thread and the sensor thread.
+    @param queue: The queue between the main thread and the sensor process.
     @param polling_interval: The time between sensor measurements in seconds.
     """
 
@@ -27,11 +27,11 @@ class Sensor():
     queue: Queue = None
     polling_interval: int = None
 
-    def __init__(self, name="default", queue=None, polling_interval=1):
+    def __init__(self, name="default", queue=None, polling_interval=2):
         """!
         Standard initialization.
         @param name: The name of the sensor. Must be unique.
-        @param queue: The queue between the main thread and the sensor thread.
+        @param queue: The queue between the main thread and the sensor process.
         @param polling_interval: The time between sensor measurements in seconds.
         """
 
@@ -50,6 +50,7 @@ class Sensor():
             if not self.queue.empty(): # If there is a message from the main thread...
                 msg = self.queue.get()
                 if msg == "STOP":
+                    print(self.name,"shutting down.")
                     return 0
             self.read_and_report()
             time.sleep(self.polling_interval)
