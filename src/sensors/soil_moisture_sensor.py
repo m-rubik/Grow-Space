@@ -1,6 +1,6 @@
 from src.utilities.sensor_template import Sensor
 
-class TemperatureSensor(Sensor):
+class SoilMoistureSensor(Sensor):
 
     def poll(self):
         """!
@@ -12,9 +12,10 @@ class TemperatureSensor(Sensor):
         # For testing, to simulate asynchronous I/O, we create a random number at random intervals
         import random
         import time
+        rand = random.Random()
         current_time = time.time()
         self.previous_val = self.current_val
-        self.current_val = random.randrange(10, 40)
+        self.current_val = round(rand.random()*100,2)
 
         # TODO Step 1.5: Run algorithms with the data??? 
 

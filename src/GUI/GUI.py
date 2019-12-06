@@ -59,22 +59,26 @@ class GrowSpaceGUI:
 
         # Layout the GUI components
         self.configuration_label.grid(row=0, column=0, columnspan=1, sticky=W)
-        self.configuration_val_label.grid(row=0, column=1, columnspan=1, sticky=E)
+        self.configuration_val_label.grid(row=0, column=1, columnspan=1, sticky=W+E)
         self.overall_status_label.grid(row=1, column=0, columnspan=1, sticky=W)
-        self.overall_status_text_label.grid(row=1, column=1, columnspan=1, sticky=E)
+        self.overall_status_text_label.grid(row=1, column=1, columnspan=1, sticky=W+E)
 
         # self.master.grid_rowconfigure(2, weight=1, minsize=1) # Empty Row
 
         self.soil_1_label.grid(row=3, column=0, columnspan=1, sticky=W)
-        self.soil_1_val_label.grid(row=3, column=1, columnspan=1, sticky=E)
+        self.soil_1_val_label.grid(row=3, column=1, columnspan=1, sticky=W+E)
         self.temperature_label.grid(row=4, column=0, columnspan=1, sticky=W)
-        self.temperature_val_label.grid(row=4, column=1, columnspan=1, sticky=E)
+        self.temperature_val_label.grid(row=4, column=1, columnspan=1, sticky=W+E)
 
         self.button = Button(master, text="Load", command=self.load_file, width=10)
         self.button.grid(row=5, column=0, sticky=W)
         self.button = Button(master, text="Save", command=self.save_file, width=10)
         self.button.grid(row=5, column=1, sticky=E)
         self.stop_button.grid(row=6, column=0, columnspan=2, sticky=W)
+
+        # print(self.grid_info())
+        # for column in 
+        # grid_columnconfigure(index=i)
 
 
         ## TODO: REMOVE THIS. This is just the stuff from the sample GUI
