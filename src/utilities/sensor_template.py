@@ -9,20 +9,21 @@ until told to stop, it is a worker process.
 import time
 from abc import ABC, abstractmethod
 from multiprocessing import Queue
+from datetime import datetime, timedelta
 
 class Sensor(ABC):
     """!
     This is the class that all sensors inherit.
     @param name: The name of the sensor. Must be unique.
-    @param previous_val: The previous value that the sensor read.
-    @param current_val: The current value that the sensor just read.
+    @param _previous_val: The previous value that the sensor read.
+    @param _current_val: The current value that the sensor just read.
     @param queue: The queue between the main thread and the sensor process.
     @param polling_interval: The time between sensor measurements in seconds.
     """
 
     name: str = "Default"
-    previous_val: int = None
-    current_val: int = None
+    _previous_val: int = None
+    _current_val: int = None
     queue: Queue = None
     polling_interval: int = None
 
@@ -44,20 +45,21 @@ class Sensor(ABC):
         Based on the polling_interval, it will read data and report it by placing it into the queue.
         """
 
+        current_time = datetime.now()
+        next_poll_time = current_time + timedelta(seconds=self.polling_interval)
         while True:
-            # Check if it receiving a message from the main thread.
-            if not self.queue.empty(): # If there is a message from the main thread...
-                msg = self.queue.get()
-                if msg == "STOP":
-                    print(self.name,"shutting down.")
-                    return 0
-            self.poll()
-            time.sleep(self.polling_interval)
+            if datetime.now() > next_poll_time:
+                self.poll()
+                current_time = datetime.now()
+                next_poll_time = current_time + timedelta(seconds=self.polling_interval)
+                # print("Next poll scheduled for:", next_poll_time)
+            else:
+                time.sleep(0.1) # Quick delay to elliminate run-away memory consumption
+                pass
 
     @abstractmethod
     def poll(self):
         """!
         This method captures & reports sensor data.
         """
-
         pass

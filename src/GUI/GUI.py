@@ -128,39 +128,38 @@ class GrowSpaceGUI:
             # Print to console whatever it gets
             print("Received from", msg[0] + ":", msg[1])
 
-            # Display the data accordingly
-            if msg[0] == "soil_moisture_sensor_1":
-                self.soil_1_val.set(str(msg[1])+"%")
-                if msg[1] < 65:
-                    self.soil_1_val_label.config(fg="Red")
-                    warning_flags["soil_moisture_sensor_1"] = "Needs Watering"
-                else:
-                    self.soil_1_val_label.config(fg="Green")
-                    warning_flags.pop('soil_moisture_sensor_1', None)
-            if msg[0] == "temperature_sensor":
-                self.temperature_val.set(str(msg[1])+"°C")
-                if msg[1] < 20:
-                    self.temperature_val_label.config(fg="Red")
-                    warning_flags["temperature_sensor"] = "Too Cold"
-                elif msg[1] > 30:
-                    self.temperature_val_label.config(fg="Red")
-                    warning_flags["temperature_sensor"] = "Too Hot"
-                else:
-                    self.temperature_val_label.config(fg="Green")
-                    warning_flags.pop('temperature_sensor', None)
+            if isinstance(msg[0], str):
+                # Display the data accordingly
+                if msg[0] == "soil_moisture_sensor_1":
+                    self.soil_1_val.set(str(msg[1])+"%")
+                    if int(msg[1]) < 65:
+                        self.soil_1_val_label.config(fg="Red")
+                        warning_flags["soil_moisture_sensor_1"] = "Needs Watering"
+                    else:
+                        self.soil_1_val_label.config(fg="Green")
+                        warning_flags.pop('soil_moisture_sensor_1', None)
+                if msg[0] == "temperature_sensor":
+                    self.temperature_val.set(str(msg[1])+"°C")
+                    if int(msg[1]) < 20:
+                        self.temperature_val_label.config(fg="Red")
+                        warning_flags["temperature_sensor"] = "Too Cold"
+                    elif int(msg[1]) > 30:
+                        self.temperature_val_label.config(fg="Red")
+                        warning_flags["temperature_sensor"] = "Too Hot"
+                    else:
+                        self.temperature_val_label.config(fg="Green")
+                        warning_flags.pop('temperature_sensor', None)
 
-            if error_flags:
-                self.overall_status_text_label.config(fg="Red")
-                self.overall_status_val.set(','.join(str(x) for x in error_flags.values()))
-            elif warning_flags:
-                self.overall_status_text_label.config(fg="Yellow")
-                self.overall_status_val.set(','.join(str(x) for x in warning_flags.values()))
-            else:
-                self.overall_status_text_label.config(fg="Green")
-                self.overall_status_val.set('Good')
+                if error_flags:
+                    self.overall_status_text_label.config(fg="Red")
+                    self.overall_status_val.set(','.join(str(x) for x in error_flags.values()))
+                elif warning_flags:
+                    self.overall_status_text_label.config(fg="Yellow")
+                    self.overall_status_val.set(','.join(str(x) for x in warning_flags.values()))
+                else:
+                    self.overall_status_text_label.config(fg="Green")
+                    self.overall_status_val.set('Good')
             
-                
-
 
     ## TODO: REMOVE. This is only from the sample GUI
     # def validate(self, new_text):

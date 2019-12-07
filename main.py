@@ -9,7 +9,7 @@ import sys
 import time
 import os
 from tkinter import Tk
-from multiprocessing import Queue, Process
+from multiprocessing import Queue, Process, active_children
 from src.GUI.GUI import GrowSpaceGUI
 from src.sensors.temperature_sensor import TemperatureSensor
 from src.sensors.soil_moisture_sensor import SoilMoistureSensor
@@ -42,8 +42,6 @@ class ThreadedClient:
         self.sensors['temperature_sensor'] = TemperatureSensor(name="temperature_sensor", queue=Queue())
         self.sensor_processes['soil_moisture_sensor_1'] = Process(target=self.sensors['soil_moisture_sensor_1'].run)
         self.sensor_processes['temperature_sensor'] = Process(target=self.sensors['temperature_sensor'].run)
-
-        print(self.sensor_processes['temperature_sensor'])
         
         for sensor in self.sensor_processes.values():
             sensor.start()
@@ -71,15 +69,10 @@ class ThreadedClient:
         if not self.main_running:
             # Close the GUI
             self.gui.master.destroy()
-            # Cleanup time! For each process, pass it a STOP signal
-            for sensor in self.sensors.values():
-                sensor.queue.put("STOP")
-            # Wait for the processes to stop
-            time.sleep(3)
-            # Terminate and join all processes
-            for sensor in self.sensor_processes.values():
-                sensor.terminate()
-                sensor.join()
+            # Cleanup time! Terminate each process
+            for process in active_children():
+                process.terminate()
+                process.join()
             # Brutal system exit. Make sure everything is cleaned up first!
             # TODO: This doesn't seem to be closing everything properly yet...
             sys.exit(0)

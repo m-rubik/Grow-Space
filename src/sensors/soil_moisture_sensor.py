@@ -1,4 +1,5 @@
 from src.utilities.sensor_template import Sensor
+from datetime import datetime
 
 class SoilMoistureSensor(Sensor):
 
@@ -13,15 +14,15 @@ class SoilMoistureSensor(Sensor):
         import random
         import time
         rand = random.Random()
-        current_time = time.time()
-        self.previous_val = self.current_val
-        self.current_val = round(rand.random()*100,2)
+        current_time = datetime.now()
+        self._previous_val = self._current_val
+        self._current_val = round(rand.random()*100,2)
 
         # TODO Step 1.5: Run algorithms with the data??? 
 
         # Step 2: Relay the reading
-        self.queue.put(self.current_val)
+        self.queue.put(self._current_val)
         
         # Step 3: Log the reading
         with open("logs/"+self.name+".txt","a+") as f:
-            f.write(str(current_time)+":"+str(self.current_val)+"\n")
+            f.write(str(current_time)+":"+str(self._current_val)+"\n")
