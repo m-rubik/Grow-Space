@@ -1,59 +1,65 @@
 """!
-This is a template class for any sensor input.
-Each sensor will be inherit this class, and override/add any methods as required.
-Therefore, each sensor is a worker class of this template.
+This is the base class for any sensor class (sensors classes will inherit this class).
 
-This will run as a seperate process from the main thread.
+A sensor process will run until signalled to stop by received the string
+"STOP" in its queue. Since this process runs indefinitely
+until told to stop, it is a worker process.
 """
 
-import os
+import time
+from abc import ABC, abstractmethod
 from multiprocessing import Queue
+from datetime import datetime, timedelta
 
-class Sensor():
+class Sensor(ABC):
+    """!
+    This is the class that all sensors inherit.
+    @param name: The name of the sensor. Must be unique.
+    @param _previous_val: The previous value that the sensor read.
+    @param _current_val: The current value that the sensor just read.
+    @param queue: The queue between the main thread and the sensor process.
+    @param polling_interval: The time between sensor measurements in seconds.
+    """
 
-    name:str = "Default"
-    last_val:int = None
-    current_val:int = None
-    queue:Queue = None
+    name: str = "Default"
+    _previous_val: int = None
+    _current_val: int = None
+    queue: Queue = None
+    polling_interval: int = None
 
-    def __init__(self, name="default", queue=None):
+    def __init__(self, name="default", queue=None, polling_interval=2):
+        """!
+        Standard initialization.
+        @param name: The name of the sensor. Must be unique.
+        @param queue: The queue between the main thread and the sensor process.
+        @param polling_interval: The time between sensor measurements in seconds.
+        """
+
         self.name = name
         self.queue = queue
+        self.polling_interval = polling_interval
 
     def run(self):
         """!
         This is the main loop for any sensor.
-        It will read the value and report it back to the main 
+        Based on the polling_interval, it will read data and report it by placing it into the queue.
         """
 
+        current_time = datetime.now()
+        next_poll_time = current_time + timedelta(seconds=self.polling_interval)
         while True:
-            # Step 1: Read & Relay the sensor input.
-            # For testing, to simulate asynchronous I/O, we create a random number at random intervals
-            import random
-            import time
-            rand = random.Random()
-            time.sleep(rand.random() * 1.5)
-            current_time = time.time()
-            self.last_val = self.current_val
-            self.current_val = rand.random() 
-            msg = [self.name, self.current_val]
-            self.queue.put(msg)
-            
-            # Step 2: Log the read value
-            if not os.path.exists('logs'):
-                os.mkdir('logs')
-            with open("logs/"+self.name+".txt","a+") as f:
-                f.write(str(current_time)+":"+str(self.current_val)+"\n")
+            if datetime.now() > next_poll_time:
+                self.poll()
+                current_time = datetime.now()
+                next_poll_time = current_time + timedelta(seconds=self.polling_interval)
+                # print("Next poll scheduled for:", next_poll_time)
+            else:
+                time.sleep(0.1) # Quick delay to elliminate run-away memory consumption
+                pass
 
-            # (Do other stuff)
-
+    @abstractmethod
     def poll(self):
         """!
-        This is a manualy triggered capture & reporting of data.
+        This method captures & reports sensor data.
         """
-        # Read sensor value
-        # Update current/last val
-        # Log val 
-        # (Do other stuff)
-        # Report to main thread
         pass

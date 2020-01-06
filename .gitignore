@@ -105,4 +105,5 @@ venv.bak/
 
 /documentation/html
 /.vscode/*
-/logs
+/src/logs/*
+/logs/*

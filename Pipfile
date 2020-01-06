@@ -7,7 +7,12 @@ verify_ssl = true
 pylint = "*"
 
 [packages]
+<<<<<<< HEAD
 rpi-ws281x = "*"
+=======
+pandas = "*"
+matplotlib = "*"
+>>>>>>> 6ee12569926a1a2cb721f13c79960dddb4abab1e
 
 [requires]
 python_version = "3.7"
