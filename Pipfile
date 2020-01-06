@@ -7,7 +7,7 @@ verify_ssl = true
 pylint = "*"
 
 [packages]
-tkinter = "*"
+rpi-ws281x = "*"
 
 [requires]
 python_version = "3.7"

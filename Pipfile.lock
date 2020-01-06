@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ed63b31f068d51bac7a2fd34e605f75dbafcc8c96209103c96edcd09c836d424"
+            "sha256": "c2a61da09987ef6992d6e5243adecf96662a8b62285ff7281bcf193616d7dc9a"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -15,7 +15,19 @@
             }
         ]
     },
-    "default": {},
+    "default": {
+        "rpi-ws281x": {
+            "hashes": [
+                "sha256:262ad65562333c20ccb1f10850f2413521dd300a2af16de32cbfa27b5b8353ac",
+                "sha256:bad191da9945d7ba9fe0f88ab70d04e6af1b554f520eaa50415f7bff1fa31150",
+                "sha256:d06cd31217dec40d715a3a07ccb2b4b0b0719527c5aa020cbdd77d0c0b31d113",
+                "sha256:dbbb04947b3166d96ba48a82702be9e9e762eb78922434e491d0de958f8fe8c7",
+                "sha256:eb2365f513b333fb1574131a1a719b66ffd252624c192ac0e954a5970cfea84f"
+            ],
+            "index": "pypi",
+            "version": "==4.2.2"
+        }
+    },
     "develop": {
         "astroid": {
             "hashes": [
@@ -23,14 +35,6 @@
                 "sha256:840947ebfa8b58f318d42301cf8c0a20fd794a33b61cc4638e28e9e61ba32f42"
             ],
             "version": "==2.3.3"
-        },
-        "colorama": {
-            "hashes": [
-                "sha256:05eed71e2e327246ad6b38c540c4a3117230b19679b875190486ddd2d721422d",
-                "sha256:f8ac84de7840f5b9c4e3347b3c1eaa50f7e49c2b07596221daec5edaabbd7c48"
-            ],
-            "markers": "sys_platform == 'win32'",
-            "version": "==0.4.1"
         },
         "isort": {
             "hashes": [

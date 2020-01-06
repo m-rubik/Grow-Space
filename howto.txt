@@ -16,3 +16,8 @@ pipenv install --sequential
 Possibly you might need to do:
 sudo nano .env
 PYTHONPATH=${PYTHONPATH}:src
+
+If it fails to launch debugger open settings.json
+and change "python.terminal.activateEnvironment" to False
+
+
