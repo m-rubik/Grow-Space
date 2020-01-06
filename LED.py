@@ -50,21 +50,14 @@ def rainbowCycle(strip, wait_ms=20, iterations=5):
         strip.show()
         time.sleep(wait_ms/1000.0)
         
-strip = Adafruit_NeoPixel(LED_COUNT,LED_PIN,LED_FREQ_HQ,LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
-print("before")
-strip.begin()
-print("after")
-
-for x in range(0, LED_COUNT):
-    strip.setPixelColor(x, Color(255,255,255))
-    print(x)
-
-strip.show()
-    
-time.sleep(10)
+def adjust_color(strip, red_content=255, green_content=255, blue_content=255):
+    for x in range(0, LED_COUNT):
+        strip.setPixelColor(x, Color(red_content,green_content,blue_content))
+        strip.show()
         
-rainbowCycle(strip)
-
-#strip.show()
+strip = Adafruit_NeoPixel(LED_COUNT,LED_PIN,LED_FREQ_HQ,LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
+strip.begin()
+     
+adjust_color(strip, 10, 0, 10)
 
 print("DONE")
