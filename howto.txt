@@ -24,7 +24,7 @@ If when trying to run the code in VSCODE it fails to launch debugger:
 
 
 TO RUN:
-sudo /home/pi/.local/share/virtualenvs/Grow-Space-_9Jpauul/bin/python ./LED.py
+sudo /home/pi/.local/share/virtualenvs/Grow-Space-_9Jpauul/bin/python ./main.py
 
 
 
