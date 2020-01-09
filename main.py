@@ -14,6 +14,7 @@ from src.GUI.GUI import GrowSpaceGUI
 from src.sensors.temperature_sensor import TemperatureSensor
 from src.sensors.soil_moisture_sensor import SoilMoistureSensor
 
+
 class ThreadedClient:
     """!
     This is the main thread class.
@@ -96,6 +97,7 @@ class ThreadedClient:
         The "main loop" a.k.a periodic_call will notice this and begin shutdown
         """
         self.main_running = False
+
 
 if __name__ == "__main__":
     ROOT = Tk()
