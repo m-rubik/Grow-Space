@@ -1,7 +1,21 @@
+"""!
+Code for the Soil Moisture Sensor
+"""
+
 from src.utilities.sensor_template import Sensor
 from datetime import datetime
+import RPi.GPIO as GPIO
 
 class SoilMoistureSensor(Sensor):
+
+    channel: int = None
+
+    def __init__(self, name="default", queue=None, polling_interval=2):
+        super().__init__(name, queue, polling_interval)
+        self.channel = 16 # TODO: This should maybe be passed in???
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.channel, GPIO.IN)
+
 
     def poll(self):
         """!
@@ -16,7 +30,11 @@ class SoilMoistureSensor(Sensor):
         rand = random.Random()
         current_time = datetime.now()
         self._previous_val = self._current_val
-        self._current_val = round(rand.random()*100,2)
+
+        self._current_val = GPIO.input(self.channel)
+        
+        ## FOR TESTING
+        # self._current_val = round(rand.random()*100,2)
 
         # TODO Step 1.5: Run algorithms with the data??? 
 

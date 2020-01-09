@@ -20,7 +20,7 @@ sudo chmod 777 /dev/mem
 Possibly add yourself to kmem group with sudo usermod -g kmem pi
 """
 
-from rpi_ws281x import *
+from rpi_ws281x import * # TODO: Fix this wildcard import
 import time
 
 LED_COUNT = 144

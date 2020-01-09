@@ -10,6 +10,8 @@ pylint = "*"
 rpi-ws281x = "*"
 pandas = "*"
 matplotlib = "*"
+adafruit-blinka = "*"
+adafruit-circuitpython-bme680 = "*"
 
 [requires]
 python_version = "3.*"

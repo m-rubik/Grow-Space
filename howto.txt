@@ -7,17 +7,25 @@ cd Grow-Space
 3. If you don't already have pipenv, install it:
 pip install pipenv
 
-IF on rpi:
-	Delete the tkinter requirement in pipfile
-
 4. Install the virtual environment from the Pipfile
 pipenv install --sequential
 
-Possibly you might need to do:
+
+
+ON THE RPI ONLY:
+5. You might need to do:
 sudo nano .env
 PYTHONPATH=${PYTHONPATH}:src
 
-If it fails to launch debugger open settings.json
-and change "python.terminal.activateEnvironment" to False
+Troubleshooting:
+If when trying to run the code in VSCODE it fails to launch debugger:
+1. open settings.json
+2. change "python.terminal.activateEnvironment" to False
+
+
+TO RUN:
+sudo /home/pi/.local/share/virtualenvs/Grow-Space-_9Jpauul/bin/python ./main.py
+
+
 
 

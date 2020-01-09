@@ -9,7 +9,7 @@ import sys
 import time
 import os
 from tkinter import Tk
-from multiprocessing import Queue, Process, active_children
+from multiprocessing import Queue, Process, active_children, set_start_method
 from src.GUI.GUI import GrowSpaceGUI
 from src.sensors.temperature_sensor import TemperatureSensor
 from src.sensors.soil_moisture_sensor import SoilMoistureSensor
@@ -75,14 +75,12 @@ class ThreadedClient:
                 process.terminate()
                 process.join()
             # Brutal system exit. Make sure everything is cleaned up first!
-            # TODO: This doesn't seem to be closing everything properly yet...
-            sys.exit(0)
+            return 0
 
         # For each sensor, check if there is any data in its queue
         for sensor_name, sensor in self.sensors.items():
             if not sensor.queue.empty():
                 msg = [sensor_name, sensor.queue.get()]
-
                 # TODO: Do stuff with the data here
 
                 # Relay the data to the GUI so the user can see it
