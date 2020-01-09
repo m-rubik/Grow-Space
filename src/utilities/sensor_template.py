@@ -10,6 +10,8 @@ import time
 from abc import ABC, abstractmethod
 from multiprocessing import Queue
 from datetime import datetime, timedelta
+import RPi.GPIO as GPIO
+
 
 class Sensor(ABC):
     """!
@@ -54,7 +56,7 @@ class Sensor(ABC):
                 next_poll_time = current_time + timedelta(seconds=self.polling_interval)
                 # print("Next poll scheduled for:", next_poll_time)
             else:
-                time.sleep(0.1) # Quick delay to elliminate run-away memory consumption
+                time.sleep(0.1)  # Quick delay to eliminate run-away memory consumption
                 pass
 
     @abstractmethod

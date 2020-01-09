@@ -8,6 +8,7 @@ from multiprocessing import Queue
 from tkinter import Tk, Label, Button, Entry, IntVar, END, W, E, N, S, StringVar
 from tkinter.filedialog import askopenfile, asksaveasfile
 
+
 class GrowSpaceGUI:
     """!
     GUI class for any grow space box.

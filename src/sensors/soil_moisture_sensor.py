@@ -6,13 +6,14 @@ from src.utilities.sensor_template import Sensor
 from datetime import datetime
 import RPi.GPIO as GPIO
 
+
 class SoilMoistureSensor(Sensor):
 
     channel: int = None
 
     def __init__(self, name="default", queue=None, polling_interval=2):
         super().__init__(name, queue, polling_interval)
-        self.channel = 16 # TODO: This should maybe be passed in???
+        self.channel = 16  # TODO: This should maybe be passed in???
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.channel, GPIO.IN)
 
