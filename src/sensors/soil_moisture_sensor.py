@@ -6,6 +6,7 @@ import RPi.GPIO as GPIO
 from src.utilities.sensor_template import Sensor
 from datetime import datetime
 
+
 class SoilMoistureSensor(Sensor):
 
     channel: int = None

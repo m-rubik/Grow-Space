@@ -12,6 +12,7 @@ from tkinter import Tk
 from multiprocessing import Queue, Process, active_children, set_start_method
 from src.GUI.GUI import GrowSpaceGUI
 
+
 class ThreadedClient:
     """!
     This is the main thread class.
@@ -100,6 +101,7 @@ class ThreadedClient:
         The "main loop" a.k.a periodic_call will notice this and begin shutdown
         """
         self.main_running = False
+
 
 if __name__ == "__main__":
     ROOT = Tk()
