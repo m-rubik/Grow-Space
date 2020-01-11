@@ -1,21 +1,27 @@
+"""!
+Code for simulating a Soil Moisture Sensor
+"""
+
+import random
 from src.utilities.sensor_template import Sensor
 from datetime import datetime
 
-class TemperatureSensor(Sensor):
+class SoilMoistureSensor(Sensor):
 
+    def __init__(self, name="default", queue=None, polling_interval=2):
+        super().__init__(name, queue, polling_interval)
+    
     def poll(self):
         """!
         This method is called periodically to read sensor data and report
         it back to the main thread.
         """
 
-        # Step 1: Take a reading.
-        # For testing, to simulate asynchronous I/O, we create a random number at random intervals
-        import random
-        import time
+        # Step 1: Generate a reading
+        rand = random.Random()
         current_time = datetime.now()
         self._previous_val = self._current_val
-        self._current_val = random.randrange(10, 40)
+        self._current_val = round(rand.random()*100,2)
 
         # TODO Step 1.5: Run algorithms with the data??? 
 

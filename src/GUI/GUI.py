@@ -138,12 +138,14 @@ class GrowSpaceGUI:
                     else:
                         self.soil_1_val_label.config(fg="Green")
                         warning_flags.pop('soil_moisture_sensor_1', None)
-                if msg[0] == "temperature_sensor":
-                    self.temperature_val.set(str(msg[1])+"°C")
-                    if int(msg[1]) < 20:
+
+                elif msg[0] == "environment_sensor":
+                    received_temp = round(msg[1]['temperature'], 2)
+                    self.temperature_val.set(str(received_temp)+"°C")
+                    if received_temp < 20:
                         self.temperature_val_label.config(fg="Red")
                         warning_flags["temperature_sensor"] = "Too Cold"
-                    elif int(msg[1]) > 30:
+                    elif received_temp > 30:
                         self.temperature_val_label.config(fg="Red")
                         warning_flags["temperature_sensor"] = "Too Hot"
                     else:

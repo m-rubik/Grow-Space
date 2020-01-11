@@ -11,8 +11,6 @@ import os
 from tkinter import Tk
 from multiprocessing import Queue, Process, active_children, set_start_method
 from src.GUI.GUI import GrowSpaceGUI
-from src.sensors.temperature_sensor import TemperatureSensor
-from src.sensors.soil_moisture_sensor import SoilMoistureSensor
 
 class ThreadedClient:
     """!
@@ -30,21 +28,29 @@ class ThreadedClient:
     sensors: dict = dict()
     sensor_processes: dict = dict()
 
-    def __init__(self, master):
+    def __init__(self, master, simulate_environment=False):
         """!
         Launches the GUI and the asynchronous worker processes (1 for each sensor).
         @param master: The root (instance) of a Tkinter top-level widget
         """
 
         self.gui = GrowSpaceGUI(master, self.master_queue, self.end_application)
-        
-        self.sensors['soil_moisture_sensor_1'] = SoilMoistureSensor(name="soil_moisture_sensor_1", queue=Queue())
-        self.sensors['temperature_sensor'] = TemperatureSensor(name="temperature_sensor", queue=Queue())
-        self.sensor_processes['soil_moisture_sensor_1'] = Process(target=self.sensors['soil_moisture_sensor_1'].run)
-        self.sensor_processes['temperature_sensor'] = Process(target=self.sensors['temperature_sensor'].run)
-        
-        for sensor in self.sensor_processes.values():
-            sensor.start()
+
+        if simulate_environment:
+            print("Running simulation...")
+            from src.simulations import sim_env_sensor, sim_soil_sensor
+            self.sensors['environment_sensor'] = sim_env_sensor.EnvironmentSensor(name="sim_environment_sensor", queue=Queue())
+            self.sensors['soil_moisture_sensor_1'] = sim_soil_sensor.SoilMoistureSensor(name="sim_soil_moisture_sensor_1", queue=Queue())
+        else:
+            print("Running system...")
+            from src.sensors.soil_moisture_sensor import SoilMoistureSensor
+            from src.sensors.env_sensor import EnvironmentSensor
+            self.sensors['soil_moisture_sensor_1'] = SoilMoistureSensor(name="soil_moisture_sensor_1", queue=Queue())
+            self.sensors['environment_sensor'] = EnvironmentSensor(name="environment_sensor", queue=Queue())
+
+        for name, value in self.sensors.items():
+            self.sensor_processes[name] = Process(target=value.run)
+            self.sensor_processes[name].start()
 
         self.main_running = True
 
@@ -101,5 +107,5 @@ if __name__ == "__main__":
     # ROOT.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
     ROOT.resizable()
     ROOT.geometry("350x150")
-    CLIENT = ThreadedClient(ROOT)
+    CLIENT = ThreadedClient(ROOT, simulate_environment=True)
     ROOT.mainloop() # Blocking!
