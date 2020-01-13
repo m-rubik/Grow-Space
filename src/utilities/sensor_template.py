@@ -10,7 +10,6 @@ import time
 from abc import ABC, abstractmethod
 from multiprocessing import Queue
 from datetime import datetime, timedelta
-import RPi.GPIO as GPIO
 
 
 class Sensor(ABC):
