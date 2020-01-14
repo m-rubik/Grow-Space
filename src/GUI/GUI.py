@@ -77,11 +77,6 @@ class GrowSpaceGUI:
         self.button.grid(row=5, column=1, sticky=E)
         self.stop_button.grid(row=6, column=0, columnspan=2, sticky=W)
 
-        # print(self.grid_info())
-        # for column in 
-        # grid_columnconfigure(index=i)
-
-
         ## TODO: REMOVE THIS. This is just the stuff from the sample GUI
         # self.total = 0
         # self.entered_number = 0
@@ -186,3 +181,15 @@ class GrowSpaceGUI:
 
     #     self.total_label_text.set(self.total)
     #     self.entry.delete(0, END)
+
+if __name__ == "__main__":
+    from multiprocessing import Queue
+    import sys
+    ROOT = Tk()
+    # WIDTH, HEIGHT = ROOT.winfo_screenwidth(), ROOT.winfo_screenheight()
+    # ROOT.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
+    ROOT.resizable()
+    ROOT.geometry("350x150")
+    endCommand = lambda: sys.exit(0)
+    app = GrowSpaceGUI(ROOT, Queue(), endCommand)
+    ROOT.mainloop() # Blocking!
