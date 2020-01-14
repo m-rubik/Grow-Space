@@ -21,7 +21,7 @@ Navigate to the directory containing main.py then do:
 
 ```pipenv shell```
 
-```pipenv ./main.py```
+```python ./main.py```
 
 ## Usage on RPi
 
