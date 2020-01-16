@@ -12,6 +12,7 @@ pandas = "*"
 matplotlib = "*"
 adafruit-blinka = "*"
 adafruit-circuitpython-bme680 = "*"
+adafruit-circuitpython-ads1x15 = "*"
 
 [requires]
 python_version = "3.*"
