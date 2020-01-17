@@ -104,8 +104,10 @@ class GrowSpaceGUI:
         files = [("Configuration files", "*.cfg"), ('All Files', '*.*')] 
         f = asksaveasfile(filetypes = files, defaultextension = files)
         if f is None: # User closes the dialog with "cancel"
-            return
+            return None
+        # TODO: Here is where we need to format the config file based on the user's input
         text2save = "UHHHHHH"
+        # Save to the file
         f.write(text2save)
         f.close()
 
@@ -128,9 +130,9 @@ class GrowSpaceGUI:
                 # Display the data accordingly
                 if msg[0] == "soil_moisture_sensor_1":
                     self.soil_1_val.set(str(msg[1])+"%")
-                    if int(msg[1]) < 65:
+                    if msg[2]:
                         self.soil_1_val_label.config(fg="Red")
-                        warning_flags["soil_moisture_sensor_1"] = "Needs Watering"
+                        warning_flags["soil_moisture_sensor_1"] = msg[2]
                     else:
                         self.soil_1_val_label.config(fg="Green")
                         warning_flags.pop('soil_moisture_sensor_1', None)
