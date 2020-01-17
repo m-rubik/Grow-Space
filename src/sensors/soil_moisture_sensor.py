@@ -2,21 +2,28 @@
 Code for the Soil Moisture Sensor
 """
 
-import RPi.GPIO as GPIO
+import time
+import board
+from busio import I2C
+import adafruit_ads1x15.ads1115 as ADS
+from adafruit_ads1x15.analog_in import AnalogIn 
 from src.utilities.sensor_template import Sensor
 from datetime import datetime
 
 
 class SoilMoistureSensor(Sensor):
 
-    channel: int = None
+    i2c_interface = None
+    ads = None
+    sensor_board = None
+    channel = None
 
-    def __init__(self, name="default", queue=None, polling_interval=2, pin=None):
+    def __init__(self, name="default", queue=None, polling_interval=2):
         super().__init__(name, queue, polling_interval)
-        self.channel = pin # TODO: This should maybe be passed in???
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.channel, GPIO.IN)
 
+        self.i2c_interface = I2C(board.SCL, board.SDA)
+        self.ads = ADS.ADS1115(self.i2c_interface)
+        self.channel = AnalogIn(self.ads, ADS.P0)
 
     def poll(self):
         """!
@@ -26,12 +33,14 @@ class SoilMoistureSensor(Sensor):
 
         # Step 1: Take a reading.
         self._previous_val = self._current_val
-        self._current_val = GPIO.input(self.channel)
+        self._current_val = [self.channel.value, self.channel.voltage]
+
+        print(self._current_val)
         
         # TODO Step 1.5: Run algorithms with the data??? 
 
         # Step 2: Relay the reading
-        self.queue.put(self._current_val)
+        self.queue.put(self._current_val[0])
         
         # Step 3: Log the reading
         current_time = datetime.now()
@@ -39,24 +48,43 @@ class SoilMoistureSensor(Sensor):
             f.write(str(current_time)+":"+str(self._current_val)+"\n")
 
 if __name__ == "__main__":
-    import RPi.GPIO as GPIO
+
     import time
-    import datetime
+    import board
+    from busio import I2C
+    import adafruit_ads1x15.ads1115 as ADS
+    from adafruit_ads1x15.analog_in import AnalogIn 
 
-    channel = 16
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(channel, GPIO.IN)
-
-    def callback(channel):
-        time = datetime.datetime.now()
-        reading = GPIO.input(channel)
-        if reading == 1:
-            print(time, "Reading is", str(reading)+". No water")
-        else:
-            print(time, "Reading is", str(reading)+". Water detected")
-
-    GPIO.add_event_detect(channel, GPIO.BOTH, bouncetime=300)
-    GPIO.add_event_callback(channel, callback)
+    # Create library object using our Bus I2C port
+    i2c = I2C(board.SCL, board.SDA)
+    ads = ADS.ADS1115(i2c)
+    chan = AnalogIn(ads, ADS.P0)
+    print("{:>5}\t{:>5}".format('raw','v'))
 
     while True:
-        time.sleep(0.1)
+        print("{:>5}\t{:>5.3f}".format(chan.value,chan.voltage))
+        time.sleep(0.5)
+
+
+    ## CODE FOR DIGITAL SIGNAL ONLY
+    # import RPi.GPIO as GPIO
+    # import time
+    # import datetime
+
+    # channel = 16
+    # GPIO.setmode(GPIO.BCM)
+    # GPIO.setup(channel, GPIO.IN)
+
+    # def callback(channel):
+    #     time = datetime.datetime.now()
+    #     reading = GPIO.input(channel)
+    #     if reading == 1:
+    #         print(time, "Reading is", str(reading)+". No water")
+    #     else:
+    #         print(time, "Reading is", str(reading)+". Water detected")
+
+    # GPIO.add_event_detect(channel, GPIO.BOTH, bouncetime=300)
+    # GPIO.add_event_callback(channel, callback)
+
+    # while True:
+    #     time.sleep(0.1)
