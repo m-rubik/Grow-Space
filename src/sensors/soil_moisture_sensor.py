@@ -24,6 +24,15 @@ class SoilMoistureSensor(Sensor):
         self.i2c_interface = I2C(board.SCL, board.SDA)
         self.ads = ADS.ADS1115(self.i2c_interface)
         self.channel = AnalogIn(self.ads, ADS.P0)
+        self.voltage_list = []
+
+        current_time = datetime.now()
+        # sets max voltage from average of 5 readings from sensor
+        while (datetime.now()-current_time) < 10.0:
+            self.voltage_list.append(self.channel.voltage)
+
+        # Initializes max voltage of the sensor
+        self.max_volt = sum(self.voltage_list)/len(self.voltage_list)
 
     def poll(self):
         """!
@@ -31,21 +40,24 @@ class SoilMoistureSensor(Sensor):
         it back to the main thread.
         """
 
-        # Step 1: Take a reading.
+        # Step 1: Take a reading and normalize voltage value
         self._previous_val = self._current_val
-        self._current_val = [self.channel.value, self.channel.voltage]
+        self._current_val = [self.channel.value, self.channel.voltage/self.max_volt]
 
         print(self._current_val)
         
         # TODO Step 1.5: Run algorithms with the data??? 
 
         # Step 2: Relay the reading
+        # This is passing the raw value to the queue?
+        # self.queue.put(self._current_val[1])
         self.queue.put(self._current_val[0])
-        
+
         # Step 3: Log the reading
         current_time = datetime.now()
-        with open("logs/"+self.name+".txt","a+") as f:
+        with open("logs/"+self.name+".txt", "a+") as f:
             f.write(str(current_time)+":"+str(self._current_val)+"\n")
+
 
 if __name__ == "__main__":
 
@@ -59,14 +71,13 @@ if __name__ == "__main__":
     i2c = I2C(board.SCL, board.SDA)
     ads = ADS.ADS1115(i2c)
     chan = AnalogIn(ads, ADS.P0)
-    print("{:>5}\t{:>5}".format('raw','v'))
+    print("{:>5}\t{:>5}".format('raw', 'v'))
 
     while True:
-        print("{:>5}\t{:>5.3f}".format(chan.value,chan.voltage))
+        print("{:>5}\t{:>5.3f}".format(chan.value, chan.voltage))
         time.sleep(0.5)
 
-
-    ## CODE FOR DIGITAL SIGNAL ONLY
+    # CODE FOR DIGITAL SIGNAL ONLY
     # import RPi.GPIO as GPIO
     # import time
     # import datetime

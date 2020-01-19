@@ -13,6 +13,7 @@ from src.utilities.sensor_template import Sensor
 i2c = I2C(board.SCL, board.SDA)
 bme680 = adafruit_bme680.Adafruit_BME680_I2C(i2c, debug=False)
 
+
 class EnvironmentSensor(Sensor):
     """!
     This is the class for the BME680 Multifunction Environment Sensor
@@ -33,7 +34,8 @@ class EnvironmentSensor(Sensor):
 
         # Create our sensor board object
         self.sensor_board = adafruit_bme680.Adafruit_BME680_I2C(i2c, debug=False)
-        self.sensor_board.sea_level_pressure = sea_level_pressure # change this to match the location's pressure (hPa) at sea level
+        # change this to match the location's pressure (hPa) at sea level
+        self.sensor_board.sea_level_pressure = sea_level_pressure
 
     def poll(self):
 
@@ -65,6 +67,7 @@ class EnvironmentSensor(Sensor):
             for entry, value in self.data_dict.items():
                 f.write(entry + ": " + str(value) + ", ")
             f.write("\n")
+
 
 if __name__ == "__main__":
     """

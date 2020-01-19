@@ -34,5 +34,6 @@ def watering_algorithm(db, simulate_environment):
     msg = ["soil_moisture_sensor_1", db['latest']['soil_moisture_sensor_1'], flag]
     return msg
 
+
 def lighting_algorithm(db, simulate_environment):
     pass
