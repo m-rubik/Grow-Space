@@ -4,7 +4,7 @@ ECE490/ECE491 Capstone design project -- Grow Space.
 
 ## Installation
 1. Clone this directory:
-```git clone https://github.com/m-rubik/Grow-Space.git```
+```git clone git@github.com:m-rubik/Grow-Space.git```
 
 2. Open the directory:
 ```cd Grow-Space```
