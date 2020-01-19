@@ -4,10 +4,12 @@ Contains all functions related to JSON operations.
 
 import json
 
+
 def load_from_json(filename):
     with open(filename+".json", "r") as f:
         data = json.load(f)
     return data
+
 
 def save_as_json(filename, data):
     try:
