@@ -24,6 +24,7 @@ class SoilMoistureSensor(Sensor):
         self.i2c_interface = I2C(board.SCL, board.SDA)
         self.ads = ADS.ADS1115(self.i2c_interface)
         self.channel = AnalogIn(self.ads, ADS.P0)
+        # self.channel1 = AnalogIn(self.ads, ADS.P1)
         self.voltage_list = []
 
         current_time = datetime.now()

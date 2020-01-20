@@ -5,7 +5,8 @@ RPi GPIO pins.
 
 import RPi.GPIO as GPIO
 
-class Relay():
+
+class Relay:
     """!
     This is the class for all relay devices
     @param pin: The RPi pin that acts as the signal pin to the relay
@@ -46,6 +47,7 @@ class Relay():
     def turn_off(self):
         self.is_conducting = False
         GPIO.output(self.pin, self.is_conducting)
+
 
 if __name__ == "__main__":
     """

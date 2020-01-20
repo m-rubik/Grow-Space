@@ -5,7 +5,8 @@ ws281 LED strip.
 
 from rpi_ws281x import * # TODO: Fix this wildcard import
 
-class LEDStrip():
+
+class LEDStrip:
     """!
     This is the class for the ws281 LED strip.
     @param LED_COUNT: Number of LEDs in the strip
@@ -42,7 +43,7 @@ class LEDStrip():
         else:
             self.LED_BRIGHTNESS = LED_BRIGHTNESS
 
-        if LED_PIN in [13, 19, 41, 45, 53]:
+        if LED_PIN in [24]:
             self.LED_CHANNEL = 1
         else:
             self.LED_CHANNEL = 0
@@ -55,20 +56,21 @@ class LEDStrip():
         self.LED_INVERT = LED_INVERT
 
         self.strip = Adafruit_NeoPixel(self.LED_COUNT, 
-                                    self.LED_PIN, 
-                                    self.LED_FREQ_HQ,
-                                    self.LED_DMA, 
-                                    self.LED_INVERT,
-                                    self.LED_BRIGHTNESS,
-                                    self.LED_CHANNEL)
+                                       self.LED_PIN,
+                                       self.LED_FREQ_HQ,
+                                       self.LED_DMA,
+                                       self.LED_INVERT,
+                                       self.LED_BRIGHTNESS,
+                                       self.LED_CHANNEL)
         self.strip.begin()
 
     def adjust_color(self, pixel_range="All", red_content=255, green_content=255, blue_content=255):
         if pixel_range == "All":
             pixel_range = range(0, self.LED_COUNT)
         for LED in pixel_range:
-            self.strip.setPixelColor(LED, Color(red_content,green_content,blue_content))
+            self.strip.setPixelColor(LED, Color(red_content, green_content, blue_content))
             self.strip.show()
+
 
 if __name__ == "__main__":
     """
