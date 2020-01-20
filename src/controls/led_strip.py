@@ -43,7 +43,7 @@ class LEDStrip:
         else:
             self.LED_BRIGHTNESS = LED_BRIGHTNESS
 
-        if LED_PIN in [24]:
+        if LED_PIN in [13, 19, 41, 45, 53]: # see: https://tutorials-raspberrypi.com/connect-control-raspberry-pi-ws2812-rgb-led-strips/ 
             self.LED_CHANNEL = 1
         else:
             self.LED_CHANNEL = 0
