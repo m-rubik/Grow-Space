@@ -63,8 +63,8 @@ if __name__ == "__main__":
 
     io.setmode(io.BOARD)
     io.setup(in1, io.OUT)
-    io.setup(in2, io.OUT)
-    io.setup(in3, io.OUT)
+    io.setup(in2, io.OUT) # UV LEDs draw 1.08A at 12.1V. With 12.5ohms (8 100ohms //) draw 840 mA
+    io.setup(in3, io.OUT) # Pump has current limiting 25ohms w/ back-emf resistance 200ohms
 
     io.output(in1, True)
     io.output(in2, True)
@@ -73,14 +73,14 @@ if __name__ == "__main__":
     time.sleep(1)
 
     io.output(in1, False)
-    io.output(in2, False)
-    io.output(in3, False)
+    #io.output(in2, False)
+    #io.output(in3, False)
 
-    time.sleep(1)
+    time.sleep(10)
 
     io.output(in1, True)
-    io.output(in2, True)
-    io.output(in3, True)
+    #io.output(in2, True)
+    #io.output(in3, True)
 
     # try:
     #     while True:

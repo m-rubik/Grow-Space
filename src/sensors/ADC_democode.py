@@ -9,13 +9,18 @@ i2c = I2C(board.SCL, board.SDA)
 ads = ADS.ADS1115(i2c)
 chan0 = AnalogIn(ads, ADS.P0)
 chan1 = AnalogIn(ads, ADS.P1)
-chan2 = AnalogIn(ads, ADS.P2)
+# chan2 = AnalogIn(ads, ADS.P2)
 
 while True:
+    print("====================================")
+    print("SENSOR 1")
     print("{:>5}\t{:>5.3f}".format(chan0.value,chan0.voltage))
-    print("{:>5}\t{:>5.3f}".format(chan1.value,chan1.voltage))
-    print("{:>5}\t{:>5.3f}".format(chan2.value,chan2.voltage))
     time.sleep(0.5)
+    print("====================================")
+    print("SENSOR 2")
+    print("{:>5}\t{:>5.3f}".format(chan1.value,chan1.voltage))
+    # print("{:>5}\t{:>5.3f}".format(chan2.value,chan2.voltage))
+    time.sleep(1)
 
 
 # # Simple demo of reading each analog input from the ADS1x15 and printing it to

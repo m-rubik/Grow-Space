@@ -16,15 +16,17 @@ class SoilMoistureSensor(Sensor):
     i2c_interface = None
     ads = None
     sensor_board = None
-    channel = None
+    channel = None 
 
-    def __init__(self, name="default", queue=None, polling_interval=2):
+    def __init__(self, name="default", queue=None, polling_interval=2, max_v=3, min_3=1):
         super().__init__(name, queue, polling_interval)
 
         self.i2c_interface = I2C(board.SCL, board.SDA)
         self.ads = ADS.ADS1115(self.i2c_interface)
         self.channel = AnalogIn(self.ads, ADS.P0)
         # self.channel1 = AnalogIn(self.ads, ADS.P1)
+        self.max_v = max_v
+        self.min_v = min_v
         self.voltage_list = []
 
         current_time = datetime.now()
