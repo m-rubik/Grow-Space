@@ -1,0 +1,86 @@
+{
+    "01-21-20 14:02:23": {
+        "environment_sensor": {
+            "altitude": 1446,
+            "gas": 372833,
+            "humidity": 69,
+            "pressure": 1408,
+            "temperature": 28
+        },
+        "soil_moisture_sensor_1": 64.5
+    },
+    "01-21-20 14:02:25": {
+        "environment_sensor": {
+            "altitude": 809,
+            "gas": 690932,
+            "humidity": 6,
+            "pressure": 649,
+            "temperature": 34
+        },
+        "soil_moisture_sensor_1": 66.89
+    },
+    "01-21-20 14:02:27": {
+        "environment_sensor": {
+            "altitude": 1887,
+            "gas": 153423,
+            "humidity": 14,
+            "pressure": 1208,
+            "temperature": 36
+        },
+        "soil_moisture_sensor_1": 68.37
+    },
+    "01-21-20 14:02:29": {
+        "environment_sensor": {
+            "altitude": 619,
+            "gas": 689792,
+            "humidity": 92,
+            "pressure": 539,
+            "temperature": 33
+        },
+        "soil_moisture_sensor_1": 32.19
+    },
+    "01-21-20 14:02:31": {
+        "environment_sensor": {
+            "altitude": 258,
+            "gas": 151560,
+            "humidity": 62,
+            "pressure": 636,
+            "temperature": 23
+        },
+        "soil_moisture_sensor_1": 81.66
+    },
+    "01-21-20 14:02:33": {
+        "environment_sensor": {
+            "altitude": 429,
+            "gas": 289011,
+            "humidity": 32,
+            "pressure": 569,
+            "temperature": 19
+        },
+        "soil_moisture_sensor_1": 90.29
+    },
+    "01-21-20 14:02:35": {
+        "environment_sensor": {
+            "altitude": 1256,
+            "gas": 116307,
+            "humidity": 1,
+            "pressure": 535,
+            "temperature": 37
+        },
+        "soil_moisture_sensor_1": 54.34
+    },
+    "Moisture_High": 80,
+    "Moisture_Low": 60,
+    "Moisture_Target": 70,
+    "last_watering": "2020-01-21 14:02:29.725564",
+    "latest": {
+        "environment_sensor": {
+            "altitude": 1256,
+            "gas": 116307,
+            "humidity": 1,
+            "pressure": 535,
+            "temperature": 37
+        },
+        "soil_moisture_sensor_1": 54.34
+    }
+}

@@ -8,10 +8,7 @@ from datetime import datetime
 from busio import I2C
 import adafruit_bme680
 from src.utilities.sensor_template import Sensor
- 
-# Create library object using our Bus I2C port
-i2c = I2C(board.SCL, board.SDA)
-bme680 = adafruit_bme680.Adafruit_BME680_I2C(i2c, debug=False)
+
 
 class EnvironmentSensor(Sensor):
     """!
@@ -30,13 +27,12 @@ class EnvironmentSensor(Sensor):
 
         # Create I2C interface library object
         self.i2c = I2C(board.SCL, board.SDA)
-
         # Create our sensor board object
-        self.sensor_board = adafruit_bme680.Adafruit_BME680_I2C(i2c, debug=False)
-        self.sensor_board.sea_level_pressure = sea_level_pressure # change this to match the location's pressure (hPa) at sea level
+        self.sensor_board = adafruit_bme680.Adafruit_BME680_I2C(self.i2c, debug=False)
+        # change this to match the location's pressure (hPa) at sea level
+        self.sensor_board.sea_level_pressure = sea_level_pressure
 
     def poll(self):
-
         # Step 1: Take the readings
         try:
             self.data_dict['temperature'] = self.sensor_board.temperature   # [Celcius]
@@ -66,6 +62,7 @@ class EnvironmentSensor(Sensor):
                 f.write(entry + ": " + str(value) + ", ")
             f.write("\n")
 
+
 if __name__ == "__main__":
     """
     Code from:
@@ -73,23 +70,16 @@ if __name__ == "__main__":
 
     remember to install both the adafruit_blinka and adafruit-circuitpython-bme680 libraries
     """
-    import time
-    import board
-    from busio import I2C
-    import adafruit_bme680
-    
-    # Create library object using our Bus I2C port
+
+
     i2c = I2C(board.SCL, board.SDA)
     bme680 = adafruit_bme680.Adafruit_BME680_I2C(i2c, debug=False)
-    
-    # change this to match the location's pressure (hPa) at sea level
     bme680.sea_level_pressure = 1013.25
-
+    
     while True:
         print("\nTemperature: %0.1f C" % bme680.temperature)
         print("Gas: %d ohm" % bme680.gas)
         print("Humidity: %0.1f %%" % bme680.humidity)
         print("Pressure: %0.3f hPa" % bme680.pressure)
         print("Altitude = %0.2f meters" % bme680.altitude)
-
         time.sleep(1)

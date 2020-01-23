@@ -61,6 +61,7 @@ class Sensor(ABC):
     @abstractmethod
     def poll(self):
         """!
-        This method captures & reports sensor data.
+        This method captures sensor data.
+        Since it is an abstract method, it MUST be implemented by all derived classes.
         """
         pass

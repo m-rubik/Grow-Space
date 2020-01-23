@@ -5,7 +5,8 @@ RPi GPIO pins.
 
 import RPi.GPIO as GPIO
 
-class Relay():
+
+class Relay:
     """!
     This is the class for all relay devices
     @param pin: The RPi pin that acts as the signal pin to the relay
@@ -47,6 +48,7 @@ class Relay():
         self.is_conducting = False
         GPIO.output(self.pin, self.is_conducting)
 
+
 if __name__ == "__main__":
     """
     Example code from: https://www.electronicshub.org/control-a-relay-using-raspberry-pi/
@@ -55,42 +57,57 @@ if __name__ == "__main__":
     import RPi.GPIO as io
     import time
 
-    in1 = 16
-    in2 = 18
+    in1 = 11
+    in2 = 13
+    in3 = 15
 
     io.setmode(io.BOARD)
     io.setup(in1, io.OUT)
-    io.setup(in2, io.OUT)
+    io.setup(in2, io.OUT) # UV LEDs draw 1.08A at 12.1V. With 12.5ohms (8 100ohms //) draw 840 mA
+    io.setup(in3, io.OUT) # Pump has current limiting 25ohms w/ back-emf resistance 200ohms
+
+    io.output(in1, True)
+    io.output(in2, True)
+    io.output(in3, True)
+
+    time.sleep(1)
 
     io.output(in1, False)
-    io.output(in2, False)
+    #io.output(in2, False)
+    #io.output(in3, False)
 
-    try:
-        while True:
-            for x in range(5):
-                io.output(in1, True)
-                time.sleep(1)
-                io.output(in1, False)
-                io.output(in2, True)
-                time.sleep(1)
-                io.output(in2, False)
+    time.sleep(10)
+
+    io.output(in1, True)
+    #io.output(in2, True)
+    #io.output(in3, True)
+
+    # try:
+    #     while True:
+    #         for x in range(5):
+    #             io.output(in1, True)
+    #             time.sleep(1)
+    #             io.output(in1, False)
+    #             io.output(in2, True)
+    #             time.sleep(1)
+    #             io.output(in2, False)
             
-            io.output(in1,True)
-            io.output(in2,True)
+    #         io.output(in1,True)
+    #         io.output(in2,True)
 
-            for x in range(4):
-                io.output(in1, True)
-                time.sleep(1)
-                io.output(in1, False)
-                time.sleep(1)
+    #         for x in range(4):
+    #             io.output(in1, True)
+    #             time.sleep(1)
+    #             io.output(in1, False)
+    #             time.sleep(1)
                 
-            io.output(in1,True)
+    #         io.output(in1,True)
 
-            for x in range(4):
-                    io.output(in2, True)
-                    time.sleep(1)
-                    io.output(in2, False)
-                    time.sleep(1)
-            io.output(in2,True)
-    except KeyboardInterrupt:
-        io.cleanup()
+    #         for x in range(4):
+    #                 io.output(in2, True)
+    #                 time.sleep(1)
+    #                 io.output(in2, False)
+    #                 time.sleep(1)
+    #         io.output(in2,True)
+    # except KeyboardInterrupt:
+    #     io.cleanup()
