@@ -98,16 +98,13 @@ class GrowSpaceGUI:
 
         self.Title.grid(row=0, column=0, columnspan=5, sticky=W)
 
-        # Add GUI components
-        self.stop_button = Button(master, text="EXIT", bg="Red", command=endCommand)
-        self.configuration_label = Label(master, bg="Black", fg="White", textvariable=self.configuration_text)
-        self.configuration_val_label = Label(master, bg="Black", fg="White", textvariable=self.configuration_val)
-        self.overall_status_text_label = Label(master, bg="Black", fg="Green", textvariable=self.overall_status_val)
-        self.overall_status_label = Label(master, bg="Black", fg="White", textvariable=self.overall_status_text)
-        self.soil_1_label = Label(master, bg="Black", fg="White", textvariable=self.soil_1_text)
-        self.soil_1_val_label = Label(master, bg="Black", fg="White", textvariable=self.soil_1_val)
-        self.temperature_label = Label(master, bg="Black", fg="White", textvariable=self.temperature_text)
-        self.temperature_val_label = Label(master, bg="Black", fg="White", textvariable=self.temperature_val)
+        #Environmental Conditions
+
+        self.EnvironmentalConditionHeader.grid(row=6, column=5, columnspan=10, sticky=W)
+        self.SoilMoistureCondition.grid(row=8, column=5, sticky=W)
+        self.TemperatureCondition.grid(row=10, column=5, sticky=W)
+        self.HumidityCondition.grid(row=12, column=5, sticky=W)
+        self.VOCCondition.grid(row=14, column=5, sticky=W)
 
         # Condition Values
         self.SoilMoistureCondition_value.grid(row=8, column=11,  sticky=W+E)
@@ -116,7 +113,7 @@ class GrowSpaceGUI:
         self.VOCCondition_value.grid(row=14, column=11, sticky=W+E)
 
         # Range Headers
-        self.ParameterRangeHeader.grid(row=5, column=22, columnspan=10, sticky=W)
+        self.ParameterRangeHeader.grid(row=6, column=22, columnspan=10, sticky=W)
         self.SoilMoistureRange.grid(row=8, column=22, sticky=W)
         self.TemperatureRange.grid(row=10, column=22, sticky=W)
         self.HumidityRange.grid(row=12, column=22, sticky=W)
@@ -196,16 +193,7 @@ class GrowSpaceGUI:
         self.control_win.FanButton.grid(row=15, column=6)
         self.control_win.PumpButton.grid(row=20, column=6)
 
-            if isinstance(msg[0], str):
-                # Display the data accordingly
-                if msg[0] == "soil_moisture_sensor_1":
-                    self.soil_1_val.set(str(msg[1])+"%")
-                    if int(msg[1]) < 65:
-                        self.soil_1_val_label.config(fg="Red")
-                        warning_flags["soil_moisture_sensor_1"] = "Needs Watering"
-                    else:
-                        self.soil_1_val_label.config(fg="Green")
-                        warning_flags.pop('soil_moisture_sensor_1', None)
+
 
     # def processIncoming(self):
     #     """!
