@@ -20,7 +20,7 @@ class LEDStrip:
     """
 
     LED_COUNT: int = 144
-    LED_PIN: int = 18
+    LED_PIN: int = 18 # pin 12
     LED_FREQ_HQ: int = 800000
     LED_DMA: int = 10
     LED_BRIGHTNESS: int = 100
@@ -105,7 +105,8 @@ if __name__ == "__main__":
     LED_PIN = 18
     LED_FREQ_HQ = 800000
     LED_DMA = 10
-    LED_BRIGHTNESS = 100
+    LED_BRIGHTNESS = 10
+    # Brightness {75, 1.60A}, {100, 2.11A}, {125, 2.61A}
     LED_INVERT = False
     LED_CHANNEL = 0
 
@@ -120,7 +121,7 @@ if __name__ == "__main__":
             pos -= 170
             return Color(0, pos * 3, 255 - pos * 3)
         
-    def rainbowCycle(strip, wait_ms=20, iterations=5):
+    def rainbow_cycle(strip, wait_ms=20, iterations=5):
         """Draw rainbow that uniformly distributes itself across all pixels."""
         for j in range(256*iterations):
             for i in range(strip.numPixels()):
@@ -136,6 +137,7 @@ if __name__ == "__main__":
     strip = Adafruit_NeoPixel(LED_COUNT,LED_PIN,LED_FREQ_HQ,LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
     strip.begin()
         
-    adjust_color(strip, 10, 0, 10)
+    adjust_color(strip, 255, 255, 255)
+    #rainbowCycle(strip)
 
     print("DONE")

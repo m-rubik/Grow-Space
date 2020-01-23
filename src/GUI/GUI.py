@@ -48,7 +48,7 @@ class GrowSpaceGUI:
         self.temperature_val.set("-")
 
         # Add GUI components
-        self.stop_button = Button(master, text="EXIT", bg="Red", command=endCommand)
+        self.stop_button = Button(master, text=u"\u23FB", bg="Red", command=endCommand)
         self.configuration_label = Label(master, bg="Black", fg="White", textvariable=self.configuration_text)
         self.configuration_val_label = Label(master, bg="Black", fg="White", textvariable=self.configuration_val)
         self.overall_status_text_label = Label(master, bg="Black", fg="Green", textvariable=self.overall_status_val)
