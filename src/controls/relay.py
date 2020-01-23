@@ -5,6 +5,8 @@ RPi GPIO pins.
 
 import RPi.GPIO as GPIO
 
+#TODO: Make this turn off on shutdown
+
 
 class Relay:
     """!
@@ -72,15 +74,15 @@ if __name__ == "__main__":
 
     time.sleep(1)
 
-    io.output(in1, False)
+    #io.output(in1, False)
     #io.output(in2, False)
-    #io.output(in3, False)
+    io.output(in3, False)
 
-    time.sleep(10)
+    time.sleep(5)
 
-    io.output(in1, True)
+    #io.output(in1, True)
     #io.output(in2, True)
-    #io.output(in3, True)
+    io.output(in3, True)
 
     # try:
     #     while True:
