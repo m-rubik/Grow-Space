@@ -18,20 +18,26 @@ class SoilMoistureSensor(Sensor):
     sensor_board = None
     channel = None
 
-    def __init__(self, name="default", queue=None, polling_interval=2):
+    def __init__(self, name="default", queue=None, polling_interval=2, channel=None):
         super().__init__(name, queue, polling_interval)
 
         self.i2c_interface = I2C(board.SCL, board.SDA)
         self.ads = ADS.ADS1115(self.i2c_interface)
-        self.channel = AnalogIn(self.ads, ADS.P0)
-        # self.channel1 = AnalogIn(self.ads, ADS.P1)
-        self.voltage_list = []
 
+        if channel == 0:
+            self.channel = AnalogIn(self.ads, ADS.P0)
+        elif channel == 1:
+            self.channel = AnalogIn(self.ads, ADS.P1)
+        elif channel == 2:
+            self.channel = AnalogIn(self.ads, ADS.P2)
+        elif channel == 3:
+            self.channel = AnalogIn(self.ads, ADS.P3)
+
+        self.voltage_list = []
         current_time = datetime.now()
         # sets max voltage from average of 5 readings from sensor
         while (datetime.now()-current_time) < 10.0:
             self.voltage_list.append(self.channel.voltage)
-
         # Initializes max voltage of the sensor
         self.max_volt = sum(self.voltage_list)/len(self.voltage_list)
 
@@ -82,11 +88,9 @@ if __name__ == "__main__":
     # import RPi.GPIO as GPIO
     # import time
     # import datetime
-
     # channel = 16
     # GPIO.setmode(GPIO.BCM)
     # GPIO.setup(channel, GPIO.IN)
-
     # def callback(channel):
     #     time = datetime.datetime.now()
     #     reading = GPIO.input(channel)
@@ -94,9 +98,7 @@ if __name__ == "__main__":
     #         print(time, "Reading is", str(reading)+". No water")
     #     else:
     #         print(time, "Reading is", str(reading)+". Water detected")
-
     # GPIO.add_event_detect(channel, GPIO.BOTH, bouncetime=300)
     # GPIO.add_event_callback(channel, callback)
-
     # while True:
     #     time.sleep(0.1)
