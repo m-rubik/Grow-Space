@@ -106,9 +106,7 @@ if __name__ == "__main__":
     LED_FREQ_HQ = 800000
     LED_DMA = 10
     LED_BRIGHTNESS = 10
-        # Brightness 75  1.60A
-        # Brightness 100 2.11A
-        # Brightness 125 2.61A
+    # Brightness {75, 1.60A}, {100, 2.11A}, {125, 2.61A}
     LED_INVERT = False
     LED_CHANNEL = 0
 
@@ -123,7 +121,7 @@ if __name__ == "__main__":
             pos -= 170
             return Color(0, pos * 3, 255 - pos * 3)
         
-    def rainbowCycle(strip, wait_ms=20, iterations=5):
+    def rainbow_cycle(strip, wait_ms=20, iterations=5):
         """Draw rainbow that uniformly distributes itself across all pixels."""
         for j in range(256*iterations):
             for i in range(strip.numPixels()):
