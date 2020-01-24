@@ -1,25 +1,22 @@
 # Imports
-    # General
+
+# General
 import time
 import board
 from busio import I2C
 
-    # ADC/Moisture Sensors
+# ADC/Moisture Sensors
 import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn 
-    # Environment Sensor
-#from src.utilities.sensor_template import Sensor
+
+# Environment Sensor
 import adafruit_bme680
 from datetime import datetime
 
-import importlib
-moduleName = 'src.utilities.sensor_template'
-importlib.import_module(moduleName)
-
-    # RGB LED
+# RGB LED
 from rpi_ws281x import * # TODO: Fix this wildcard import
 
-    # UV LED
+# UV LED
 import RPi.GPIO as io
 
 # TODO: Can't run motor, lights, and fan all at the same time

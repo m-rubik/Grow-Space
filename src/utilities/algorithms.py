@@ -7,7 +7,7 @@ import datetime
 
 def watering_algorithm(db, simulate_environment):
     if int(db['latest']['soil_moisture_sensor_1']) < db['Moisture_Low']:
-        flag = "Moisture below LOW threshold"
+        flag = "LOW"
         time = datetime.datetime.now()
         if "last_watering" in db:
             if time > db["last_watering"]+datetime.timedelta(minutes=10): # TODO: Obtain the actual pumping interval

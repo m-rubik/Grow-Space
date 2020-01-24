@@ -1,66 +1,85 @@
 {
-    "01-23-20 15:47:11": {
+    "01-23-20 18:44:44": {
         "environment_sensor": {
-            "altitude": 1137,
-            "gas": 497658,
-            "humidity": 64,
-            "pressure": 1262,
-            "temperature": 29
+            "altitude": 1546,
+            "gas": 328304,
+            "humidity": 10,
+            "pressure": 845,
+            "temperature": 31
         },
-        "soil_moisture_sensor_1": 31.67
+        "soil_moisture_sensor_1": 85.21
     },
-    "01-23-20 15:47:13": {
+    "01-23-20 18:44:46": {
         "environment_sensor": {
-            "altitude": 689,
-            "gas": 336567,
-            "humidity": 64,
-            "pressure": 1419,
-            "temperature": 36
+            "altitude": 1929,
+            "gas": 224259,
+            "humidity": 48,
+            "pressure": 1383,
+            "temperature": 17
         },
-        "soil_moisture_sensor_1": 43.05
+        "soil_moisture_sensor_1": 56.82
     },
-    "01-23-20 15:47:15": {
+    "01-23-20 18:44:48": {
         "environment_sensor": {
-            "altitude": 195,
-            "gas": 660956,
-            "humidity": 29,
-            "pressure": 964,
-            "temperature": 19
-        },
-        "soil_moisture_sensor_1": 68.07
+            "altitude": 1643,
+            "gas": 303859,
+            "humidity": 52,
+            "pressure": 1057,
+            "temperature": 25
+        }
     },
-    "01-23-20 15:47:17": {
-        "environment_sensor": {
-            "altitude": 1663,
-            "gas": 489618,
-            "humidity": 5,
-            "pressure": 1055,
-            "temperature": 15
-        },
-        "soil_moisture_sensor_1": 89.94
+    "01-23-20 18:44:49": {
+        "soil_moisture_sensor_1": 47.59
     },
-    "01-23-20 15:47:19": {
+    "01-23-20 18:44:51": {
         "environment_sensor": {
-            "altitude": 1174,
-            "gas": 501660,
-            "humidity": 79,
-            "pressure": 1249,
+            "altitude": 342,
+            "gas": 658086,
+            "humidity": 33,
+            "pressure": 1429,
             "temperature": 26
         },
-        "soil_moisture_sensor_1": 10.81
+        "soil_moisture_sensor_1": 64.77
     },
+    "01-23-20 18:44:53": {
+        "environment_sensor": {
+            "altitude": 7,
+            "gas": 112254,
+            "humidity": 94,
+            "pressure": 1220,
+            "temperature": 27
+        },
+        "soil_moisture_sensor_1": 68.51
+    },
+    "01-23-20 18:44:55": {
+        "environment_sensor": {
+            "altitude": 285,
+            "gas": 164088,
+            "humidity": 60,
+            "pressure": 613,
+            "temperature": 23
+        }
+    },
+    "Fan Status": "OFF",
     "Moisture_High": 80,
     "Moisture_Low": 60,
     "Moisture_Target": 70,
-    "last_watering": "2020-01-23 15:47:11.511194",
+    "Pump Status": "OFF",
+    "RGB LED Status": [
+        0,
+        0,
+        0
+    ],
+    "UV LED Status": "OFF",
+    "last_watering": "2020-01-23 18:44:46.985625",
     "latest": {
         "environment_sensor": {
-            "altitude": 1174,
-            "gas": 501660,
-            "humidity": 79,
-            "pressure": 1249,
-            "temperature": 26
+            "altitude": 285,
+            "gas": 164088,
+            "humidity": 60,
+            "pressure": 613,
+            "temperature": 23
         },
-        "soil_moisture_sensor_1": 10.81
+        "soil_moisture_sensor_1": 68.51
     }
 }

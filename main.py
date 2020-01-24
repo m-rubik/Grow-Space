@@ -21,7 +21,8 @@ class ThreadedClient:
     In the future, when more boxes are implemented, there would be multiple
     instances of this class used, where each instance is for 1 box.
     @param gui: This is the main GUI
-    @param master_queue: Queue between this thread and the GUI
+    @param main_to_gui_queue: Uni-directional queue going FROM this thread TO the gui
+    @param gui_to_main_queue: Uni-directional queue going FROM the gui TO this thread
     @param sensors: A dictionary mapping all Sensor class instances to a unique name. These are the sensors of the system.
     @param sensor_processes: A dictionary mapping all Sensor worker processes to a unique name. These are the sensor processes of the system.
     @param main_running: Flag to show if the main loop is running or called to exit.
@@ -31,7 +32,8 @@ class ThreadedClient:
     """
 
     gui: GrowSpaceGUI = None
-    master_queue: Queue = Queue()
+    main_to_gui_queue: Queue = Queue()
+    gui_to_main_queue: Queue = Queue()
     sensors: dict = dict()
     sensor_processes: dict = dict()
     main_running: bool = True
@@ -47,7 +49,7 @@ class ThreadedClient:
         """
 
         self.simulated = simulate_environment
-        self.gui = GrowSpaceGUI(master, self.master_queue, self.end_application)
+        self.gui = GrowSpaceGUI(master, self.main_to_gui_queue, self.gui_to_main_queue, self.end_application)
 
         self.load_configuration()
 
@@ -70,6 +72,11 @@ class ThreadedClient:
         configuration_dict = {"Moisture_High": 80, "Moisture_Low": 60, "Moisture_Target": 70}
         for item, value in configuration_dict.items():
             self.db_master[item] = value
+        self.db_master["Pump Status"] = "OFF"
+        self.db_master["Fan Status"] = "OFF"
+        self.db_master["RGB LED Status"] = [0, 0, 0]
+        self.db_master["UV LED Status"] = "OFF"
+
 
     def spawn_processes(self):
         if self.simulated:
@@ -97,7 +104,7 @@ class ThreadedClient:
         This is the "main loop" of the main thread. Based on the refresh interval,
         it will periodically get data from the sensors and pass it to the GUI to be displayed, then call itself
         to run again.
-        @param gui_refresh_interval: Polling time (in miliseconds) of the sensors
+        @param gui_refresh_interval: How often (in miliseconds) the GUI will get check its inbound queue for new data to display
         """
 
         self.gui.processIncoming()
@@ -124,6 +131,7 @@ class ThreadedClient:
                 # Save database
                 export_object("./database/master", self.db_master)
                 save_as_json("./database/master", self.db_master)
+
                 # TODO: Run algorithms on the data
                 if sensor_name == "soil_moisture_sensor_1":
                     from src.utilities.algorithms import watering_algorithm
@@ -131,7 +139,18 @@ class ThreadedClient:
                 # Relay the data to the GUI so the user can see it
                 else:
                     msg = [sensor_name, sensor_data]
-                self.master_queue.put(msg)
+                self.main_to_gui_queue.put(msg)
+
+        if not self.gui_to_main_queue.empty():
+            msg = self.gui_to_main_queue.get()
+            print(msg)
+            if msg == "Toggle Pump":
+                # TODO: Actually toggle the pump
+                if self.db_master["Pump Status"] == "ON":
+                    self.db_master["Pump Status"] = "OFF"
+                else:
+                    self.db_master["Pump Status"] = "ON"
+                self.main_to_gui_queue.put(["Pump Status", self.db_master["Pump Status"]])
 
         # Wait for the requested time and then call itself
         self.gui.master.after(gui_refresh_interval, self.periodic_call)
@@ -148,7 +167,7 @@ if __name__ == "__main__":
     ROOT = Tk()
     # WIDTH, HEIGHT = ROOT.winfo_screenwidth(), ROOT.winfo_screenheight()
     # ROOT.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
-    ROOT.resizable()
-    ROOT.geometry("350x150")
+    # ROOT.resizable()
+    ROOT.geometry("1024x600")
     CLIENT = ThreadedClient(ROOT, simulate_environment=True)
     ROOT.mainloop() # Blocking!
