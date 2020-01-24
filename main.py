@@ -8,6 +8,7 @@ and control signals can be generated.
 import sys
 import time
 import os
+import atexit
 from tkinter import Tk
 from multiprocessing import Queue, Process, active_children, set_start_method
 from src.GUI.GUI import GrowSpaceGUI
@@ -50,6 +51,7 @@ class ThreadedClient:
         @param simulate_environment: Flag for if the environment is to be simulated (for development).
         """
 
+        atexit.register(self.end_application)
         self.simulated = simulate_environment
         self.gui = GrowSpaceGUI(master, self.main_to_gui_queue, self.gui_to_main_queue, self.end_application)
 
@@ -96,7 +98,6 @@ class ThreadedClient:
             self.controls['fan'] = fan.Fan(pin=17, name="fan", queue=Queue())
             self.controls['pump'] = pump.Pump(pin=22, name="pump", queue=Queue())
             self.controls['UV LED'] = uv_led.UVLed(pin=27, name="UV LED", queue=Queue())
-
 
         # Add all processes to dict
         for name, value in self.sensors.items():

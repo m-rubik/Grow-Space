@@ -230,7 +230,6 @@ class GrowSpaceGUI:
                 elif msg[0] == "Pump Status":
                     self.PumpStatus_value.configure(text=msg[1])
 
-            
 
 if __name__ == "__main__":
     import sys
