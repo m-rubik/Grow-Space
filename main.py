@@ -25,6 +25,7 @@ class ThreadedClient:
     @param gui_to_main_queue: Uni-directional queue going FROM the gui TO this thread
     @param sensors: A dictionary mapping all Sensor class instances to a unique name. These are the sensors of the system.
     @param sensor_processes: A dictionary mapping all Sensor worker processes to a unique name. These are the sensor processes of the system.
+    @param controls: A dictionary containing access to control objects (relays)
     @param main_running: Flag to show if the main loop is running or called to exit.
     @param db_master: Master database.
     @param statueses: Dictionary containing all operating statuses
@@ -36,6 +37,7 @@ class ThreadedClient:
     gui_to_main_queue: Queue = Queue()
     sensors: dict = dict()
     sensor_processes: dict = dict()
+    controls: dict = dict()
     main_running: bool = True
     db_master: dict = dict()
     statuses: dict = dict()
@@ -77,7 +79,6 @@ class ThreadedClient:
         self.db_master["RGB LED Status"] = [0, 0, 0]
         self.db_master["UV LED Status"] = "OFF"
 
-
     def spawn_processes(self):
         if self.simulated:
             print("Running simulation...")
@@ -88,9 +89,14 @@ class ThreadedClient:
             print("Running system...")
             from src.sensors.soil_moisture_sensor import SoilMoistureSensor
             from src.sensors.env_sensor import EnvironmentSensor
+            from src.controls import fan, pump, uv_led
             self.sensors['soil_moisture_sensor_1'] = SoilMoistureSensor(name="soil_moisture_sensor_1", queue=Queue(), channel=0, max_v=3, min_v=1)
             self.sensors['soil_moisture_sensor_2'] = SoilMoistureSensor(name="soil_moisture_sensor_2", queue=Queue(), channel=1, max_v=3, min_v=1)
             self.sensors['environment_sensor'] = EnvironmentSensor(name="environment_sensor", queue=Queue())
+            self.controls['fan'] = fan.Fan(pin=17, name="fan", queue=Queue())
+            self.controls['pump'] = pump.Pump(pin=22, name="pump", queue=Queue())
+            self.controls['UV LED'] = uv_led.UVLed(pin=27, name="UV LED", queue=Queue())
+
 
         # Add all processes to dict
         for name, value in self.sensors.items():

@@ -7,12 +7,6 @@ from datetime import datetime
 from src.utilities.sensor_template import Sensor
 
 class EnvironmentSensor(Sensor):
-    """!
-    This is the class for the BME680 Multifunction Environment Sensor
-    @param pin: The RPi pin that acts as the signal pin to the relay
-    @param name: The name of the relay.
-    @param is_conducting: The current state of the relay
-    """
 
     data_dict: dict = {}
 
@@ -46,3 +40,6 @@ class EnvironmentSensor(Sensor):
             for entry, value in self.data_dict.items():
                 f.write(entry + ": " + str(value) + ", ")
             f.write("\n")
+
+    def shutdown(self):
+        print(self.name, "shutting down.")
