@@ -180,9 +180,9 @@ class GrowSpaceGUI:
         self.control_win.configure(bg="Black")
         self.control_win.geometry("1024x600")
 
-        self.control_win.RGBLEDButton = Button(self.control_win, bg = "White", fg="Black", text = "RGB LED",font="Helvetica 24 bold", command=None)
-        self.control_win.UVLEDButton = Button(self.control_win, bg="White", fg="Black", text="UV LED",font="Helvetica 24 bold", command=None)
-        self.control_win.FanButton = Button(self.control_win, bg="White", fg="Black", text="Fan",font="Helvetica 24 bold", command=None)
+        self.control_win.RGBLEDButton = Button(self.control_win, bg = "White", fg="Black", text = "RGB LED",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle RGB"))
+        self.control_win.UVLEDButton = Button(self.control_win, bg="White", fg="Black", text="UV LED",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle UV"))
+        self.control_win.FanButton = Button(self.control_win, bg="White", fg="Black", text="Fan",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle Fan"))
         self.control_win.PumpButton = Button(self.control_win, bg="White", fg="Black", text="Pump",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle Pump"))
         self.control_win.ExitButton = Button(self.control_win, bg="White", fg="Black", text="\u23FB",font="Helvetica 24 bold", command=lambda: self.control_win.destroy())
 
@@ -229,6 +229,19 @@ class GrowSpaceGUI:
 
                 elif msg[0] == "Pump Status":
                     self.PumpStatus_value.configure(text=msg[1])
+
+                elif msg[0] == "Fan Status":
+                    self.FanStatus_value.configure(text=msg[1])
+
+                elif msg[0] == "UV LED Status":
+                    self.FanStatus_value.configure(text=msg[1])
+
+                elif msg[0] == "RGB LED Status":
+                    self.FanStatus_value.configure(text=str(msg[1][0]) + "% - " + str(msg[1][1]) + "% - " + str(msg[1][2]) + "%")
+
+
+
+
 
 
 if __name__ == "__main__":
