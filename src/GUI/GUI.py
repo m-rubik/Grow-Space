@@ -234,10 +234,10 @@ class GrowSpaceGUI:
                     self.FanStatus_value.configure(text=msg[1])
 
                 elif msg[0] == "UV LED Status":
-                    self.FanStatus_value.configure(text=msg[1])
+                    self.UVLEDIntensity_value.configure(text=msg[1])
 
                 elif msg[0] == "RGB LED Status":
-                    self.FanStatus_value.configure(text=str(msg[1][0]) + "% - " + str(msg[1][1]) + "% - " + str(msg[1][2]) + "%")
+                    self.RGBLEDIntensity_value.configure(text=str(msg[1][0]) + "% - " + str(msg[1][1]) + "% - " + str(msg[1][2]) + "%")
 
 
 
