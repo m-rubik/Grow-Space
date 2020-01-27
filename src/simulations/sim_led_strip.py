@@ -25,7 +25,7 @@ class LEDStrip():
     LED_CHANNEL: int = 0
     strip = None
 
-    def __init__(self, LED_PIN, LED_COUNT=144, LED_FREQ_HQ=800000, LED_DMA=10, LED_BRIGHTNESS=100, LED_INVERT=False):
+    def __init__(self, LED_PIN, name="Default", LED_COUNT=144, LED_FREQ_HQ=800000, LED_DMA=10, LED_BRIGHTNESS=100, LED_INVERT=False):
 
         if LED_BRIGHTNESS < 0:
             self.LED_BRIGHTNESS = 0

@@ -28,12 +28,12 @@ class Relay():
 
     def toggle(self):
         if self.is_off:
-            self.turn_off()
-        else:
             self.turn_on()
+        else:
+            self.turn_off()
 
     def turn_on(self):
-        self.is_off = True
+        self.is_off = False
 
     def turn_off(self):
-        self.is_off = False
+        self.is_off = True

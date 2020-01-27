@@ -83,15 +83,26 @@ class ThreadedClient:
         self.db_master["UV LED Status"] = "OFF"
 
     def add_controllers(self):
-        from src.controls import fan, pump, uv_led, led_strip
-        self.controls['fan'] = fan.Fan(pin=17, name="fan", queue=Queue())
-        self.controls['fan'].turn_off()
-        self.controls['pump'] = pump.Pump(pin=22, name="pump", queue=Queue())
-        self.controls['pump'].turn_off()
-        self.controls['UV LED'] = uv_led.UVLed(pin=27, name="UV LED", queue=Queue())
-        self.controls['UV LED'].turn_off()
-        self.controls['RGB LED'] = led_strip.LEDStrip(LED_PIN=18, name="RGB LED")
-        self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
+        if self.simulated:
+            from src.simulations import sim_relay, sim_led_strip
+            self.controls['fan'] = sim_relay.Relay(pin=17, name="fan")
+            self.controls['fan'].turn_off()
+            self.controls['pump'] = sim_relay.Relay(pin=22, name="pump")
+            self.controls['pump'].turn_off()
+            self.controls['UV LED'] = sim_relay.Relay(pin=27, name="UV LED")
+            self.controls['UV LED'].turn_off()
+            self.controls['RGB LED'] = sim_led_strip.LEDStrip(LED_PIN=18, name="RGB LED")
+            self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
+        else:
+            from src.controls import fan, pump, uv_led, led_strip
+            self.controls['fan'] = fan.Fan(pin=17, name="fan", queue=Queue())
+            self.controls['fan'].turn_off()
+            self.controls['pump'] = pump.Pump(pin=22, name="pump", queue=Queue())
+            self.controls['pump'].turn_off()
+            self.controls['UV LED'] = uv_led.UVLed(pin=27, name="UV LED", queue=Queue())
+            self.controls['UV LED'].turn_off()
+            self.controls['RGB LED'] = led_strip.LEDStrip(LED_PIN=18, name="RGB LED")
+            self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
 
     def spawn_processes(self):
         if self.simulated:
