@@ -158,6 +158,28 @@ class ThreadedClient:
                 else:
                     self.db_master["Pump Status"] = "ON"
                 self.main_to_gui_queue.put(["Pump Status", self.db_master["Pump Status"]])
+            elif msg == "Toggle Fan":
+                # TODO: Actually toggle the fan
+                if self.db_master["Fan Status"] == "ON":
+                    self.db_master["Fan Status"] = "OFF"
+                else:
+                    self.db_master["Fan Status"] = "ON"
+                self.main_to_gui_queue.put(["Fan Status", self.db_master["Fan Status"]])
+            elif msg == "Toggle UV":
+                # TODO: Actually toggle the UV LED
+                if self.db_master["UV LED Status"] == "ON":
+                    self.db_master["UV LED Status"] = "OFF"
+                else:
+                    self.db_master["UV LED Status"] = "ON"
+                self.main_to_gui_queue.put(["UV LED Status", self.db_master["UV LED Status"]])
+            elif msg == "Toggle RGB":
+                # TODO: Actually toggle the UV LED
+                if self.db_master["RGB LED Status"] == [100,100,100]:
+                    self.db_master["RGB LED Status"] = [0,0,0]
+                else:
+                    self.db_master["RGB LED Status"] = [100,100,100]
+                self.main_to_gui_queue.put(["RGB LED Status", self.db_master["RGB LED Status"]])
+
 
         # Wait for the requested time and then call itself
         self.gui.master.after(gui_refresh_interval, self.periodic_call)
