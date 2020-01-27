@@ -11,12 +11,6 @@ from src.utilities.sensor_template import Sensor
 
 
 class EnvironmentSensor(Sensor):
-    """!
-    This is the class for the BME680 Multifunction Environment Sensor
-    @param pin: The RPi pin that acts as the signal pin to the relay
-    @param name: The name of the relay.
-    @param is_conducting: The current state of the relay
-    """
 
     i2c_interface = None
     sensor_board = None
@@ -43,12 +37,6 @@ class EnvironmentSensor(Sensor):
         except Exception as err:
             print(err)
 
-        # print("\nTemperature: %0.1f C" % self.data_dict['temperature'])
-        # print("Gas: %d ohm" % self.data_dict['gas'])
-        # print("Humidity: %0.1f %%" % self.data_dict['humidity'])
-        # print("Pressure: %0.3f hPa" % self.data_dict['pressure'])
-        # print("Altitude = %0.2f meters" % self.data_dict['altitude'])
-
         # TODO Step 1.5: Run algorithms with the data??? 
 
         # Step 2: Relay the readings
@@ -62,6 +50,9 @@ class EnvironmentSensor(Sensor):
                 f.write(entry + ": " + str(value) + ", ")
             f.write("\n")
 
+    def shutdown(self):
+        print(self.name, "shutting down.")
+
 
 if __name__ == "__main__":
     """
@@ -70,8 +61,6 @@ if __name__ == "__main__":
 
     remember to install both the adafruit_blinka and adafruit-circuitpython-bme680 libraries
     """
-
-
     i2c = I2C(board.SCL, board.SDA)
     bme680 = adafruit_bme680.Adafruit_BME680_I2C(i2c, debug=False)
     bme680.sea_level_pressure = 1013.25

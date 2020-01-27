@@ -3,10 +3,11 @@ This code is for the intialization and control of a
 ws281 LED strip.
 """
 
+#TODO: MAKE THIS TURN-OFF ON SHUTDOWN
+
 from rpi_ws281x import * # TODO: Fix this wildcard import
 
-
-class LEDStrip:
+class LEDStrip():
     """!
     This is the class for the ws281 LED strip.
     @param LED_COUNT: Number of LEDs in the strip
@@ -29,12 +30,6 @@ class LEDStrip:
     strip = None
 
     def __init__(self, LED_PIN, LED_COUNT=144, LED_FREQ_HQ=800000, LED_DMA=10, LED_BRIGHTNESS=100, LED_INVERT=False):
-        """!
-        Standard initialization.
-        @param pin: The RPi pin that acts as the signal pin to the relay
-        @param name: The name of the relay.
-        @param is_conducting: The current state of the relay
-        """
 
         if LED_BRIGHTNESS < 0:
             self.LED_BRIGHTNESS = 0

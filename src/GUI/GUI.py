@@ -12,16 +12,18 @@ from tkinter.filedialog import askopenfile, asksaveasfile
 class GrowSpaceGUI:
     """!
     GUI class for any grow space box.
-    @param queue: The queue to communicate to the main thread.
+    @param queue_in: Uni-directional queue going FROM the main process TO this process
+    @param queue_out: Uni-directional queue going FROM this process TO the main process
     @param master: The root (instance) of a Tkinter top-level widget
     """
 
-    queue:Queue = None
+    queue_in: Queue = None
+    queue_out: Queue = None
     master = None
-    control_win = None
 
-    def __init__(self, master, queue, endCommand):
-        self.queue = queue
+    def __init__(self, master, queue_in, queue_out, endCommand):
+        self.queue_in = queue_in
+        self.queue_out = queue_out
         self.master = master
 
         self.master.title("Grow Space")
@@ -79,15 +81,13 @@ class GrowSpaceGUI:
 
 
         #Creating Buttons
-
         self.LoadButton = Button(self.master, bg = "White", fg="Black", text="LOAD", font="Helvetica 24 bold", command=self.load_file)
         self.SaveButton = Button(self.master, bg="White", fg="Black", text="SAVE", font="Helvetica 24 bold", command=self.save_file)
-        self.PowerButton = Button(self.master, bg="White", fg="Black", text=u"\u23FB", font="Helvetica 24 bold", command=None)
+        self.PowerButton = Button(self.master, bg="White", fg="Black", text="\u23FB", font="Helvetica 24 bold", command=endCommand)
         self.ConfigureButton = Button(self.master, bg="White", fg="Black", text="CONFIGURE", font="Helvetica 24 bold", command=None)
         self.ControlButton = Button(self.master, bg="White", fg="Black", text="CONTROL", font="Helvetica 24 bold", command=self.control_window)
 
         # creates a grid 50 x 50 in the main window
-
         rows = 0
         while rows < 50:
             self.master.grid_rowconfigure(rows, weight=1, minsize=1)  # Empty Row
@@ -99,7 +99,6 @@ class GrowSpaceGUI:
         self.Title.grid(row=0, column=0, columnspan=5, sticky=W)
 
         #Environmental Conditions
-
         self.EnvironmentalConditionHeader.grid(row=6, column=5, columnspan=10, sticky=W)
         self.SoilMoistureCondition.grid(row=8, column=5, sticky=W)
         self.TemperatureCondition.grid(row=10, column=5, sticky=W)
@@ -138,7 +137,6 @@ class GrowSpaceGUI:
         self.HumidityStatus_value.grid(row=30, column=11, sticky=W+E)
         self.VOCStatus_value.grid(row=32, column=11, sticky=W+E)
 
-
         #Device Status Headers
         self.DeviceStatusHeader.grid(row=24, column=22, columnspan=10, sticky=W)
         self.PumpStatus.grid(row=26, column=22, sticky=W)
@@ -146,9 +144,7 @@ class GrowSpaceGUI:
         self.RGBLEDIntensity.grid(row=30, column=22, sticky=W)
         self.UVLEDIntensity.grid(row=32, column=22, sticky=W)
 
-
         #Device Status Values
-
         self.PumpStatus_value.grid(row=26, column=29, sticky=W+E)
         self.FanStatus_value.grid(row=28, column=29, sticky=W+E)
         self.RGBLEDIntensity_value.grid(row=30, column=29, sticky=W+E)
@@ -166,13 +162,15 @@ class GrowSpaceGUI:
     def load_file(self):
         config_file = askopenfile(filetypes=(("Configuration files", "*.cfg"), ("All files", "*.*")))
         print(config_file)
-
-    def save_file(self):
-        files = [("Configuration files", "*.cfg"), ('All Files', '*.*')]
+           
+    def save_file(self): 
+        files = [("Configuration files", "*.cfg"), ('All Files', '*.*')] 
         f = asksaveasfile(filetypes = files, defaultextension = files)
         if f is None: # User closes the dialog with "cancel"
-            return
+            return None
+        # TODO: Here is where we need to format the config file based on the user's input
         text2save = "UHHHHHH"
+        # Save to the file
         f.write(text2save)
         f.close()
 
@@ -185,76 +183,59 @@ class GrowSpaceGUI:
         self.control_win.RGBLEDButton = Button(self.control_win, bg = "White", fg="Black", text = "RGB LED",font="Helvetica 24 bold", command=None)
         self.control_win.UVLEDButton = Button(self.control_win, bg="White", fg="Black", text="UV LED",font="Helvetica 24 bold", command=None)
         self.control_win.FanButton = Button(self.control_win, bg="White", fg="Black", text="Fan",font="Helvetica 24 bold", command=None)
-        self.control_win.PumpButton = Button(self.control_win, bg="White", fg="Black", text="Pump",font="Helvetica 24 bold", command=None)
-        self.control_win.ExitButton = Button(self.control_win, bg="White", fg="Black", text="Pump",font="Helvetica 24 bold", command=None)
+        self.control_win.PumpButton = Button(self.control_win, bg="White", fg="Black", text="Pump",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle Pump"))
+        self.control_win.ExitButton = Button(self.control_win, bg="White", fg="Black", text="\u23FB",font="Helvetica 24 bold", command=lambda: self.control_win.destroy())
 
-        self.control_win.RGBLEDButton.grid(row=2, column=6)
-        self.control_win.UVLEDButton.grid(row=10, column=6)
-        self.control_win.FanButton.grid(row=15, column=6)
-        self.control_win.PumpButton.grid(row=20, column=6)
+        self.control_win.RGBLEDButton.grid(row=0, column=0)
+        self.control_win.UVLEDButton.grid(row=1, column=0)
+        self.control_win.FanButton.grid(row=2, column=0)
+        self.control_win.PumpButton.grid(row=3, column=0)
+        self.control_win.ExitButton.grid(row=4, column=0)
 
+    def processIncoming(self):
+        """! 
+        Receive data from the incoming queue (from the main process)
+        """
 
+        while not self.queue_in.empty():
+            msg = self.queue_in.get()
 
-    # def processIncoming(self):
-    #     """!
-    #     If any data is coming back to the main processes,
-    #     receive it here and display it
-    #     """
-    #
-    #     warning_flags = {}
-    #     error_flags = {}
-    #
-    #     while not self.queue.empty():
-    #         msg = self.queue.get()
-    #
-    #         # Print to console whatever it gets
-    #         print("Received from", msg[0] + ":", msg[1])
-    #
-    #         if isinstance(msg[0], str):
-    #             # Display the data accordingly
-    #             if msg[0] == "soil_moisture_sensor_1":
-    #                 self.soil_1_val.set(str(msg[1])+"%")
-    #                 if int(msg[1]) < 65:
-    #                     self.soil_1_val_label.config(fg="Red")
-    #                     warning_flags["soil_moisture_sensor_1"] = "Needs Watering"
-    #                 else:
-    #                     self.soil_1_val_label.config(fg="Green")
-    #                     warning_flags.pop('soil_moisture_sensor_1', None)
-    #
-    #             elif msg[0] == "environment_sensor":
-    #                 received_temp = round(msg[1]['temperature'], 2)
-    #                 self.temperature_val.set(str(received_temp)+"°C")
-    #                 if received_temp < 20:
-    #                     self.temperature_val_label.config(fg="Red")
-    #                     warning_flags["temperature_sensor"] = "Too Cold"
-    #                 elif received_temp > 30:
-    #                     self.temperature_val_label.config(fg="Red")
-    #                     warning_flags["temperature_sensor"] = "Too Hot"
-    #                 else:
-    #                     self.temperature_val_label.config(fg="Green")
-    #                     warning_flags.pop('temperature_sensor', None)
-    #
-    #             if error_flags:
-    #                 self.overall_status_text_label.config(fg="Red")
-    #                 self.overall_status_val.set(','.join(str(x) for x in error_flags.values()))
-    #             elif warning_flags:
-    #                 self.overall_status_text_label.config(fg="Yellow")
-    #                 self.overall_status_val.set(','.join(str(x) for x in warning_flags.values()))
-    #             else:
-    #                 self.overall_status_text_label.config(fg="Green")
-    #                 self.overall_status_val.set('Good')
-    #
+            # Print whatever it receives from the main thread
+            print("Received from", msg[0] + ":", msg[1])
 
+            if isinstance(msg[0], str):
+                # Display the data accordingly
+                if msg[0] == "soil_moisture_sensor_1":
+                    self.SoilMoistureCondition_value.configure(text=str(msg[1])+"%")
+                    if msg[2]:
+                        self.SoilMoistureCondition_value.config(fg="Red")
+                        self.SoilMoistureStatus_value.configure(text=msg[2])
+                    else:
+                        self.SoilMoistureCondition_value.config(fg="Green")
+                        self.SoilMoistureStatus_value.configure(text="OK")
+
+                elif msg[0] == "environment_sensor":
+                    received_temp = round(msg[1]['temperature'], 2)
+                    self.TemperatureCondition_value.configure(text=str(received_temp)+"°C")
+                    if received_temp < 20:
+                        self.TemperatureCondition_value.config(fg="Red")
+                        self.TemperatureStatus_value.configure(text="LOW")
+                    elif received_temp > 30:
+                        self.TemperatureCondition_value.config(fg="Red")
+                        self.TemperatureStatus_value.configure(text="HIGH")
+                    else:
+                        self.TemperatureCondition_value.config(fg="Green")
+                        self.TemperatureStatus_value.configure(text="OK")
+
+                elif msg[0] == "Pump Status":
+                    self.PumpStatus_value.configure(text=msg[1])
 
 
 if __name__ == "__main__":
-    from multiprocessing import Queue
     import sys
     ROOT = Tk()
-    # WIDTH, HEIGHT = ROOT.winfo_screenwidth(), ROOT.winfo_screenheight()
-    # ROOT.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
-    ROOT.resizable()
+    # ROOT.resizable()
     ROOT.geometry("1024x600")
     endCommand = lambda: sys.exit(0)
-    app = GrowSpaceGUI(ROOT, Queue(), endCommand)
+    app = GrowSpaceGUI(ROOT, Queue(), Queue(), endCommand)
     ROOT.mainloop() # Blocking!

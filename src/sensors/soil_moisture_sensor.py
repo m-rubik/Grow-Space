@@ -23,8 +23,6 @@ class SoilMoistureSensor(Sensor):
 
         self.i2c_interface = I2C(board.SCL, board.SDA)
         self.ads = ADS.ADS1115(self.i2c_interface)
-        self.channel = AnalogIn(self.ads, ADS.P0)
-        # self.channel1 = AnalogIn(self.ads, ADS.P1)
         self.max_v = max_v
         self.min_v = min_v
         self.voltage_list = []
@@ -54,22 +52,20 @@ class SoilMoistureSensor(Sensor):
 
         # Step 1: Take a reading and normalize voltage value
         self._previous_val = self._current_val
-        self._current_val = [self.channel.value, self.channel.voltage/self.max_volt]
-
-        print(self._current_val)
+        self._current_val = [self.channel.value, self.channel.voltage]
         
         # TODO Step 1.5: Run algorithms with the data??? 
 
         # Step 2: Relay the reading
-        # This is passing the raw value to the queue?
-        # self.queue.put(self._current_val[1])
-        self.queue.put(self._current_val[0])
+        self.queue.put(self._current_val[0]) # This is passing the raw value to the queue?
 
         # Step 3: Log the reading
         current_time = datetime.now()
         with open("logs/"+self.name+".txt", "a+") as f:
             f.write(str(current_time)+":"+str(self._current_val)+"\n")
 
+    def shutdown(self):
+        print(self.name, "shutting down.")
 
 if __name__ == "__main__":
 

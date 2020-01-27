@@ -7,33 +7,33 @@ class Relay():
     This is the class for all relay devices
     @param pin: The RPi pin that acts as the signal pin to the relay
     @param name: The name of the relay.
-    @param is_conducting: The current state of the relay
+    @param is_off: The current state of the relay
     """
 
     pin: int
     name: str = "default"
-    is_conducting: int = False
+    is_off: int = False
 
-    def __init__(self, pin, name="default", is_conducting=False):
+    def __init__(self, pin, name="default", is_off=False):
         """!
         Standard initialization.
         @param pin: The RPi pin that acts as the signal pin to the relay
         @param name: The name of the relay.
-        @param is_conducting: The current state of the relay
+        @param is_off: The current state of the relay
         """
 
         self.pin = pin
         self.name = name
-        self.is_conducting = is_conducting
+        self.is_off = is_off
 
     def toggle(self):
-        if self.is_conducting:
+        if self.is_off:
             self.turn_off()
         else:
             self.turn_on()
 
     def turn_on(self):
-        self.is_conducting = True
+        self.is_off = True
 
     def turn_off(self):
-        self.is_conducting = False
+        self.is_off = False

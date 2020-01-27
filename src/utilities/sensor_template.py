@@ -10,6 +10,7 @@ import time
 from abc import ABC, abstractmethod
 from multiprocessing import Queue
 from datetime import datetime, timedelta
+import atexit
 
 
 class Sensor(ABC):
@@ -39,6 +40,7 @@ class Sensor(ABC):
         self.name = name
         self.queue = queue
         self.polling_interval = polling_interval
+        atexit.register(self.shutdown)
 
     def run(self):
         """!
@@ -57,6 +59,10 @@ class Sensor(ABC):
             else:
                 time.sleep(0.1)  # Quick delay to eliminate run-away memory consumption
                 pass
+
+    @abstractmethod
+    def shutdown(self):
+        pass
 
     @abstractmethod
     def poll(self):
