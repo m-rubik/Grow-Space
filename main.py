@@ -58,6 +58,7 @@ class ThreadedClient:
         self.load_configuration()
 
         self.spawn_processes()
+        self.add_controllers()
 
         # Ensure that there is a directory for log files to go to.
         if not os.path.exists('logs'):
@@ -81,6 +82,17 @@ class ThreadedClient:
         self.db_master["RGB LED Status"] = [0, 0, 0]
         self.db_master["UV LED Status"] = "OFF"
 
+    def add_controllers(self):
+        from src.controls import fan, pump, uv_led, led_strip
+        self.controls['fan'] = fan.Fan(pin=17, name="fan", queue=Queue())
+        self.controls['fan'].turn_off()
+        self.controls['pump'] = pump.Pump(pin=22, name="pump", queue=Queue())
+        self.controls['pump'].turn_off()
+        self.controls['UV LED'] = uv_led.UVLed(pin=27, name="UV LED", queue=Queue())
+        self.controls['UV LED'].turn_off()
+        self.controls['RGB LED'] = led_strip.LEDStrip(LED_PIN=18, name="RGB LED")
+        self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
+
     def spawn_processes(self):
         if self.simulated:
             print("Running simulation...")
@@ -91,13 +103,9 @@ class ThreadedClient:
             print("Running system...")
             from src.sensors.soil_moisture_sensor import SoilMoistureSensor
             from src.sensors.env_sensor import EnvironmentSensor
-            from src.controls import fan, pump, uv_led
             self.sensors['soil_moisture_sensor_1'] = SoilMoistureSensor(name="soil_moisture_sensor_1", queue=Queue(), channel=0, max_v=3, min_v=1)
             self.sensors['soil_moisture_sensor_2'] = SoilMoistureSensor(name="soil_moisture_sensor_2", queue=Queue(), channel=1, max_v=3, min_v=1)
             self.sensors['environment_sensor'] = EnvironmentSensor(name="environment_sensor", queue=Queue())
-            self.controls['fan'] = fan.Fan(pin=17, name="fan", queue=Queue())
-            self.controls['pump'] = pump.Pump(pin=22, name="pump", queue=Queue())
-            self.controls['UV LED'] = uv_led.UVLed(pin=27, name="UV LED", queue=Queue())
 
         # Add all processes to dict
         for name, value in self.sensors.items():
@@ -152,34 +160,34 @@ class ThreadedClient:
             msg = self.gui_to_main_queue.get()
             print(msg)
             if msg == "Toggle Pump":
-                # TODO: Actually toggle the pump
+                self.controls['pump'].toggle()
                 if self.db_master["Pump Status"] == "ON":
                     self.db_master["Pump Status"] = "OFF"
                 else:
                     self.db_master["Pump Status"] = "ON"
                 self.main_to_gui_queue.put(["Pump Status", self.db_master["Pump Status"]])
             elif msg == "Toggle Fan":
-                # TODO: Actually toggle the fan
+                self.controls['fan'].toggle()
                 if self.db_master["Fan Status"] == "ON":
                     self.db_master["Fan Status"] = "OFF"
                 else:
                     self.db_master["Fan Status"] = "ON"
                 self.main_to_gui_queue.put(["Fan Status", self.db_master["Fan Status"]])
             elif msg == "Toggle UV":
-                # TODO: Actually toggle the UV LED
+                self.controls['UV LED'].toggle()
                 if self.db_master["UV LED Status"] == "ON":
                     self.db_master["UV LED Status"] = "OFF"
                 else:
                     self.db_master["UV LED Status"] = "ON"
                 self.main_to_gui_queue.put(["UV LED Status", self.db_master["UV LED Status"]])
             elif msg == "Toggle RGB":
-                # TODO: Actually toggle the UV LED
                 if self.db_master["RGB LED Status"] == [100,100,100]:
+                    self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
                     self.db_master["RGB LED Status"] = [0,0,0]
                 else:
+                    self.controls['RGB LED'].adjust_color(red_content=255, green_content=255, blue_content=255)
                     self.db_master["RGB LED Status"] = [100,100,100]
                 self.main_to_gui_queue.put(["RGB LED Status", self.db_master["RGB LED Status"]])
-
 
         # Wait for the requested time and then call itself
         self.gui.master.after(gui_refresh_interval, self.periodic_call)
