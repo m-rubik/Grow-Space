@@ -239,7 +239,7 @@ class GrowSpaceGUI:
                 elif msg[0] == "RGB LED Status":
                     self.RGBLEDIntensity_value.configure(text=str(msg[1][0]) + "% - " + str(msg[1][1]) + "% - " + str(msg[1][2]) + "%")
 
-YOLO BRO
+
 
 
 
