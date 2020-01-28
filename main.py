@@ -196,9 +196,14 @@ class ThreadedClient:
                     self.db_master["UV LED Status"] = "ON"
                 self.main_to_gui_queue.put(["UV LED Status", self.db_master["UV LED Status"]])
             elif isinstance(msg, list):
-                red = int(msg[0])
-                green = int(msg[1])
-                blue = int(msg[2])
+                if msg[0] == '' or msg[1]=='' or msg[2]=='':
+                    red = 0
+                    green = 0
+                    blue = 0
+                else:
+                    red = int(msg[0])
+                    green = int(msg[1])
+                    blue = int(msg[2])
 
                 if (red < 0 or red > 255) or (green < 0 or green > 255) or (blue < 0 or blue > 255):
                     print("Invalid input")
