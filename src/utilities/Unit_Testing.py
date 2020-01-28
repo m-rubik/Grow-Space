@@ -72,17 +72,17 @@ if __name__ == "__main__":
     io.output(in2, True)
     io.output(in3, True)
     
-    adjust_color(strip, 255, 255, 255)
-    time.sleep(5)
+    #adjust_color(strip, 255, 255, 255)
+    #time.sleep(5)
     
-    for input in [in2, in1]:
-        io.output(input, False)
-        time.sleep(5)
+    #for input in [in2, in1]:
+        #io.output(input, False)
+        #time.sleep(5)
         #io.output(input, True)
     
     #io.output(in1, True)
-    io.output(in2, True)
-    io.output(in1, True)
+    #io.output(in2, True)
+    #io.output(in1, True)
 
 
     # Moisture Sensor Testing Block
@@ -122,11 +122,11 @@ if __name__ == "__main__":
         time.sleep(1)
 
 
-    io.output(in1, True)
-    io.output(in2, True)
-    io.output(in3, True)
+    #io.output(in1, True)
+    #io.output(in2, True)
+    #io.output(in3, True)
 
-    current_time = datetime.now()
+    #current_time = datetime.now()
 #    for input in [in1, in2, in3]:
 #        io.output(input, False)
 #        time.sleep(5)
@@ -134,5 +134,5 @@ if __name__ == "__main__":
 
     io.cleanup()  # cleanup all GPIO
     print("Testing Complete")
-    adjust_color(strip, 0, 0, 0)
+    #adjust_color(strip, 0, 0, 0)
 

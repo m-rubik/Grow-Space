@@ -221,5 +221,5 @@ if __name__ == "__main__":
     # ROOT.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
     # ROOT.resizable()
     ROOT.geometry("1024x600")
-    CLIENT = ThreadedClient(ROOT, simulate_environment=True)
+    CLIENT = ThreadedClient(ROOT, simulate_environment=False)
     ROOT.mainloop() # Blocking!
