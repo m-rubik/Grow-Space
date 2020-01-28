@@ -178,9 +178,27 @@ class GrowSpaceGUI:
         self.control_win = Tk()
         self.control_win.title("Control Devices")
         self.control_win.configure(bg="Black")
-        self.control_win.geometry("1024x600")
+        self.control_win.geometry("1000x500")
 
-        self.control_win.RGBLEDButton = Button(self.control_win, bg = "White", fg="Black", text = "RGB LED",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle RGB"))
+        # creates a grid 50 x 50 in the main window
+        rows1 = 0
+        while rows1 < 20:
+            self.control_win.grid_rowconfigure(rows1, weight=1, minsize=1)  # Empty Row
+            self.control_win.grid_columnconfigure(rows1, weight=1, minsize=1)  # Empty column
+            rows1 += 1
+
+        self.Red_val = StringVar()
+        self.Green_val = StringVar()
+        self.Blue_val = StringVar()
+
+        self.control_win.Red_Entry = Entry(self.control_win,  textvariable = self.Red_val)
+        self.control_win.Red_Entry_Label = Label(self.control_win, fg="Black", bg = "Red", text = "RED", font="Helvetica 24")
+        self.control_win.Green_Entry = Entry(self.control_win, textvariable=self.Green_val)
+        self.control_win.Green_Entry_Label = Label(self.control_win, fg="Black", bg="Green", text="GREEN", font="Helvetica 24")
+        self.control_win.Blue_Entry = Entry(self.control_win,  textvariable=self.Blue_val)
+        self.control_win.Blue_Entry_Label = Label(self.control_win, fg="Black", bg="Blue", text="BLUE",font="Helvetica 24")
+
+        self.control_win.RGBLEDButton = Button(self.control_win, bg = "White", fg="Black", text = "RGB LED",font="Helvetica 24 bold", command=lambda: self.queue_out.put([self.control_win.Red_Entry.get(),self.control_win.Green_Entry.get(),self.control_win.Blue_Entry.get()]))
         self.control_win.UVLEDButton = Button(self.control_win, bg="White", fg="Black", text="UV LED",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle UV"))
         self.control_win.FanButton = Button(self.control_win, bg="White", fg="Black", text="Fan",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle Fan"))
         self.control_win.PumpButton = Button(self.control_win, bg="White", fg="Black", text="Pump",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle Pump"))
@@ -191,6 +209,13 @@ class GrowSpaceGUI:
         self.control_win.FanButton.grid(row=2, column=0)
         self.control_win.PumpButton.grid(row=3, column=0)
         self.control_win.ExitButton.grid(row=4, column=0)
+
+        self.control_win.Red_Entry_Label.grid(row=0, column=2)
+        self.control_win.Red_Entry.grid(row=0, column=3)
+        self.control_win.Green_Entry_Label.grid(row=0, column=5)
+        self.control_win.Green_Entry.grid(row=0, column=6)
+        self.control_win.Blue_Entry_Label.grid(row=0, column=8)
+        self.control_win.Blue_Entry.grid(row=0, column=9)
 
     def processIncoming(self):
         """! 
