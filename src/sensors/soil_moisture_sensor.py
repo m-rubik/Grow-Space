@@ -44,7 +44,8 @@ class SoilMoistureSensor(Sensor):
             #time.sleep(1)
         # Initializes max voltage of the sensor
         #self.max_volt = sum(self.voltage_list)/len(self.voltage_list)
-        self.max_volt = 3.292 #TODO: TEST THIS SHIT
+        self.max_volt = 3.292
+        self.min_volt = 1.30
 
     def poll(self):
         """!
@@ -54,12 +55,19 @@ class SoilMoistureSensor(Sensor):
 
         # Step 1: Take a reading and normalize voltage value
         self._previous_val = self._current_val
-        self._current_val = [self.channel.value, self.channel.voltage]
+        self._current_val = [self.channel.value, self.channel.voltage, 3]
+        print(self._current_val)
         
         # TODO Step 1.5: Run algorithms with the data??? 
 
         # Step 2: Relay the reading
-        self.queue.put(round(1 - self._current_val[1]/self.max_volt ,2)*100) # This is passing the raw value to the queue?
+        self._current_val[2]= (-100/(self.max_volt-self.min_volt))* (self._current_val[1]-self.max_volt)
+        if self._current_val[2] > 99.7:
+            self._current_val[2] = 100.00
+        elif self._current_val[2]< 0.3:
+            self._current_val[2] = 0.00
+            
+        self.queue.put(round(self._current_val[2],2)) # This is passing the raw value to the queue?
 
         # Step 3: Log the reading
         current_time = datetime.now()

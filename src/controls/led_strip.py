@@ -68,7 +68,7 @@ class LEDStrip():
             pixel_range = range(0, self.LED_COUNT)
         for LED in pixel_range:
             self.strip.setPixelColor(LED, Color(red_content, green_content, blue_content))
-            self.strip.show()
+        self.strip.show()
             
     def shutdown(self):
         print(self.name, "shutting down.")

@@ -195,13 +195,20 @@ class ThreadedClient:
                 else:
                     self.db_master["UV LED Status"] = "ON"
                 self.main_to_gui_queue.put(["UV LED Status", self.db_master["UV LED Status"]])
-            elif msg == "Toggle RGB":
-                if self.db_master["RGB LED Status"] == [100,100,100]:
-                    self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
-                    self.db_master["RGB LED Status"] = [0,0,0]
-                else:
-                    self.controls['RGB LED'].adjust_color(red_content=255, green_content=255, blue_content=255)
-                    self.db_master["RGB LED Status"] = [100,100,100]
+            elif isinstance(msg, list):
+                red = int(msg[0])
+                green = int(msg[1])
+                blue = int(msg[2])
+                self.controls['RGB LED'].adjust_color(red_content=red, green_content=green, blue_content=blue)
+                self.db_master["RGB LED Status"] = [red,green,blue]
+                if red == 69:
+                    for _ in range(50):
+                        import time
+                        import random
+                        self.controls['RGB LED'].adjust_color(red_content=random.randint(0,255), green_content=random.randint(0,255), blue_content=random.randint(0,255))
+                        time.sleep(0.2)
+                        self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
+                        time.sleep(0.2)
                 self.main_to_gui_queue.put(["RGB LED Status", self.db_master["RGB LED Status"]])
 
         # Wait for the requested time and then call itself
