@@ -6,6 +6,7 @@ ws281 LED strip.
 #TODO: MAKE THIS TURN-OFF ON SHUTDOWN
 
 from rpi_ws281x import * # TODO: Fix this wildcard import
+import atexit
 
 class LEDStrip():
     """!
@@ -28,6 +29,7 @@ class LEDStrip():
     LED_INVERT: bool = False
     LED_CHANNEL: int = 0
     strip = None
+    name = None
 
     def __init__(self, LED_PIN, name="Default", LED_COUNT=144, LED_FREQ_HQ=800000, LED_DMA=10, LED_BRIGHTNESS=100, LED_INVERT=False):
 
@@ -58,6 +60,8 @@ class LEDStrip():
                                        self.LED_BRIGHTNESS,
                                        self.LED_CHANNEL)
         self.strip.begin()
+        self.name = name
+        atexit.register(self.shutdown)
 
     def adjust_color(self, pixel_range="All", red_content=255, green_content=255, blue_content=255):
         if pixel_range == "All":
@@ -65,7 +69,11 @@ class LEDStrip():
         for LED in pixel_range:
             self.strip.setPixelColor(LED, Color(red_content, green_content, blue_content))
             self.strip.show()
-
+            
+    def shutdown(self):
+        print(self.name, "shutting down.")
+        self.adjust_color(red_content=0, green_content=0, blue_content=0)
+        
 
 if __name__ == "__main__":
     """
