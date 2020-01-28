@@ -201,6 +201,7 @@ class ThreadedClient:
                 blue = int(msg[2])
 
                 if (red < 0 or red > 255) or (green < 0 or green > 255) or (blue < 0 or blue > 255):
+                    print("Invalid input")
                     red = 0
                     blue = 0
                     green = 0
