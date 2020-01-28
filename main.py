@@ -88,7 +88,7 @@ class ThreadedClient:
             self.controls['fan'] = sim_relay.Relay(pin=17, name="fan")
             self.controls['pump'] = sim_relay.Relay(pin=22, name="pump")
             self.controls['UV LED'] = sim_relay.Relay(pin=27, name="UV LED")
-            self.controls['RGB LED'] = sim_led_strip.LEDStrip(LED_PIN=18, name="RGB LED")
+            self.controls['RGB LED'] = sim_led_strip.LEDStrip(LED_PIN=18, LED_COUNT=9, name="RGB LED")
         else:
             from src.controls import fan, pump, uv_led, led_strip
             self.controls['fan'] = fan.Fan(pin=17, name="fan", queue=Queue())
@@ -201,6 +201,7 @@ class ThreadedClient:
                 blue = int(msg[2])
 
                 if (red < 0 or red > 255) or (green < 0 or green > 255) or (blue < 0 or blue > 255):
+                    print("Invalid input")
                     red = 0
                     blue = 0
                     green = 0
