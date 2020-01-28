@@ -216,6 +216,8 @@ class GrowSpaceGUI:
 
                 elif msg[0] == "environment_sensor":
                     received_temp = round(msg[1]['temperature'], 2)
+                    received_humidity = round(msg[1]['humidity'],2)
+                    self.HumidityCondition_value.configure(text=str(received_humidity)+"%")
                     self.TemperatureCondition_value.configure(text=str(received_temp)+"°C")
                     if received_temp < 20:
                         self.TemperatureCondition_value.config(fg="Red")
@@ -226,6 +228,8 @@ class GrowSpaceGUI:
                     else:
                         self.TemperatureCondition_value.config(fg="Green")
                         self.TemperatureStatus_value.configure(text="OK")
+
+
 
                 elif msg[0] == "Pump Status":
                     self.PumpStatus_value.configure(text=msg[1])
