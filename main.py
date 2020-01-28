@@ -199,6 +199,12 @@ class ThreadedClient:
                 red = int(msg[0])
                 green = int(msg[1])
                 blue = int(msg[2])
+
+                if (red < 0 or red > 255) or (green < 0 or green > 255) or (blue < 0 or blue > 255):
+                    red = 0
+                    blue = 0
+                    green = 0
+                    
                 self.controls['RGB LED'].adjust_color(red_content=red, green_content=green, blue_content=blue)
                 self.db_master["RGB LED Status"] = [red,green,blue]
                 if red == 69:
@@ -228,5 +234,5 @@ if __name__ == "__main__":
     # ROOT.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
     # ROOT.resizable()
     ROOT.geometry("1024x600")
-    CLIENT = ThreadedClient(ROOT, simulate_environment=False)
+    CLIENT = ThreadedClient(ROOT, simulate_environment=True)
     ROOT.mainloop() # Blocking!
