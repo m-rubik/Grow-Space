@@ -44,7 +44,7 @@ class SoilMoistureSensor(Sensor):
             #time.sleep(1)
         # Initializes max voltage of the sensor
         #self.max_volt = sum(self.voltage_list)/len(self.voltage_list)
-        self.max_volt = 3.5 #TODO: TEST THIS SHIT
+        self.max_volt = 3.292 #TODO: TEST THIS SHIT
 
     def poll(self):
         """!
