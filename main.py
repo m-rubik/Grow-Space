@@ -204,7 +204,7 @@ class ThreadedClient:
                     red = 0
                     blue = 0
                     green = 0
-                    
+
                 self.controls['RGB LED'].adjust_color(red_content=red, green_content=green, blue_content=blue)
                 self.db_master["RGB LED Status"] = [red,green,blue]
                 if red == 69:
