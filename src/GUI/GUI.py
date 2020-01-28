@@ -201,7 +201,7 @@ class GrowSpaceGUI:
             msg = self.queue_in.get()
 
             # Print whatever it receives from the main thread
-            print("Received from", msg[0] + ":", msg[1])
+            print("GUI: Received data from", msg[0] + ":", msg[1])
 
             if isinstance(msg[0], str):
                 # Display the data accordingly
