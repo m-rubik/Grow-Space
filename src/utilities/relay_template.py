@@ -48,12 +48,15 @@ class Relay(ABC):
     def turn_on(self):
         self.is_off = False
         GPIO.output(self.pin, self.is_off)
+        print("Turning on", self.name)
 
     def turn_off(self):
         self.is_off = True
         GPIO.output(self.pin, self.is_off)
+        print("Turning off", self.name)
 
     def shutdown(self):
+        print(self.name, "shutting down.")
         self.is_off = True
         GPIO.output(self.pin, self.is_off)
 

@@ -86,23 +86,27 @@ class ThreadedClient:
         if self.simulated:
             from src.simulations import sim_relay, sim_led_strip
             self.controls['fan'] = sim_relay.Relay(pin=17, name="fan")
-            self.controls['fan'].turn_off()
             self.controls['pump'] = sim_relay.Relay(pin=22, name="pump")
-            self.controls['pump'].turn_off()
             self.controls['UV LED'] = sim_relay.Relay(pin=27, name="UV LED")
-            self.controls['UV LED'].turn_off()
             self.controls['RGB LED'] = sim_led_strip.LEDStrip(LED_PIN=18, name="RGB LED")
-            self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
         else:
             from src.controls import fan, pump, uv_led, led_strip
             self.controls['fan'] = fan.Fan(pin=17, name="fan", queue=Queue())
-            self.controls['fan'].turn_off()
             self.controls['pump'] = pump.Pump(pin=22, name="pump", queue=Queue())
-            self.controls['pump'].turn_off()
             self.controls['UV LED'] = uv_led.UVLed(pin=27, name="UV LED", queue=Queue())
-            self.controls['UV LED'].turn_off()
             self.controls['RGB LED'] = led_strip.LEDStrip(LED_PIN=18, name="RGB LED")
-            self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
+        
+        # Make sure everything starts off
+        self.controls['fan'].turn_off()
+        self.controls['pump'].turn_off()
+        self.controls['UV LED'].turn_off()
+        self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
+
+        # Send initial status to GUI
+        self.main_to_gui_queue.put(["Pump Status", self.db_master["Pump Status"]])
+        self.main_to_gui_queue.put(["Fan Status", self.db_master["Fan Status"]])
+        self.main_to_gui_queue.put(["UV LED Status", self.db_master["UV LED Status"]])
+        self.main_to_gui_queue.put(["RGB LED Status", self.db_master["RGB LED Status"]])
 
     def spawn_processes(self):
         if self.simulated:
@@ -169,7 +173,7 @@ class ThreadedClient:
 
         if not self.gui_to_main_queue.empty():
             msg = self.gui_to_main_queue.get()
-            print(msg)
+            print("Received manual control from GUI:", msg)
             if msg == "Toggle Pump":
                 self.controls['pump'].toggle()
                 if self.db_master["Pump Status"] == "ON":
