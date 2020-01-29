@@ -108,3 +108,4 @@ venv.bak/
 /.vscode/*
 /src/logs/*
 /logs/*
+/database/*

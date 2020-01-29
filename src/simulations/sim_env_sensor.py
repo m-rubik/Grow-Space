@@ -17,7 +17,7 @@ class EnvironmentSensor(Sensor):
 
         # Step 1: Generate random readings
         self.data_dict['temperature'] = random.randrange(10, 40)    # [Celcius]
-        self.data_dict['gas'] = random.randrange(100000, 800000)    # [Ohm]
+        self.data_dict['gas'] = random.randrange(100000, 900000)    # [Ohm]
         self.data_dict['humidity'] = random.randrange(0, 100)       # [%]
         self.data_dict['pressure'] = random.randrange(500, 1500)    # [hPa]
         self.data_dict['altitude'] = random.randrange(0, 2000)      # [m]

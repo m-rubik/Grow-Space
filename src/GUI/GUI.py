@@ -7,6 +7,7 @@ The GUI is based on a Tkinter widget.
 from multiprocessing import Queue
 from tkinter import Tk, Label, Button, Entry, IntVar, END, W, E, N, S, StringVar
 from tkinter.filedialog import askopenfile, asksaveasfile
+from src.utilities.json_utilities import save_as_json
 
 
 class GrowSpaceGUI:
@@ -59,25 +60,25 @@ class GrowSpaceGUI:
 
 
         #Creating Label Values
-        self.SoilMoistureCondition_value = Label(self.master, bg="Black", fg="White", text="50%", font="Helvetica 22")
-        self.TemperatureCondition_value  = Label(self.master, bg="Black", fg="White", text="100%", font="Helvetica 22")
-        self.HumidityCondition_value  = Label(self.master, bg="Black", fg="White", text="0%", font="Helvetica 22")
-        self.VOCCondition_value  = Label(self.master, bg="Black", fg="White", text="10%", font="Helvetica 22")
+        self.SoilMoistureCondition_value = Label(self.master, bg="Black", fg="White", text="-", font="Helvetica 22")
+        self.TemperatureCondition_value  = Label(self.master, bg="Black", fg="White", text="-", font="Helvetica 22")
+        self.HumidityCondition_value  = Label(self.master, bg="Black", fg="White", text="-", font="Helvetica 22")
+        self.VOCCondition_value  = Label(self.master, bg="Black", fg="White", text="-", font="Helvetica 22")
 
-        self.SoilMoistureStatus_value = Label(self.master, bg="Black", fg="White", text="HIGH", font="Helvetica 22")
-        self.TemperatureStatus_value = Label(self.master, bg="Black", fg="White", text="LOW", font="Helvetica 22")
-        self.HumidityStatus_value = Label(self.master, bg="Black", fg="White", text="OK", font="Helvetica 22")
-        self.VOCStatus_value = Label(self.master, bg="Black", fg="White", text="OK", font="Helvetica 22")
+        self.SoilMoistureStatus_value = Label(self.master, bg="Black", fg="White", text="-", font="Helvetica 22")
+        self.TemperatureStatus_value = Label(self.master, bg="Black", fg="White", text="-", font="Helvetica 22")
+        self.HumidityStatus_value = Label(self.master, bg="Black", fg="White", text="-", font="Helvetica 22")
+        self.VOCStatus_value = Label(self.master, bg="Black", fg="White", text="-", font="Helvetica 22")
 
-        self.SoilMoistureRange_value = Label(self.master, bg="Black", fg="White", text="20% - 40%", font="Helvetica 22")
-        self.TemperatureRange_value = Label(self.master, bg="Black", fg="White", text="20" + u"\u00b0" + "C" + " - 25" + u"\u00b0" + "C", font="Helvetica 22")
-        self.HumidityRange_value = Label(self.master, bg="Black", fg="White", text="30% - 35%", font="Helvetica 22")
-        self.VOCRange_value = Label(self.master, bg="Black", fg="White", text="50% - 60%", font="Helvetica 22")
+        self.SoilMoistureRange_value = Label(self.master, bg="Black", fg="White", text="-", font="Helvetica 22")
+        self.TemperatureRange_value = Label(self.master, bg="Black", fg="White", text="-", font="Helvetica 22")
+        self.HumidityRange_value = Label(self.master, bg="Black", fg="White", text="-", font="Helvetica 22")
+        self.VOCRange_value = Label(self.master, bg="Black", fg="White", text="-", font="Helvetica 22")
 
-        self.PumpStatus_value = Label(self.master, bg="Black", fg="White", text="OFF", font="Helvetica 22")
-        self.FanStatus_value = Label(self.master, bg="Black", fg="White", text="ON", font="Helvetica 22")
-        self.RGBLEDIntensity_value = Label(self.master, bg="Black", fg="White", text="10% - 20% - 30%", font="Helvetica 22")
-        self.UVLEDIntensity_value = Label(self.master, bg="Black", fg="White", text="10%", font="Helvetica 22")
+        self.PumpStatus_value = Label(self.master, bg="Black", fg="White", text="-", font="Helvetica 22")
+        self.FanStatus_value = Label(self.master, bg="Black", fg="White", text="-", font="Helvetica 22")
+        self.RGBLEDIntensity_value = Label(self.master, bg="Black", fg="White", text="-", font="Helvetica 22")
+        self.UVLEDIntensity_value = Label(self.master, bg="Black", fg="White", text="-", font="Helvetica 22")
 
 
         #Creating Buttons
@@ -160,19 +161,34 @@ class GrowSpaceGUI:
     ##################### FUNCTIONS ################################################################
 
     def load_file(self):
-        config_file = askopenfile(filetypes=(("Configuration files", "*.cfg"), ("All files", "*.*")))
-        print(config_file)
+        files = [("JSON files", "*.json")]
+        config_file = askopenfile(filetypes=files, defaultextension = files)
+        if config_file is None: # User closes the dialog with "cancel"
+            print("User did not chose a configuration file to load")
+        else:
+            self.queue_out.put(["RELOAD", config_file.name.split(".json")[0]])
            
     def save_file(self): 
-        files = [("Configuration files", "*.cfg"), ('All Files', '*.*')] 
-        f = asksaveasfile(filetypes = files, defaultextension = files)
-        if f is None: # User closes the dialog with "cancel"
-            return None
-        # TODO: Here is where we need to format the config file based on the user's input
-        text2save = "UHHHHHH"
-        # Save to the file
-        f.write(text2save)
-        f.close()
+        files = [("JSON files", "*.json")] 
+        config_file = asksaveasfile(filetypes = files, defaultextension = files)
+        if config_file is None: # User closes the dialog with "cancel"
+            print("User cancelled configuration file save")
+        else:
+            # TODO: Obtain the data that they entered in the Entry boxes (that are yet to be made), and format it as
+            # a dictionnary (see the main call in src.utilities.json_utilities as an example of how the data should be structured). 
+            data = {}
+            data['Temperature_Low'] = 1
+            data['Temperature_High'] = 1
+            data['Sunlight_Low'] = 1
+            data['Sunlight_High'] = 1
+            data['Moisture_Low'] = 1
+            data['Moisture_High'] = 1
+            data['Humidity_Low'] = 1
+            data['Humidity_High'] = 1
+            data['VOC_Low'] = 1
+            data['VOC_High'] = 1
+
+            save_as_json(config_file.name.split(".json")[0], data)
 
     def control_window(self):
         self.control_win = Tk()
@@ -240,37 +256,46 @@ class GrowSpaceGUI:
                         self.SoilMoistureStatus_value.configure(text="OK")
 
                 elif msg[0] == "environment_sensor":
-                    received_temp = round(msg[1]['temperature'], 2)
-                    received_humidity = round(msg[1]['humidity'],2)
-                    self.HumidityCondition_value.configure(text=str(received_humidity)+"%")
+                    # Update temperature
+                    received_temp = round(msg[1]['temperature']['value'], 2)
                     self.TemperatureCondition_value.configure(text=str(received_temp)+"°C")
-                    if received_temp < 20:
+                    if msg[1]['temperature']['flag'] is not None:
                         self.TemperatureCondition_value.config(fg="Red")
-                        self.TemperatureStatus_value.configure(text="LOW")
-                    elif received_temp > 30:
-                        self.TemperatureCondition_value.config(fg="Red")
-                        self.TemperatureStatus_value.configure(text="HIGH")
+                        self.TemperatureStatus_value.configure(text=msg[1]['temperature']['flag'])
                     else:
                         self.TemperatureCondition_value.config(fg="Green")
                         self.TemperatureStatus_value.configure(text="OK")
 
+                    # Update humidity
+                    received_humidity = round(msg[1]['humidity']['value'], 2)
+                    self.HumidityCondition_value.configure(text=str(received_humidity)+"%")
+                    if msg[1]['humidity']['flag'] is not None:
+                        self.HumidityCondition_value.config(fg="Red")
+                        self.HumidityStatus_value.configure(text=msg[1]['humidity']['flag'])
+                    else:
+                        self.HumidityCondition_value.config(fg="Green")
+                        self.HumidityStatus_value.configure(text="OK")
 
+                    # Update VOC
+                    received_gas = round(msg[1]['gas']['value'], 2)
+                    self.VOCCondition_value.configure(text=str(received_gas)+"kΩ")
+                    if msg[1]['gas']['flag'] is not None:
+                        self.VOCCondition_value.config(fg="Red")
+                        self.VOCStatus_value.configure(text=msg[1]['gas']['flag'])
+                    else:
+                        self.VOCCondition_value.config(fg="Green")
+                        self.VOCStatus_value.configure(text="OK")
 
                 elif msg[0] == "Pump Status":
                     self.PumpStatus_value.configure(text=msg[1])
-
                 elif msg[0] == "Fan Status":
                     self.FanStatus_value.configure(text=msg[1])
-
                 elif msg[0] == "UV LED Status":
                     self.UVLEDIntensity_value.configure(text=msg[1])
-
                 elif msg[0] == "RGB LED Status":
                     self.RGBLEDIntensity_value.configure(text=str(msg[1][0]) + "% - " + str(msg[1][1]) + "% - " + str(msg[1][2]) + "%")
-
-
-
-
+                else:
+                    print("Unexpected item passed in main_to_gui queue:", msg)
 
 
 if __name__ == "__main__":

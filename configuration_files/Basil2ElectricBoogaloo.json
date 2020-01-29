@@ -1,0 +1,12 @@
+{
+    "Humidity_High": 1,
+    "Humidity_Low": 1,
+    "Moisture_High": 1,
+    "Moisture_Low": 1,
+    "Sunlight_High": 1,
+    "Sunlight_Low": 1,
+    "Temperature_High": 1,
+    "Temperature_Low": 1,
+    "VOC_High": 1,
+    "VOC_Low": 1
+}
