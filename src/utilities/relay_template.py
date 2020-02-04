@@ -42,6 +42,7 @@ class Relay(ABC):
     def toggle(self):
         if self.is_off:
             self.turn_on()
+            self.is_off = False
         else:
             self.turn_off()
 
