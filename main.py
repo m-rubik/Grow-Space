@@ -105,7 +105,7 @@ class ThreadedClient:
             self.controls['fan'] = sim_relay.Relay(pin=17, name="fan")
             self.controls['pump'] = sim_relay.Relay(pin=22, name="pump")
             self.controls['UV LED'] = sim_relay.Relay(pin=27, name="UV LED")
-            self.controls['RGB LED'] = sim_led_strip.LEDStrip(LED_PIN=18, LED_COUNT=9, name="RGB LED")
+            self.controls['RGB LED'] = sim_led_strip.LEDStrip(LED_PIN=18, LED_COUNT=107, name="RGB LED")
         else:
             from src.controls import fan, pump, uv_led, led_strip
             self.controls['fan'] = fan.Fan(pin=17, name="fan", queue=Queue())
@@ -263,5 +263,5 @@ if __name__ == "__main__":
     # ROOT.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
     # ROOT.resizable()
     ROOT.geometry("1024x600")
-    CLIENT = ThreadedClient(ROOT, simulate_environment=True)
+    CLIENT = ThreadedClient(ROOT, simulate_environment=False)
     ROOT.mainloop() # Blocking!
