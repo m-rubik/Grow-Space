@@ -219,7 +219,7 @@ class ThreadedClient:
                     self.load_configuration()
                 else:
 
-                    if msg[0] == '' or int(msg[0]) < 0 or int(msg[0]) > 255:
+                    if msg[0] == '' or int(msg[0]) < 0 or int(msg[0]) > 255
                         red = 0
                     else:
                         red = int(msg[0])
@@ -233,10 +233,10 @@ class ThreadedClient:
                         blue = 0
                     else:
                         blue = int(msg[2])
-                    
+
                     self.controls['RGB LED'].adjust_color(red_content=red, green_content=green, blue_content=blue)
                     self.db_master["RGB LED Status"] = [red,green,blue]
-                    if red == 69:
+                    if red == 69 or green == 69 or blue == 69 or (red == 6 and green == 9 and blue == 0) or (red == 0 and green == 6 and blue ==9):
                         for _ in range(50):
                             import time
                             import random
