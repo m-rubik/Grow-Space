@@ -236,7 +236,7 @@ class ThreadedClient:
 
                     self.controls['RGB LED'].adjust_color(red_content=red, green_content=green, blue_content=blue)
                     self.db_master["RGB LED Status"] = [red,green,blue]
-                    if red == 69 or green == 69 or blue == 69 or (red == 6 and green == 9 and blue == 0) or (red == 0 and green == 6 and blue ==9):
+                    if red == 69 or green == 69 or blue == 69 or (red == 6 and green == 9) or (green == 6 and blue ==9):
                         for _ in range(50):
                             import time
                             import random
@@ -245,6 +245,25 @@ class ThreadedClient:
                             self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
                             time.sleep(0.2)
                     self.main_to_gui_queue.put(["RGB LED Status", self.db_master["RGB LED Status"]])
+
+                    if red == 4 and green == 2 and blue == 0:
+                        r = 0
+                        g = 150
+                        import time
+
+                        while g > 0:
+                            self.controls['RGB LED'].adjust_color(red_content=r green_content=g, blue_content=0)
+                            time.sleep(0.2)
+                            g = g-1
+                            r = r+1
+
+
+
+
+
+
+
+
 
         # Wait for the requested time and then call itself
         self.gui.master.after(gui_refresh_interval, self.periodic_call)
