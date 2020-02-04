@@ -257,6 +257,7 @@ class ThreadedClient:
                             g = g-1
                             r = r+1
 
+                        time.sleep(1)
                         self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
 
 
