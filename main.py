@@ -15,6 +15,7 @@ from src.GUI.GUI import GrowSpaceGUI
 from datetime import datetime
 from src.utilities.pickle_utilities import export_object
 from src.utilities.json_utilities import save_as_json
+from src.utilities.algorithms import watering_algorithm, environment_algorithm
 
 class ThreadedClient:
     """!
@@ -31,6 +32,7 @@ class ThreadedClient:
     @param db_master: Master database.
     @param statueses: Dictionary containing all operating statuses
     @param simulated: Flag to show if the environment is a simulation
+    @param configuration_file: Path to the current active system configuration file
     """
 
     gui: GrowSpaceGUI = None
@@ -43,22 +45,18 @@ class ThreadedClient:
     db_master: dict = dict()
     statuses: dict = dict()
     simulated: bool = False
+    configuration_file: str = None
 
-    def __init__(self, master, simulate_environment=False):
+    def __init__(self, master, configuration_file="./configuration_files/basil", simulate_environment=False):
         """!
         Launches the GUI and the asynchronous worker processes (1 for each sensor).
         @param master: The root (instance) of a Tkinter top-level widget.
+        @param configuration_file: The path to the configuration file that is to be loaded.
         @param simulate_environment: Flag for if the environment is to be simulated (for development).
         """
 
+        # Before doing anything else, register a safe shutdown method for if the program crashes
         atexit.register(self.end_application)
-        self.simulated = simulate_environment
-        self.gui = GrowSpaceGUI(master, self.main_to_gui_queue, self.gui_to_main_queue, self.end_application)
-
-        self.load_configuration()
-
-        self.spawn_processes()
-        self.add_controllers()
 
         # Ensure that there is a directory for log files to go to.
         if not os.path.exists('logs'):
@@ -69,19 +67,38 @@ class ThreadedClient:
             os.mkdir('database')
         self.db_master['latest'] = {}
 
-        # Start the periodic call (main loop)
-        self.periodic_call()
-
-    def load_configuration(self):
-        # TODO: Load the actual configuration file
-        configuration_dict = {"Moisture_High": 80, "Moisture_Low": 60, "Moisture_Target": 70}
-        for item, value in configuration_dict.items():
-            self.db_master[item] = value
+        # Set initial databse entries
         self.db_master["Pump Status"] = "OFF"
         self.db_master["Fan Status"] = "OFF"
         self.db_master["RGB LED Status"] = [0, 0, 0]
         self.db_master["UV LED Status"] = "OFF"
 
+        self.simulated = simulate_environment
+        self.configuration_file = configuration_file
+
+        self.gui = GrowSpaceGUI(master, self.main_to_gui_queue, self.gui_to_main_queue, self.end_application)
+        self.load_configuration()
+        self.spawn_processes()
+        self.add_controllers()
+
+        # Start the periodic call (main loop)
+        self.periodic_call()
+
+    def load_configuration(self):
+        # Load configuration file
+        from src.utilities.json_utilities import load_from_json
+        configuration_dict = load_from_json(self.configuration_file)
+
+        # Transfer configuration file data into master database
+        for item, value in configuration_dict.items():
+            self.db_master[item] = value
+
+        # Set configuration parameters in GUI
+        self.gui.SoilMoistureRange_value.configure(text=str(self.db_master["Moisture_Low"])+"% - "+str(self.db_master["Moisture_High"])+"%")
+        self.gui.TemperatureRange_value.configure(text=str(self.db_master["Temperature_Low"])+"°C - "+str(self.db_master["Temperature_High"])+"°C")
+        self.gui.HumidityRange_value.configure(text=str(self.db_master["Humidity_Low"])+"% - "+str(self.db_master["Humidity_High"])+"%")
+        self.gui.VOCRange_value.configure(text=str(self.db_master["VOC_Low"])+"kΩ - "+str(self.db_master["VOC_High"])+"kΩ")
+    
     def add_controllers(self):
         if self.simulated:
             from src.simulations import sim_relay, sim_led_strip
@@ -164,13 +181,14 @@ class ThreadedClient:
 
                 # TODO: Run algorithms on the data
                 if sensor_name == "soil_moisture_sensor_1":
-                    from src.utilities.algorithms import watering_algorithm
                     msg = watering_algorithm(self.db_master, self.simulated)
-                # Relay the data to the GUI so the user can see it
+                elif sensor_name == "environment_sensor":
+                    msg = environment_algorithm(self.db_master, self.simulated)
                 else:
                     msg = [sensor_name, sensor_data]
                 self.main_to_gui_queue.put(msg)
 
+        # Check if the GUI is sending anything to main
         if not self.gui_to_main_queue.empty():
             msg = self.gui_to_main_queue.get()
             print("Received manual control from GUI:", msg)
@@ -196,32 +214,30 @@ class ThreadedClient:
                     self.db_master["UV LED Status"] = "ON"
                 self.main_to_gui_queue.put(["UV LED Status", self.db_master["UV LED Status"]])
             elif isinstance(msg, list):
-                if msg[0] == '' or msg[1]=='' or msg[2]=='':
-                    red = 0
-                    green = 0
-                    blue = 0
+                if msg[0] == "RELOAD":
+                    self.configuration_file = msg[1]
+                    self.load_configuration()
                 else:
-                    red = int(msg[0])
-                    green = int(msg[1])
-                    blue = int(msg[2])
-
-                if (red < 0 or red > 255) or (green < 0 or green > 255) or (blue < 0 or blue > 255):
-                    print("Invalid input")
-                    red = 0
-                    blue = 0
-                    green = 0
-
-                self.controls['RGB LED'].adjust_color(red_content=red, green_content=green, blue_content=blue)
-                self.db_master["RGB LED Status"] = [red,green,blue]
-                if red == 69:
-                    for _ in range(50):
-                        import time
-                        import random
-                        self.controls['RGB LED'].adjust_color(red_content=random.randint(0,255), green_content=random.randint(0,255), blue_content=random.randint(0,255))
-                        time.sleep(0.2)
-                        self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
-                        time.sleep(0.2)
-                self.main_to_gui_queue.put(["RGB LED Status", self.db_master["RGB LED Status"]])
+                    if any(val == '' or int(val) < 0 or int(val) > 255 for val in msg):
+                        print("Invalid input. Defaulting to 0")
+                        red = 0
+                        green = 0
+                        blue = 0
+                    else:
+                        red = int(msg[0])
+                        green = int(msg[1])
+                        blue = int(msg[2])
+                    self.controls['RGB LED'].adjust_color(red_content=red, green_content=green, blue_content=blue)
+                    self.db_master["RGB LED Status"] = [red,green,blue]
+                    if red == 69:
+                        for _ in range(50):
+                            import time
+                            import random
+                            self.controls['RGB LED'].adjust_color(red_content=random.randint(0,255), green_content=random.randint(0,255), blue_content=random.randint(0,255))
+                            time.sleep(0.2)
+                            self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
+                            time.sleep(0.2)
+                    self.main_to_gui_queue.put(["RGB LED Status", self.db_master["RGB LED Status"]])
 
         # Wait for the requested time and then call itself
         self.gui.master.after(gui_refresh_interval, self.periodic_call)
