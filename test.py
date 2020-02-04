@@ -27,6 +27,3 @@ class DerivedClass(Base):
 
 a = DerivedClass()
 a.test()
-
-from src.utilities.sensor_template import Sensor
-print("WTF")

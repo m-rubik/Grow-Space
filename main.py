@@ -108,7 +108,7 @@ class ThreadedClient:
             self.controls['fan'] = sim_relay.Relay(pin=17, name="fan")
             self.controls['pump'] = sim_relay.Relay(pin=22, name="pump")
             self.controls['UV LED'] = sim_relay.Relay(pin=27, name="UV LED")
-            self.controls['RGB LED'] = sim_led_strip.LEDStrip(LED_PIN=18, LED_COUNT=9, name="RGB LED")
+            self.controls['RGB LED'] = sim_led_strip.LEDStrip(LED_PIN=18, LED_COUNT=107, name="RGB LED")
         else:
             from src.controls import fan, pump, uv_led, led_strip
             self.controls['fan'] = fan.Fan(pin=17, name="fan", queue=Queue())
@@ -233,18 +233,25 @@ class ThreadedClient:
                     self.configuration_file = msg[1]
                     self.load_configuration()
                 else:
-                    if any(val == '' or int(val) < 0 or int(val) > 255 for val in msg):
-                        print("Invalid input. Defaulting to 0")
+
+                    if msg[0] == '' or int(msg[0]) < 0 or int(msg[0]) > 255:
                         red = 0
-                        green = 0
-                        blue = 0
                     else:
                         red = int(msg[0])
+
+                    if msg[1] == '' or int(msg[1]) < 0 or int(msg[1]) > 255:
+                        green = 0
+                    else:
                         green = int(msg[1])
+
+                    if msg[2] == '' or int(msg[2]) < 0 or int(msg[2]) > 255:
+                        blue = 0
+                    else:
                         blue = int(msg[2])
+
                     self.controls['RGB LED'].adjust_color(red_content=red, green_content=green, blue_content=blue)
                     self.db_master["RGB LED Status"] = [red,green,blue]
-                    if red == 69:
+                    if red == 69 or green == 69 or blue == 69 or (red == 6 and green == 9) or (green == 6 and blue ==9):
                         for _ in range(50):
                             import time
                             import random
@@ -253,6 +260,28 @@ class ThreadedClient:
                             self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
                             time.sleep(0.2)
                     self.main_to_gui_queue.put(["RGB LED Status", self.db_master["RGB LED Status"]])
+
+                    if red == 4 and green == 2 and blue == 0:
+                        r = 0
+                        g = 150
+                        import time
+
+                        while g > 0:
+                            self.controls['RGB LED'].adjust_color(red_content=r, green_content=g, blue_content=0)
+                            time.sleep(0.02)
+                            g = g-1
+                            r = r+1
+
+                        time.sleep(5)
+                        self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
+
+
+
+
+
+
+
+
 
         # Wait for the requested time and then call itself
         self.gui.master.after(gui_refresh_interval, self.periodic_call)
@@ -271,5 +300,5 @@ if __name__ == "__main__":
     # ROOT.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
     # ROOT.resizable()
     ROOT.geometry("1024x600")
-    CLIENT = ThreadedClient(ROOT, simulate_environment=True)
+    CLIENT = ThreadedClient(ROOT, simulate_environment=False)
     ROOT.mainloop() # Blocking!

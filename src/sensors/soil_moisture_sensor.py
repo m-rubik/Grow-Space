@@ -56,7 +56,6 @@ class SoilMoistureSensor(Sensor):
         # Step 1: Take a reading and normalize voltage value
         self._previous_val = self._current_val
         self._current_val = [self.channel.value, self.channel.voltage, 3]
-        print(self._current_val)
         
         # TODO Step 1.5: Run algorithms with the data??? 
 
