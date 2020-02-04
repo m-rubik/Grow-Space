@@ -219,7 +219,7 @@ class ThreadedClient:
                     self.load_configuration()
                 else:
 
-                    if msg[0] == '' or int(msg[0]) < 0 or int(msg[0]) > 255
+                    if msg[0] == '' or int(msg[0]) < 0 or int(msg[0]) > 255:
                         red = 0
                     else:
                         red = int(msg[0])
