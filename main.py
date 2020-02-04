@@ -218,15 +218,22 @@ class ThreadedClient:
                     self.configuration_file = msg[1]
                     self.load_configuration()
                 else:
-                    if any(val == '' or int(val) < 0 or int(val) > 255 for val in msg):
-                        print("Invalid input. Defaulting to 0")
+
+                    if msg[0] == '' or int(msg[0]) < 0 or int(msg[0]) > 255:
                         red = 0
-                        green = 0
-                        blue = 0
                     else:
                         red = int(msg[0])
+
+                    if msg[1] == '' or int(msg[1]) < 0 or int(msg[1]) > 255:
+                        green = 0
+                    else:
                         green = int(msg[1])
+
+                    if msg[2] == '' or int(msg[2]) < 0 or int(msg[2]) > 255:
+                        blue = 0
+                    else:
                         blue = int(msg[2])
+                    
                     self.controls['RGB LED'].adjust_color(red_content=red, green_content=green, blue_content=blue)
                     self.db_master["RGB LED Status"] = [red,green,blue]
                     if red == 69:
