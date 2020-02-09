@@ -10,9 +10,7 @@ def watering_algorithm(db, controls, simulate_environment):
     if int(db['latest']['soil_moisture_sensor_1']) < db['Moisture_Low']:
         flag = "LOW"
         time_at = datetime.datetime.now()
-        if simulate_environment:
-            pass
-        else:
+        if not simulate_environment:
             # Calculate how long to turn on pump
 
             # TODO: Turn on the pump
@@ -23,9 +21,13 @@ def watering_algorithm(db, controls, simulate_environment):
             pass
     else:
         flag = None
+    msg = ['soil_moisture_sensor_1', db['latest']['soil_moisture_sensor_1'], flag]
+    return msg  
 
 
 def lighting_algorithm(db, controls, simulate_environment):
+    if simulate_environment:
+        return
     controls['RGB LED'].turn_on()
     start_time = datetime.datetime.now()
     while True:
@@ -38,15 +40,15 @@ def environment_algorithm(db, controls, simulate_environment):
     temperature = int(db['latest']['environment_sensor']['temperature'])
     if temperature >= db['Temperature_High']:
         flag = "HIGH"
-        controls['UV LED'].turn_off()
-        controls['RGB LED'].turn_off()
+        # controls['UV LED'].turn_off()
+        # controls['RGB LED'].turn_off()
         controls['fan'].turn_on()
     elif temperature <= db['Temperature_Low']:
         #  TODO check if lights on produce a lot of heat or not
         # TODO do we want the lights to turn on if temp is low? check above TODO
         flag = "LOW"
-        controls['UV LED'].turn_on()
-        controls['RGB LED'].turn_on()
+        # controls['UV LED'].turn_on()
+        # controls['RGB LED'].turn_on()
         controls['fan'].turn_off()
     else:
         flag = None

@@ -90,8 +90,6 @@ if __name__ == "__main__":
     data['RGB_data'] = RGB_data
     data['UV_data'] = UV_data
 
-
-
-    save_as_json("./configuration_files/Basil2ElectricBoogaloo", data)
+    save_as_json("./configuration_files/basil", data)
 
 

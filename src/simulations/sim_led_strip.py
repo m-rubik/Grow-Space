@@ -5,7 +5,7 @@ This code is for the simulation of a ws281 LED strip.
 
 class LEDStrip():
     """!
-    This is the class for the ws281 LED strip.
+    This is the class for the simulation of a ws281 LED strip.
     @param LED_COUNT: Number of LEDs in the strip
     @param LED_PIN: GPIO pin connected to the strip. IMPORTANT: THIS IS THE GPIO PIN, NOT THE BOARD PIN
     @param LED_FREQ_HQ: LED signal frequency

@@ -183,24 +183,29 @@ class ThreadedClient:
                 export_object("./database/master", self.db_master)
                 save_as_json("./database/master", self.db_master)
 
-                # TODO: Run algorithms on the data
-                p_lights = Process(target=lighting_algorithm, args=(self.db_master, self.controls,
-                                                                    self.simulated))
-                p_lights.start()
+                # # TODO: Run algorithms on the data
+                # p_lights = Process(target=lighting_algorithm, args=(self.db_master, self.controls,
+                #                                                     self.simulated))
+                # p_lights.start()
 
                 if sensor_name == "soil_moisture_sensor_1":
-                    if self.db_master["last_watering"] < \
-                            self.db_master["last_watering"] + datetime.timedelta(minutes=1): # TODO change minutes
-                        p_water = Process(target=watering_algorithm, args=(self.db_master, self.controls,
-                                                                           self.simulated))
-                        p_water.start()
-                        self.db_master["last_watering"] = datetime.datetime.now()
+                    msg = watering_algorithm(self.db_master, self.controls, self.simulated)
                 elif sensor_name == "environment_sensor":
-                    p_env_sensor = Process(target=environment_algorithm, args=(self.db_master, self.controls,
-                                                                               self.simulated))
-                    p_env_sensor.start()
-                else:
-                    msg = [sensor_name, sensor_data]
+                    msg = environment_algorithm(self.db_master, self.controls, self.simulated)
+
+                # if sensor_name == "soil_moisture_sensor_1":
+                #     if self.db_master["last_watering"] < \
+                #             self.db_master["last_watering"] + datetime.timedelta(minutes=1): # TODO change minutes
+                #         p_water = Process(target=watering_algorithm, args=(self.db_master, self.controls,
+                #                                                            self.simulated))
+                #         p_water.start()
+                #         self.db_master["last_watering"] = datetime.datetime.now()
+                # elif sensor_name == "environment_sensor":
+                #     p_env_sensor = Process(target=environment_algorithm, args=(self.db_master, self.controls,
+                #                                                                self.simulated))
+                #     p_env_sensor.start()
+                # else:
+                #     msg = [sensor_name, sensor_data]
                 self.main_to_gui_queue.put(msg)
 
         # Check if the GUI is sending anything to main
@@ -253,19 +258,15 @@ class ThreadedClient:
                     self.db_master["RGB LED Status"] = [red,green,blue]
                     if red == 69 or green == 69 or blue == 69 or (red == 6 and green == 9) or (green == 6 and blue ==9):
                         for _ in range(50):
-                            import time
                             import random
                             self.controls['RGB LED'].adjust_color(red_content=random.randint(0,255), green_content=random.randint(0,255), blue_content=random.randint(0,255))
                             time.sleep(0.2)
                             self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
                             time.sleep(0.2)
                     self.main_to_gui_queue.put(["RGB LED Status", self.db_master["RGB LED Status"]])
-
                     if red == 4 and green == 2 and blue == 0:
                         r = 0
                         g = 150
-                        import time
-
                         while g > 0:
                             self.controls['RGB LED'].adjust_color(red_content=r, green_content=g, blue_content=0)
                             time.sleep(0.02)
@@ -274,14 +275,6 @@ class ThreadedClient:
 
                         time.sleep(5)
                         self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
-
-
-
-
-
-
-
-
 
         # Wait for the requested time and then call itself
         self.gui.master.after(gui_refresh_interval, self.periodic_call)
@@ -300,5 +293,5 @@ if __name__ == "__main__":
     # ROOT.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
     # ROOT.resizable()
     ROOT.geometry("1024x600")
-    CLIENT = ThreadedClient(ROOT, simulate_environment=False)
+    CLIENT = ThreadedClient(ROOT, simulate_environment=True)
     ROOT.mainloop() # Blocking!

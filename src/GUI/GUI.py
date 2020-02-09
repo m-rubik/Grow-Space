@@ -257,6 +257,7 @@ class GrowSpaceGUI:
 
                 elif msg[0] == "environment_sensor":
                     # Update temperature
+                    print(msg[1])
                     received_temp = round(msg[1]['temperature']['value'], 2)
                     self.TemperatureCondition_value.configure(text=str(received_temp)+"°C")
                     if msg[1]['temperature']['flag'] is not None:
