@@ -32,7 +32,7 @@ class ThreadedClient:
     @param controls: A dictionary containing access to control objects (relays)
     @param main_running: Flag to show if the main loop is running or called to exit.
     @param db_master: Master database.
-    @param statueses: Dictionary containing all operating statuses
+    @param statuses: Dictionary containing all operating statuses
     @param simulated: Flag to show if the environment is a simulation
     @param configuration_file: Path to the current active system configuration file
     """
@@ -255,7 +255,7 @@ class ThreadedClient:
                         blue = int(msg[2])
 
                     self.controls['RGB LED'].adjust_color(red_content=red, green_content=green, blue_content=blue)
-                    self.db_master["RGB LED Status"] = [red,green,blue]
+                    self.db_master["RGB LED Status"] = [red, green, blue]
                     if red == 69 or green == 69 or blue == 69 or (red == 6 and green == 9) or (green == 6 and blue ==9):
                         for _ in range(50):
                             import random

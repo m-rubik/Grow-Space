@@ -3,7 +3,7 @@ This code is for the intialization and control of a
 ws281 LED strip.
 """
 
-#TODO: MAKE THIS TURN-OFF ON SHUTDOWN
+# TODO: MAKE THIS TURN-OFF ON SHUTDOWN
 
 from rpi_ws281x import * # TODO: Fix this wildcard import
 import atexit

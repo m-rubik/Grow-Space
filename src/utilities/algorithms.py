@@ -6,33 +6,44 @@ import datetime
 import time
 
 
-def watering_algorithm(db, controls, simulate_environment):
-    if int(db['latest']['soil_moisture_sensor_1']) < db['Moisture_Low']:
-        flag = "LOW"
-        time_at = datetime.datetime.now()
-        if not simulate_environment:
-            # Calculate how long to turn on pump
+def time_keeper_1h(db, controls, simulate_environment):
+    start_time = datetime.datetime.now()
 
-            # TODO: Turn on the pump
+
+
+def watering_algorithm(db, controls, simulate_environment):
+    msg = ['soil_moisture_sensor_1', db['latest']['soil_moisture_sensor_1'], "None"]
+    if int(db['latest']['soil_moisture_sensor_1']) < db['Moisture_Low']:
+        # TODO: flow will be determined by the moisture low level, also needs to be dynamically calculated
+        flow = 3000  # Units of mL, aim for 3L of water per water cycle
+        flag = "LOW"
+        if not simulate_environment:
             controls['pump'].turn_on()
-            # TODO: Wait, need to find pump watering speed
-            # TODO: Turn off the pump
+            flow_per_second = 20  # [mL/s]  # TODO: find watering speed of pump
+            time.sleep(flow/flow_per_second)
+            last_watering = datetime.datetime.now()
             controls['pump'].turn_off()
-            pass
     else:
         flag = None
     msg = ['soil_moisture_sensor_1', db['latest']['soil_moisture_sensor_1'], flag]
-    return msg  
+    return msg
 
 
 def lighting_algorithm(db, controls, simulate_environment):
     if simulate_environment:
         return
-    controls['RGB LED'].turn_on()
-    start_time = datetime.datetime.now()
-    while True:
-        if controls['RGB LED'].is_off:
-            run_time = datetime.datetime.now() - start_time
+
+    hour = str(datetime.datetime.hour())
+    rgb_data = db['RGB_data'][hour]
+    red = rgb_data['R']
+    green = rgb_data['G']
+    blue = rgb_data['B']
+    controls['RGB LED'].adjust_color(red_content=red, green_content=green, blue_content=blue)
+    db['RGB LED Status'] = [red, green, blue]
+    if db['UV_data'][hour]:
+        controls['UV LED'].turn_on()
+    else:
+        controls['UV LED'].turn_off()
 
 
 def environment_algorithm(db, controls, simulate_environment):
@@ -45,7 +56,7 @@ def environment_algorithm(db, controls, simulate_environment):
         controls['fan'].turn_on()
     elif temperature <= db['Temperature_Low']:
         #  TODO check if lights on produce a lot of heat or not
-        # TODO do we want the lights to turn on if temp is low? check above TODO
+        #  TODO do we want the lights to turn on if temp is low? check above TODO
         flag = "LOW"
         # controls['UV LED'].turn_on()
         # controls['RGB LED'].turn_on()
@@ -57,12 +68,10 @@ def environment_algorithm(db, controls, simulate_environment):
     humidity = int(db['latest']['environment_sensor']['humidity'])
     if humidity >= db['Humidity_High']:
         flag = "HIGH"
-        controls['fan'].turn_on()
-        # TODO: research how much fan reduces humidity
+        # As we are not controlling humidity and only measuring, no action needed
     elif humidity <= db['Humidity_Low']:
         flag = "LOW"
-        controls['fan'].turn_off()
-        # TODO: research how fan deals with humidity
+        # # As we are not controlling humidity and only measuring, no action needed
     else:
         flag = None
     msg[1]['humidity'] = {'value': humidity, 'flag': flag}
@@ -73,9 +82,8 @@ def environment_algorithm(db, controls, simulate_environment):
         # TODO: What to do about high VOC? Turn on fan?
     elif gas <= db['VOC_Low']:
         flag = "LOW"
-        # TODO: AFAIK it's a good thing if VOC is low, so this should be fine as is
+        # if VOC is low, then no action needed
     else:
         flag = None
     msg[1]['gas'] = {'value': gas, 'flag': flag}
-
     return msg
