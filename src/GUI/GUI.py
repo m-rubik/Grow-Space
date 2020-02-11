@@ -179,8 +179,6 @@ class GrowSpaceGUI:
             data = {}
             data['Temperature_Low'] = 1
             data['Temperature_High'] = 1
-            data['Sunlight_Low'] = 1
-            data['Sunlight_High'] = 1
             data['Moisture_Low'] = 1
             data['Moisture_High'] = 1
             data['Humidity_Low'] = 1

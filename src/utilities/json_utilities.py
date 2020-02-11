@@ -79,8 +79,6 @@ if __name__ == "__main__":
     data = {}
     data['Temperature_Low'] = 21
     data['Temperature_High'] = 35
-    data['Sunlight_Low'] = 6
-    data['Sunlight_High'] = 9
     data['Moisture_Low'] = 55
     data['Moisture_High'] = 80
     data['Humidity_Low'] = 60
