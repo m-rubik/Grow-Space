@@ -7,6 +7,7 @@ and control signals can be generated.
 
 import sys
 import time
+import datetime
 import os
 import atexit
 from tkinter import Tk
@@ -15,7 +16,8 @@ from src.GUI.GUI import GrowSpaceGUI
 from datetime import datetime
 from src.utilities.pickle_utilities import export_object
 from src.utilities.json_utilities import save_as_json
-from src.utilities.algorithms import watering_algorithm, environment_algorithm
+from src.utilities.algorithms import watering_algorithm, environment_algorithm, lighting_algorithm
+
 
 class ThreadedClient:
     """!
@@ -83,6 +85,7 @@ class ThreadedClient:
 
         # Start the periodic call (main loop)
         self.periodic_call()
+        p_time = Process()
 
     def load_configuration(self):
         # Load configuration file
@@ -130,7 +133,8 @@ class ThreadedClient:
             print("Running simulation...")
             from src.simulations import sim_env_sensor, sim_soil_sensor
             self.sensors['environment_sensor'] = sim_env_sensor.EnvironmentSensor(name="sim_environment_sensor", queue=Queue())
-            self.sensors['soil_moisture_sensor_1'] = sim_soil_sensor.SoilMoistureSensor(name="sim_soil_moisture_sensor_1", queue=Queue())
+            self.sensors['soil_moisture_sensor_1'] = \
+                sim_soil_sensor.SoilMoistureSensor(name="sim_soil_moisture_sensor_1", queue=Queue())
         else:
             print("Running system...")
             from src.sensors.soil_moisture_sensor import SoilMoistureSensor
@@ -179,13 +183,29 @@ class ThreadedClient:
                 export_object("./database/master", self.db_master)
                 save_as_json("./database/master", self.db_master)
 
-                # TODO: Run algorithms on the data
+                # # TODO: Run algorithms on the data
+                # p_lights = Process(target=lighting_algorithm, args=(self.db_master, self.controls,
+                #                                                     self.simulated))
+                # p_lights.start()
+
                 if sensor_name == "soil_moisture_sensor_1":
-                    msg = watering_algorithm(self.db_master, self.simulated)
+                    msg = watering_algorithm(self.db_master, self.controls, self.simulated)
                 elif sensor_name == "environment_sensor":
-                    msg = environment_algorithm(self.db_master, self.simulated)
-                else:
-                    msg = [sensor_name, sensor_data]
+                    msg = environment_algorithm(self.db_master, self.controls, self.simulated)
+
+                # if sensor_name == "soil_moisture_sensor_1":
+                #     if self.db_master["last_watering"] < \
+                #             self.db_master["last_watering"] + datetime.timedelta(minutes=1): # TODO change minutes
+                #         p_water = Process(target=watering_algorithm, args=(self.db_master, self.controls,
+                #                                                            self.simulated))
+                #         p_water.start()
+                #         self.db_master["last_watering"] = datetime.datetime.now()
+                # elif sensor_name == "environment_sensor":
+                #     p_env_sensor = Process(target=environment_algorithm, args=(self.db_master, self.controls,
+                #                                                                self.simulated))
+                #     p_env_sensor.start()
+                # else:
+                #     msg = [sensor_name, sensor_data]
                 self.main_to_gui_queue.put(msg)
 
         # Check if the GUI is sending anything to main
@@ -238,19 +258,15 @@ class ThreadedClient:
                     self.db_master["RGB LED Status"] = [red,green,blue]
                     if red == 69 or green == 69 or blue == 69 or (red == 6 and green == 9) or (green == 6 and blue ==9):
                         for _ in range(50):
-                            import time
                             import random
                             self.controls['RGB LED'].adjust_color(red_content=random.randint(0,255), green_content=random.randint(0,255), blue_content=random.randint(0,255))
                             time.sleep(0.2)
                             self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
                             time.sleep(0.2)
                     self.main_to_gui_queue.put(["RGB LED Status", self.db_master["RGB LED Status"]])
-
                     if red == 4 and green == 2 and blue == 0:
                         r = 0
                         g = 150
-                        import time
-
                         while g > 0:
                             self.controls['RGB LED'].adjust_color(red_content=r, green_content=g, blue_content=0)
                             time.sleep(0.02)
@@ -259,14 +275,6 @@ class ThreadedClient:
 
                         time.sleep(5)
                         self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
-
-
-
-
-
-
-
-
 
         # Wait for the requested time and then call itself
         self.gui.master.after(gui_refresh_interval, self.periodic_call)
