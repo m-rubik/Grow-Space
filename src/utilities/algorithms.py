@@ -1,5 +1,6 @@
 """!
-Contains all data algorithms within Grow-Space enclosure. These algorithms will generate control signals, as they deem necessary.
+Contains all data algorithms within Grow-Space enclosure. These algorithms will generate control signals,
+as they deem necessary.
 """
 
 import datetime
