@@ -183,9 +183,9 @@ class ThreadedClient:
                 export_object("./database/master", self.db_master)
                 save_as_json("./database/master", self.db_master)
 
-                # # TODO: Run algorithms on the data
+                # TODO: Run algorithms on the data
                 # p_lights = Process(target=lighting_algorithm, args=(self.db_master, self.controls,
-                #                                                     self.simulated))
+                #                                                   self.simulated, False))
                 # p_lights.start()
 
                 if sensor_name == "soil_moisture_sensor_1":

@@ -10,11 +10,10 @@ def time_keeper_1h(db, controls, simulate_environment):
     start_time = datetime.datetime.now()
 
 
-
 def watering_algorithm(db, controls, simulate_environment):
     msg = ['soil_moisture_sensor_1', db['latest']['soil_moisture_sensor_1'], "None"]
     if int(db['latest']['soil_moisture_sensor_1']) < db['Moisture_Low']:
-        # TODO: flow will be determined by the moisture low level, also needs to be dynamically calculated
+        # TODO: flow will be determined by the moisture level, also needs to be dynamically calculated
         flow = 3000  # Units of mL, aim for 3L of water per water cycle
         flag = "LOW"
         if not simulate_environment:
@@ -29,10 +28,14 @@ def watering_algorithm(db, controls, simulate_environment):
     return msg
 
 
-def lighting_algorithm(db, controls, simulate_environment):
+def lighting_algorithm(db, controls, simulate_environment, off):
     if simulate_environment:
         return
-
+    if off:
+        controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
+        controls['UV LED'].turn_off()
+        db['RGB LED Status'] = [0, 0, 0]
+        return
     hour = str(datetime.datetime.hour())
     rgb_data = db['RGB_data'][hour]
     red = rgb_data['R']
@@ -51,15 +54,13 @@ def environment_algorithm(db, controls, simulate_environment):
     temperature = int(db['latest']['environment_sensor']['temperature'])
     if temperature >= db['Temperature_High']:
         flag = "HIGH"
-        # controls['UV LED'].turn_off()
-        # controls['RGB LED'].turn_off()
+        # TODO check if the LEDs produce non-negligible heat
+        # If so, then:
+        lighting_algorithm(db, controls, simulate_environment, True)
         controls['fan'].turn_on()
     elif temperature <= db['Temperature_Low']:
-        #  TODO check if lights on produce a lot of heat or not
-        #  TODO do we want the lights to turn on if temp is low? check above TODO
         flag = "LOW"
-        # controls['UV LED'].turn_on()
-        # controls['RGB LED'].turn_on()
+        lighting_algorithm(db, controls, simulate_environment, False)
         controls['fan'].turn_off()
     else:
         flag = None
