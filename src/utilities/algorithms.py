@@ -1,43 +1,88 @@
 """!
-Contains all data algorithms within Grow-Space enclosure. These algorithms will generate control signals,
-as they deem necessary.
+Contains the algorithms (functions) that are needed to translate the sensor readings
+into actionable quantities.
+
+These algorithms analyse the sensor data found within the master database, and use it to generate control messages.
+These message are passed back to the main thread, so that the information can be:
+1. Relayed to the GUI for display
+2. Used to start up control processes.
 """
 
-import datetime
-import time
+import statistics
 
 
-def time_keeper_1h(db, controls, simulate_environment):
-    start_time = datetime.datetime.now()
-
-
-def watering_algorithm(db, controls, simulate_environment):
-    msg = ['soil_moisture_sensor_1', db['latest']['soil_moisture_sensor_1'], "None"]
-    if int(db['latest']['soil_moisture_sensor_1']) < db['Moisture_Low']:
-        # TODO: flow will be determined by the moisture level, also needs to be dynamically calculated
-        flow = 3000  # Units of mL, aim for 3L of water per water cycle
+def environment_algorithm(db):
+    msg = ["environment_sensor", {}]
+    temperature = int(db['latest']['environment_sensor']['temperature'])
+    if temperature >= db['Temperature_High']:
+        flag = "HIGH"
+    elif temperature <= db['Temperature_Low']:
         flag = "LOW"
-        if not simulate_environment:
-            controls['pump'].turn_on()
-            flow_per_second = 20  # [mL/s]  # TODO: find watering speed of pump
-            time.sleep(flow/flow_per_second)
-            last_watering = datetime.datetime.now()
-            controls['pump'].turn_off()
     else:
         flag = None
-    msg = ['soil_moisture_sensor_1', db['latest']['soil_moisture_sensor_1'], flag]
+    msg[1]['temperature'] = {'value': temperature, 'flag': flag}
+
+    humidity = int(db['latest']['environment_sensor']['humidity'])
+    if humidity >= db['Humidity_High']:
+        flag = "HIGH" # As we are not controlling humidity and only measuring, no action needed
+    elif humidity <= db['Humidity_Low']:
+        flag = "LOW" # As we are not controlling humidity and only measuring, no action needed
+    else:
+        flag = None
+    msg[1]['humidity'] = {'value': humidity, 'flag': flag}
+
+    gas = round(int(db['latest']['environment_sensor']['gas'])/1000, 2)
+    if gas >= db['VOC_High']:
+        flag = "HIGH" # TODO: What to do about high VOC? Turn on fan?
+    elif gas <= db['VOC_Low']:
+        flag = "LOW" # if VOC is low, then no action needed
+    else:
+        flag = None
+    msg[1]['gas'] = {'value': gas, 'flag': flag}
     return msg
 
 
-def lighting_algorithm(db, controls, simulate_environment, off):
-    if simulate_environment:
-        return
+def watering_algorithm(db):
+    """!
+    The watering algorithm takes the raw sensor data and determines
+    if the soil moisture within the enclosure is within the acceptable range
+    (as provided by the configuraiton file).
+    """
+    try:
+        # Get the most recent soil_moisture_levels
+        current_level_1 = int(db['latest']['soil_moisture_sensor_1'])
+        current_level_2 = int(db['latest']['soil_moisture_sensor_2'])
+
+        # Calculate the overall soil moisture level
+        # TODO: Find a better way of calculating the level or maybe don't even do it this way idk
+        calculated_level = int(statistics.mean([current_level_1, current_level_2]))
+
+        # Determine the flag from the accepted range & the calculated level
+        flag = None
+        if calculated_level < db['Moisture_Low']:
+            flag = "LOW"
+        elif calculated_level > db['Moisture_High']:
+            flag = "HIGH"
+
+    except KeyError as err:
+        print("Unable to obtain latest sensor data for", str(err) + ". Likely due to the system just starting up.")
+        calculated_level = '-'
+        flag = None
+
+    # Generate & relay the message containing the calculated level for the GUI to display
+    msg = ['soil_moisture_sensor', calculated_level, flag]
+    return msg
+
+
+def lighting_algorithm(db, controls, off):
+    
     if off:
         controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
         controls['UV LED'].turn_off()
         db['RGB LED Status'] = [0, 0, 0]
         return
-    hour = str(datetime.datetime.hour())
+    import datetime
+    hour = str(datetime.datetime.now().hour)
     rgb_data = db['RGB_data'][hour]
     red = rgb_data['R']
     green = rgb_data['G']
@@ -50,42 +95,3 @@ def lighting_algorithm(db, controls, simulate_environment, off):
         controls['UV LED'].turn_off()
 
 
-def environment_algorithm(db, controls, simulate_environment):
-    msg = ["environment_sensor", {}]
-    temperature = int(db['latest']['environment_sensor']['temperature'])
-    if temperature >= db['Temperature_High']:
-        flag = "HIGH"
-        # TODO check if the LEDs produce non-negligible heat
-        # If so, then:
-        lighting_algorithm(db, controls, simulate_environment, True)
-        controls['fan'].turn_on()
-    elif temperature <= db['Temperature_Low']:
-        flag = "LOW"
-        lighting_algorithm(db, controls, simulate_environment, False)
-        controls['fan'].turn_off()
-    else:
-        flag = None
-    msg[1]['temperature'] = {'value': temperature, 'flag': flag}
-
-    humidity = int(db['latest']['environment_sensor']['humidity'])
-    if humidity >= db['Humidity_High']:
-        flag = "HIGH"
-        # As we are not controlling humidity and only measuring, no action needed
-    elif humidity <= db['Humidity_Low']:
-        flag = "LOW"
-        # # As we are not controlling humidity and only measuring, no action needed
-    else:
-        flag = None
-    msg[1]['humidity'] = {'value': humidity, 'flag': flag}
-
-    gas = round(int(db['latest']['environment_sensor']['gas'])/1000, 2)
-    if gas >= db['VOC_High']:
-        flag = "HIGH"
-        # TODO: What to do about high VOC? Turn on fan?
-    elif gas <= db['VOC_Low']:
-        flag = "LOW"
-        # if VOC is low, then no action needed
-    else:
-        flag = None
-    msg[1]['gas'] = {'value': gas, 'flag': flag}
-    return msg

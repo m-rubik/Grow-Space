@@ -87,6 +87,7 @@ if __name__ == "__main__":
     data['VOC_High'] = 800
     data['RGB_data'] = RGB_data
     data['UV_data'] = UV_data
+    data['Soak_Minutes'] = 0.5
 
     save_as_json("./configuration_files/basil", data)
 

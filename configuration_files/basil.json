@@ -130,8 +130,7 @@
             "R": 154
         }
     },
-    "Sunlight_High": 9,
-    "Sunlight_Low": 6,
+    "Soak_Minutes": 0.5,
     "Temperature_High": 35,
     "Temperature_Low": 21,
     "UV_data": {

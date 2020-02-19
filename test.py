@@ -27,3 +27,14 @@ class DerivedClass(Base):
 
 a = DerivedClass()
 a.test()
+
+import statistics
+a = 234
+b = 13
+print(int(statistics.mean([a,b])))
+
+import datetime
+now = datetime.datetime.now()
+later = now + datetime.timedelta(minutes=1)
+if now < later:
+    print("adsa")
