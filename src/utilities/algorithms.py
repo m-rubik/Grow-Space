@@ -75,6 +75,7 @@ def watering_algorithm(db):
 
 
 def lighting_algorithm(db, controls, off):
+    
     if off:
         controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
         controls['UV LED'].turn_off()

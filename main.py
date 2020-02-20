@@ -16,8 +16,8 @@ from src.GUI.GUI import GrowSpaceGUI
 from datetime import datetime, timedelta
 from src.utilities.pickle_utilities import export_object
 from src.utilities.json_utilities import save_as_json, load_from_json
-from src.utilities.algorithms import watering_algorithm, environment_algorithm, lighting_algorithm
-from src.utilities.control_processes import watering_process, fan_process
+from src.utilities.algorithms import watering_algorithm, environment_algorithm
+from src.utilities.control_processes import watering_process, fan_process, light_process
 
 
 class ThreadedClient:
@@ -107,7 +107,7 @@ class ThreadedClient:
         # Spawn the GUI
         self.gui = GrowSpaceGUI(master, self.main_to_gui_queue, self.gui_to_main_queue, self.end_application)
 
-        # Load the coniguration file
+        # Load the configuration file
         self.load_configuration()
 
         # Spawn all sensor processes
@@ -239,7 +239,10 @@ class ThreadedClient:
 
                 # If there is data, get it, save it to the master database, then save the master database
                 sensor_data = sensor.queue.get()
+                time = "Empty"
+                prev_time = time
                 time = datetime.now().strftime("%m-%d-%y %H:%M:%S")
+                # convert
                 if time not in self.db_master:
                     self.db_master[time] = {}
                 self.db_master[time][sensor_name] = sensor_data
@@ -261,7 +264,7 @@ class ThreadedClient:
                             current_time = datetime.now()
                             do_process = True
 
-                            # Check if the pump is currently being manually overriden
+                            # Check if the pump is currently being manually overridden
                             if self.db_master['Manual Overrides']['Pump']:
                                 print("Pump is in manual override")
                                 do_process = False
@@ -274,18 +277,21 @@ class ThreadedClient:
                             # Check if the system is still waiting for the previous watering to soak into the soil
                             if "soak_end_time" in self.db_master:
                                 if current_time <= self.db_master['soak_end_time']:
-                                    print("Waiting for soak-in to finish. Time remaining: ", self.db_master['soak_end_time'] - current_time)
+                                    print("Waiting for soak-in to finish. Time remaining: ",
+                                          self.db_master['soak_end_time'] - current_time)
                                     do_process = False
 
                             # If there is no condition blocking the control_process from running, execute it 
                             if do_process:
                                 if flag == "LOW": # Water level is low, need to pump
-                                    self.control_statuses['pump'] = "Busy" # Explicitly declare that the pump is now busy
-                                    self.control_processes['watering']['Process'] = Process(target=watering_process, args=(msg, self.controls, self.control_processes['watering']['Queue']))
+                                    self.control_statuses['pump'] = "Busy"  # Explicitly declare that the pump is now busy
+                                    self.control_processes['watering']['Process'] = \
+                                        Process(target=watering_process,
+                                                args=(msg, self.controls, self.control_processes['watering']['Queue']))
                                     self.control_processes['watering']['Process'].start()
-                                elif flag == "HIGH": # TODO: Are we going to do anything in this circumstance?
+                                elif flag == "HIGH":  # TODO: Are we going to do anything in this circumstance?
                                     pass
-                                else: # Water level is good, so no need to do anything
+                                else:  # Water level is good, so no need to do anything
                                     pass
 
                         except Exception as err:
@@ -303,30 +309,32 @@ class ThreadedClient:
                         current_time = datetime.now()
                         do_process = True
 
-                        # Check if the fan is currently being manually overriden
+                        # Check if the fan is currently being manually overridden
                         if self.db_master['Manual Overrides']['Fan']:
                             print("Fan is in manual override")
                             do_process = False
 
-                        # Check if the pump is already running from a previous algorithm check
+                        # Check if the fan is already running from a previous algorithm check
                         elif self.control_statuses['fan'] == "Busy":
-                            print("Pump is already running")
+                            print("Fan is already running")
                             do_process = False
                         
                         # If there is no condition blocking the control_process from running, execute it 
                         if do_process:
-                            self.control_statuses['fan'] = "Busy" # Explicitly declare that the fan is now busy
-                            self.control_processes['fan']['Process'] = Process(target=fan_process, args=(msg, self.controls, self.control_processes['fan']['Queue']))
+                            self.control_statuses['fan'] = "Busy"  # Explicitly declare that the fan is now busy
+                            self.control_processes['fan']['Process'] = \
+                                Process(target=fan_process,
+                                        args=(msg, self.controls, self.control_processes['fan']['Queue']))
                             self.control_processes['fan']['Process'].start()
 
-            
         for control_process_name, control_process in self.control_processes.items():
             if not control_process['Queue'].empty():
                 msg = control_process['Queue'].get()
                 print("Message from", control_process_name + ": " + msg)
                 if control_process_name == "watering":
                     self.db_master['last_watering'] = datetime.now()
-                    self.db_master['soak_end_time'] = self.db_master['last_watering'] + timedelta(minutes=self.db_master['Soak_Minutes'])
+                    self.db_master['soak_end_time'] = \
+                        self.db_master['last_watering'] + timedelta(minutes=self.db_master['Soak_Minutes'])
                     self.control_statuses['pump'] = "Free"
                 if control_process_name == "fan":
                     self.control_statuses['fan'] = "Free"
@@ -440,11 +448,13 @@ class ThreadedClient:
         """
         self.main_running = False
 
+
 def check_terminate_process(process):
     if not process.is_alive():
         process.terminate()
         process.join()
     return True      
+
 
 if __name__ == "__main__":
     ROOT = Tk()
