@@ -19,9 +19,8 @@ class Relay(ABC):
     pin: int
     name: str = "default"
     is_off: int = False
-    queue = None
 
-    def __init__(self, pin, name="default", is_off=True, queue=None):
+    def __init__(self, pin, name="default", is_off=True):
         """!
         Standard initialization.
         @param pin: The RPi pin that acts as the signal pin to the relay
@@ -32,7 +31,6 @@ class Relay(ABC):
         self.pin = pin
         self.name = name
         self.is_off = is_off
-        self.queue = queue
 
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.pin, GPIO.OUT) 

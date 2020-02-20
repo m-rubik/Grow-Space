@@ -152,9 +152,9 @@ class ThreadedClient:
             self.controls['RGB LED'] = sim_led_strip.LEDStrip(LED_PIN=18, LED_COUNT=107, name="RGB LED")
         else:
             from src.controls import fan, pump, uv_led, led_strip
-            self.controls['fan'] = fan.Fan(pin=17, name="fan", queue=Queue())
-            self.controls['pump'] = pump.Pump(pin=22, name="pump", queue=Queue())
-            self.controls['UV LED'] = uv_led.UVLed(pin=27, name="UV LED", queue=Queue())
+            self.controls['fan'] = fan.Fan(pin=17, name="fan")
+            self.controls['pump'] = pump.Pump(pin=22, name="pump")
+            self.controls['UV LED'] = uv_led.UVLed(pin=27, name="UV LED")
             self.controls['RGB LED'] = led_strip.LEDStrip(LED_PIN=18, name="RGB LED")
         
         # Make sure everything starts off
