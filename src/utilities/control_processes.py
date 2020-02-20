@@ -9,6 +9,7 @@ import time
 import statistics
 import sys
 
+
 def watering_process(msg, controls, queue):
     """!
     Based on the calculated level it is provided, the watering_process
@@ -19,7 +20,7 @@ def watering_process(msg, controls, queue):
     current_level = msg[1]
     # TODO: flow will be determined by the moisture level, also needs to be dynamically calculated
     # flow = 3000  # Units of mL, aim for 3L of water per water cycle
-    flow = 200 # FOR TESTING
+    flow = 200  # FOR TESTING
     flow_per_second = 20  # [mL/s]  # TODO: find watering speed of pump
     pump_time = int(flow/flow_per_second)
 
@@ -34,6 +35,7 @@ def watering_process(msg, controls, queue):
     # Terminate the process
     sys.exit(0)
 
+
 def fan_process(msg, controls, queue):
     if msg[1]['temperature']['flag'] == "HIGH":
         controls['fan'].turn_on()
@@ -42,4 +44,23 @@ def fan_process(msg, controls, queue):
     queue.put("Control process finished")
     sys.exit(0)
 
-    
+
+def light_process(db, controls, off):
+    if off:
+        controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
+        controls['UV LED'].turn_off()
+        db['RGB LED Status'] = [0, 0, 0]
+        return
+    import datetime
+    hour = str(datetime.datetime.now().hour)
+    rgb_data = db['RGB_data'][hour]
+    red = rgb_data['R']
+    green = rgb_data['G']
+    blue = rgb_data['B']
+    controls['RGB LED'].adjust_color(red_content=red, green_content=green, blue_content=blue)
+    db['RGB LED Status'] = [red, green, blue]
+    if db['UV_data'][hour]:
+        controls['UV LED'].turn_on()
+    else:
+        controls['UV LED'].turn_off()
+
