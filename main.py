@@ -101,6 +101,8 @@ class ThreadedClient:
         self.gui.TemperatureRange_value.configure(text=str(self.db_master["Temperature_Low"])+"°C - "+str(self.db_master["Temperature_High"])+"°C")
         self.gui.HumidityRange_value.configure(text=str(self.db_master["Humidity_Low"])+"% - "+str(self.db_master["Humidity_High"])+"%")
         self.gui.VOCRange_value.configure(text=str(self.db_master["VOC_Low"])+"kΩ - "+str(self.db_master["VOC_High"])+"kΩ")
+
+        ######## Insert RGB and UV LEDs once algorithm is created #########
     
     def add_controllers(self):
         if self.simulated:

@@ -9,6 +9,12 @@ from tkinter import Tk, Label, Button, Entry, IntVar, END, W, E, N, S, StringVar
 from tkinter.filedialog import askopenfile, asksaveasfile
 from src.utilities.json_utilities import save_as_json
 
+import sys
+import time
+import calendar
+import random
+import datetime
+
 
 class GrowSpaceGUI:
     """!
