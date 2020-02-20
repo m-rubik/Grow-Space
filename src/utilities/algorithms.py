@@ -33,9 +33,9 @@ def environment_algorithm(db):
 
     gas = round(int(db['latest']['environment_sensor']['gas'])/1000, 2)
     if gas >= db['VOC_High']:
-        flag = "HIGH"  # TODO: What to do about high VOC? Turn on fan?
+        flag = "HIGH" # TODO: What to do about high VOC? Turn on fan?
     elif gas <= db['VOC_Low']:
-        flag = "LOW"  # if VOC is low, then no action needed
+        flag = "LOW" # if VOC is low, then no action needed
     else:
         flag = None
     msg[1]['gas'] = {'value': gas, 'flag': flag}
@@ -46,7 +46,7 @@ def watering_algorithm(db):
     """!
     The watering algorithm takes the raw sensor data and determines
     if the soil moisture within the enclosure is within the acceptable range
-    (as provided by the configuration file).
+    (as provided by the configuraiton file).
     """
     try:
         # Get the most recent soil_moisture_levels
@@ -72,4 +72,26 @@ def watering_algorithm(db):
     # Generate & relay the message containing the calculated level for the GUI to display
     msg = ['soil_moisture_sensor', calculated_level, flag]
     return msg
+
+
+def lighting_algorithm(db, controls, off):
+    
+    if off:
+        controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
+        controls['UV LED'].turn_off()
+        db['RGB LED Status'] = [0, 0, 0]
+        return
+    import datetime
+    hour = str(datetime.datetime.now().hour)
+    rgb_data = db['RGB_data'][hour]
+    red = rgb_data['R']
+    green = rgb_data['G']
+    blue = rgb_data['B']
+    controls['RGB LED'].adjust_color(red_content=red, green_content=green, blue_content=blue)
+    db['RGB LED Status'] = [red, green, blue]
+    if db['UV_data'][hour]:
+        controls['UV LED'].turn_on()
+    else:
+        controls['UV LED'].turn_off()
+
 

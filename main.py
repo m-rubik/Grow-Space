@@ -52,7 +52,7 @@ class ThreadedClient:
     sensor_processes: dict = dict()
     simulated: bool = False
 
-    def __init__(self, master, configuration_file="./configuration_files/basil", simulate_environment=False):
+    def __init__(self, master, configuration_file="./configuration_files/basil", gui_refresh_interval=200, polling_interval=2, simulate_environment=False):
         """!
         Launches the GUI and the asynchronous worker processes (1 for each sensor).
         @param master: The root (instance) of a Tkinter top-level widget.
@@ -111,7 +111,7 @@ class ThreadedClient:
         self.load_configuration()
 
         # Spawn all sensor processes
-        self.spawn_sensor_processes()
+        self.spawn_sensor_processes(polling_interval)
 
         # Add control elements
         self.add_controllers()
@@ -119,7 +119,7 @@ class ThreadedClient:
         # TODO: Start the timekeeper
 
         # Start the periodic call (main loop)
-        self.periodic_call()
+        self.periodic_call(gui_refresh_interval)
 
     def load_configuration(self):
         """!
@@ -169,7 +169,7 @@ class ThreadedClient:
         self.main_to_gui_queue.put(["UV LED Status", self.db_master["UV LED Status"]])
         self.main_to_gui_queue.put(["RGB LED Status", self.db_master["RGB LED Status"]])
 
-    def spawn_sensor_processes(self):
+    def spawn_sensor_processes(self, polling_interval):
         """!
         This method is used to spawn all the sensor processes.
         Based on whether the system is to be simulated or not, it will chose which processes to use
@@ -178,16 +178,16 @@ class ThreadedClient:
         if self.simulated:
             print("Running simulation...")
             from src.simulations import sim_env_sensor, sim_soil_sensor
-            self.sensors['environment_sensor'] = sim_env_sensor.EnvironmentSensor(name="sim_environment_sensor", queue=Queue())
-            self.sensors['soil_moisture_sensor_1'] = sim_soil_sensor.SoilMoistureSensor(name="sim_soil_moisture_sensor_1", queue=Queue())
-            self.sensors['soil_moisture_sensor_2'] = sim_soil_sensor.SoilMoistureSensor(name="sim_soil_moisture_sensor_2", queue=Queue())
+            self.sensors['environment_sensor'] = sim_env_sensor.EnvironmentSensor(name="sim_environment_sensor", queue=Queue(), polling_interval=polling_interval)
+            self.sensors['soil_moisture_sensor_1'] = sim_soil_sensor.SoilMoistureSensor(name="sim_soil_moisture_sensor_1", queue=Queue(), polling_interval=polling_interval)
+            self.sensors['soil_moisture_sensor_2'] = sim_soil_sensor.SoilMoistureSensor(name="sim_soil_moisture_sensor_2", queue=Queue(), polling_interval=polling_interval)
         else:
             print("Running system...")
             from src.sensors.soil_moisture_sensor import SoilMoistureSensor
             from src.sensors.env_sensor import EnvironmentSensor
-            self.sensors['soil_moisture_sensor_1'] = SoilMoistureSensor(name="soil_moisture_sensor_1", queue=Queue(), channel=0, max_v=3, min_v=1)
-            self.sensors['soil_moisture_sensor_2'] = SoilMoistureSensor(name="soil_moisture_sensor_2", queue=Queue(), channel=1, max_v=3, min_v=1)
-            self.sensors['environment_sensor'] = EnvironmentSensor(name="environment_sensor", queue=Queue())
+            self.sensors['soil_moisture_sensor_1'] = SoilMoistureSensor(name="soil_moisture_sensor_1", queue=Queue(), polling_interval=polling_interval, channel=0, max_v=3, min_v=1)
+            self.sensors['soil_moisture_sensor_2'] = SoilMoistureSensor(name="soil_moisture_sensor_2", queue=Queue(), polling_interval=polling_interval, channel=1, max_v=3, min_v=1)
+            self.sensors['environment_sensor'] = EnvironmentSensor(name="environment_sensor", queue=Queue(), polling_interval=polling_interval)
 
         # Add all processes to dict
         for name, value in self.sensors.items():
@@ -213,6 +213,7 @@ class ThreadedClient:
         """
 
         self.gui.process_incoming()
+        start = datetime.now()
 
         # Check if the user has signaled to shutdown the application
         if not self.main_running:
@@ -338,6 +339,8 @@ class ThreadedClient:
                 control_process['Process'].terminate()
                 control_process['Process'].join()
     
+        end = datetime.now()
+        print("Main loop execution time:", end - start)
         # Wait for a refresh interval to elapse, then call itself to execute again
         self.gui.master.after(gui_refresh_interval, self.periodic_call)
 
@@ -457,5 +460,5 @@ if __name__ == "__main__":
     # ROOT.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
     # ROOT.resizable()
     ROOT.geometry("1024x600")
-    CLIENT = ThreadedClient(ROOT, simulate_environment=True)
-    ROOT.mainloop()  # Blocking!
+    CLIENT = ThreadedClient(ROOT, gui_refresh_interval=200, polling_interval=2, simulate_environment=True)
+    ROOT.mainloop() # Blocking!
