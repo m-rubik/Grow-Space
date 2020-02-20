@@ -195,10 +195,15 @@ class GrowSpaceGUI:
             save_as_json(config_file.name.split(".json")[0], data)
 
     def control_window(self):
+        def on_closing():
+            self.queue_out.put("END")
+            self.control_win.destroy()
+        
         self.control_win = Tk()
         self.control_win.title("Control Devices")
         self.control_win.configure(bg="Black")
         self.control_win.geometry("1000x500")
+        self.control_win.protocol("WM_DELETE_WINDOW", on_closing)
 
         # creates a grid 50 x 50 in the main window
         rows1 = 0
@@ -222,7 +227,7 @@ class GrowSpaceGUI:
         self.control_win.UVLEDButton = Button(self.control_win, bg="White", fg="Black", text="UV LED",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle UV"))
         self.control_win.FanButton = Button(self.control_win, bg="White", fg="Black", text="Fan",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle Fan"))
         self.control_win.PumpButton = Button(self.control_win, bg="White", fg="Black", text="Pump",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle Pump"))
-        self.control_win.ExitButton = Button(self.control_win, bg="White", fg="Black", text="\u23FB",font="Helvetica 24 bold", command=lambda: self.control_win.destroy())
+        self.control_win.ExitButton = Button(self.control_win, bg="White", fg="Black", text="\u23FB",font="Helvetica 24 bold", command=lambda: (self.queue_out.put("END"), self.control_win.destroy()))
 
         self.control_win.RGBLEDButton.grid(row=0, column=0)
         self.control_win.UVLEDButton.grid(row=1, column=0)
@@ -237,7 +242,7 @@ class GrowSpaceGUI:
         self.control_win.Blue_Entry_Label.grid(row=0, column=8)
         self.control_win.Blue_Entry.grid(row=0, column=9)
 
-    def processIncoming(self):
+    def process_incoming(self):
         """! 
         Receive data from the incoming queue (from the main process)
         """
@@ -246,13 +251,13 @@ class GrowSpaceGUI:
             msg = self.queue_in.get()
 
             # Print whatever it receives from the main thread
-            print("GUI: Received data from", msg[0] + ":", msg[1])
+            # print("GUI: Received data from", msg[0] + ":", msg[1])
 
             if isinstance(msg[0], str):
                 # Display the data accordingly
-                if msg[0] == "soil_moisture_sensor_1":
+                if msg[0] == "soil_moisture_sensor":
                     self.SoilMoistureCondition_value.configure(text=str(msg[1])+"%")
-                    if msg[2]:
+                    if msg[2] is not None:
                         self.SoilMoistureCondition_value.config(fg="Red")
                         self.SoilMoistureStatus_value.configure(text=msg[2])
                     else:
@@ -261,7 +266,6 @@ class GrowSpaceGUI:
 
                 elif msg[0] == "environment_sensor":
                     # Update temperature
-                    print(msg[1])
                     received_temp = round(msg[1]['temperature']['value'], 2)
                     self.TemperatureCondition_value.configure(text=str(received_temp)+"°C")
                     if msg[1]['temperature']['flag'] is not None:

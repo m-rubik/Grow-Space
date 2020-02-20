@@ -1,81 +1,96 @@
 """!
-Contains all data algorithms within Grow-Space enclosure. These algorithms will generate control signals, as they deem necessary.
+Contains the algorithms (functions) that are needed to translate the sensor readings
+into actionable quantities.
+
+These algorithms analyse the sensor data found within the master database, and use it to generate control messages.
+These message are passed back to the main thread, so that the information can be:
+1. Relayed to the GUI for display
+2. Used to start up control processes.
 """
 
-import datetime
-import time
+import statistics
 
 
-def watering_algorithm(db, controls, simulate_environment):
-    if int(db['latest']['soil_moisture_sensor_1']) < db['Moisture_Low']:
-        flag = "LOW"
-        time_at = datetime.datetime.now()
-        if not simulate_environment:
-            # Calculate how long to turn on pump
-
-            # TODO: Turn on the pump
-            controls['pump'].turn_on()
-            # TODO: Wait, need to find pump watering speed
-            # TODO: Turn off the pump
-            controls['pump'].turn_off()
-            pass
-    else:
-        flag = None
-    msg = ['soil_moisture_sensor_1', db['latest']['soil_moisture_sensor_1'], flag]
-    return msg  
-
-
-def lighting_algorithm(db, controls, simulate_environment):
-    if simulate_environment:
-        return
-    controls['RGB LED'].turn_on()
-    start_time = datetime.datetime.now()
-    while True:
-        if controls['RGB LED'].is_off:
-            run_time = datetime.datetime.now() - start_time
-
-
-def environment_algorithm(db, controls, simulate_environment):
+def environment_algorithm(db):
     msg = ["environment_sensor", {}]
     temperature = int(db['latest']['environment_sensor']['temperature'])
     if temperature >= db['Temperature_High']:
         flag = "HIGH"
-        # controls['UV LED'].turn_off()
-        # controls['RGB LED'].turn_off()
-        controls['fan'].turn_on()
     elif temperature <= db['Temperature_Low']:
-        #  TODO check if lights on produce a lot of heat or not
-        # TODO do we want the lights to turn on if temp is low? check above TODO
         flag = "LOW"
-        # controls['UV LED'].turn_on()
-        # controls['RGB LED'].turn_on()
-        controls['fan'].turn_off()
     else:
         flag = None
     msg[1]['temperature'] = {'value': temperature, 'flag': flag}
 
     humidity = int(db['latest']['environment_sensor']['humidity'])
     if humidity >= db['Humidity_High']:
-        flag = "HIGH"
-        controls['fan'].turn_on()
-        # TODO: research how much fan reduces humidity
+        flag = "HIGH" # As we are not controlling humidity and only measuring, no action needed
     elif humidity <= db['Humidity_Low']:
-        flag = "LOW"
-        controls['fan'].turn_off()
-        # TODO: research how fan deals with humidity
+        flag = "LOW" # As we are not controlling humidity and only measuring, no action needed
     else:
         flag = None
     msg[1]['humidity'] = {'value': humidity, 'flag': flag}
 
     gas = round(int(db['latest']['environment_sensor']['gas'])/1000, 2)
     if gas >= db['VOC_High']:
-        flag = "HIGH"
-        # TODO: What to do about high VOC? Turn on fan?
+        flag = "HIGH" # TODO: What to do about high VOC? Turn on fan?
     elif gas <= db['VOC_Low']:
-        flag = "LOW"
-        # TODO: AFAIK it's a good thing if VOC is low, so this should be fine as is
+        flag = "LOW" # if VOC is low, then no action needed
     else:
         flag = None
     msg[1]['gas'] = {'value': gas, 'flag': flag}
-
     return msg
+
+
+def watering_algorithm(db):
+    """!
+    The watering algorithm takes the raw sensor data and determines
+    if the soil moisture within the enclosure is within the acceptable range
+    (as provided by the configuraiton file).
+    """
+    try:
+        # Get the most recent soil_moisture_levels
+        current_level_1 = int(db['latest']['soil_moisture_sensor_1'])
+        current_level_2 = int(db['latest']['soil_moisture_sensor_2'])
+
+        # Calculate the overall soil moisture level
+        # TODO: Find a better way of calculating the level or maybe don't even do it this way idk
+        calculated_level = int(statistics.mean([current_level_1, current_level_2]))
+
+        # Determine the flag from the accepted range & the calculated level
+        flag = None
+        if calculated_level < db['Moisture_Low']:
+            flag = "LOW"
+        elif calculated_level > db['Moisture_High']:
+            flag = "HIGH"
+
+    except KeyError as err:
+        print("Unable to obtain latest sensor data for", str(err) + ". Likely due to the system just starting up.")
+        calculated_level = '-'
+        flag = None
+
+    # Generate & relay the message containing the calculated level for the GUI to display
+    msg = ['soil_moisture_sensor', calculated_level, flag]
+    return msg
+
+
+def lighting_algorithm(db, controls, off):
+    if off:
+        controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
+        controls['UV LED'].turn_off()
+        db['RGB LED Status'] = [0, 0, 0]
+        return
+    import datetime
+    hour = str(datetime.datetime.now().hour)
+    rgb_data = db['RGB_data'][hour]
+    red = rgb_data['R']
+    green = rgb_data['G']
+    blue = rgb_data['B']
+    controls['RGB LED'].adjust_color(red_content=red, green_content=green, blue_content=blue)
+    db['RGB LED Status'] = [red, green, blue]
+    if db['UV_data'][hour]:
+        controls['UV LED'].turn_on()
+    else:
+        controls['UV LED'].turn_off()
+
+

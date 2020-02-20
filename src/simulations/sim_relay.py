@@ -33,8 +33,10 @@ class Relay():
     def toggle(self):
         if self.is_off:
             self.turn_on()
+            self.is_off = False
         else:
             self.turn_off()
+            self.is_off = True
 
     def turn_on(self):
         print("Turning on", self.name)

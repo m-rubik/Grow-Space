@@ -3,7 +3,6 @@ This code is for the intialization and control of a
 ws281 LED strip.
 """
 
-#TODO: MAKE THIS TURN-OFF ON SHUTDOWN
 
 from rpi_ws281x import * # TODO: Fix this wildcard import
 import atexit
@@ -25,7 +24,7 @@ class LEDStrip():
     LED_PIN: int = 18 # pin 12
     LED_FREQ_HQ: int = 800000
     LED_DMA: int = 10
-    LED_BRIGHTNESS: int = 100
+    LED_BRIGHTNESS: int = 100 # In testing, for the full strip (before cutting), we find: {75, 1.60A}, {100, 2.11A}, {125, 2.61A}
     LED_INVERT: bool = False
     LED_CHANNEL: int = 0
     strip = None
