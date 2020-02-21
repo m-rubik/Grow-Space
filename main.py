@@ -429,7 +429,9 @@ class ThreadedClient:
                         time.sleep(0.2)
                         self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
                         time.sleep(0.2)
+
                 self.main_to_gui_queue.put(["RGB LED Status", self.db_master["RGB LED Status"]])
+
                 if red == 4 and green == 2 and blue == 0:
                     r = 0
                     g = 150

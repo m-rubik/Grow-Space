@@ -302,7 +302,7 @@ class GrowSpaceGUI:
                 elif msg[0] == "UV LED Status":
                     self.UVLEDIntensity_value.configure(text=msg[1])
                 elif msg[0] == "RGB LED Status":
-                    self.RGBLEDIntensity_value.configure(text=str(msg[1][0]) + "% - " + str(msg[1][1]) + "% - " + str(msg[1][2]) + "%")
+                    self.RGBLEDIntensity_value.configure(text=str(round(msg[1][0]*(100/255),1)) + "% - " + str(round(msg[1][1]*(100/255),1)) + "% - " + str(round(msg[1][2]*(100/255),1)) + "%")
                 else:
                     print("Unexpected item passed in main_to_gui queue:", msg)
 
