@@ -239,13 +239,13 @@ class ThreadedClient:
 
                 # If there is data, get it, save it to the master database, then save the master database
                 sensor_data = sensor.queue.get()
-                time = "Empty"
-                prev_time = time
-                time = datetime.now().strftime("%m-%d-%y %H:%M:%S")
+                #current_time = "Empty"
+                #prev_time = current_time
+                current_time = datetime.now().strftime("%m-%d-%y %H:%M:%S")
                 # convert
-                if time not in self.db_master:
-                    self.db_master[time] = {}
-                self.db_master[time][sensor_name] = sensor_data
+                if current_time not in self.db_master:
+                    self.db_master[current_time] = {}
+                self.db_master[current_time][sensor_name] = sensor_data
                 self.db_master['latest'][sensor_name] = sensor_data
                 export_object("./database/master", self.db_master)
                 save_as_json("./database/master", self.db_master)
@@ -342,7 +342,7 @@ class ThreadedClient:
                 control_process['Process'].join()
     
         end = datetime.now()
-        print("Main loop execution time:", end - start)
+        # print("Main loop execution time:", end - start)
         # Wait for a refresh interval to elapse, then call itself to execute again
         self.gui.master.after(gui_refresh_interval, self.periodic_call)
 
@@ -424,7 +424,6 @@ class ThreadedClient:
                 if red == 69 or green == 69 or blue == 69 or (red == 6 and green == 9) or (green == 6 and blue ==9):
                     for _ in range(50):
                         import random
-                        import time
                         self.controls['RGB LED'].adjust_color(red_content=random.randint(0,255), green_content=random.randint(0,255), blue_content=random.randint(0,255))
                         time.sleep(0.2)
                         self.controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
@@ -464,5 +463,5 @@ if __name__ == "__main__":
     # ROOT.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
     # ROOT.resizable()
     ROOT.geometry("1024x600")
-    CLIENT = ThreadedClient(ROOT, gui_refresh_interval=200, polling_interval=2, simulate_environment=True)
+    CLIENT = ThreadedClient(ROOT, gui_refresh_interval=200, polling_interval=2, simulate_environment=False)
     ROOT.mainloop() # Blocking!

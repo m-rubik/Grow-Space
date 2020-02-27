@@ -20,8 +20,8 @@ def watering_process(msg, controls, queue):
     current_level = msg[1]
     # TODO: flow will be determined by the moisture level, also needs to be dynamically calculated
     # flow = 3000  # Units of mL, aim for 3L of water per water cycle
-    flow = 200  # FOR TESTING
-    flow_per_second = 20  # [mL/s]  # TODO: find watering speed of pump
+    flow = 50  # FOR TESTING
+    flow_per_second = 1  # [mL/s]  # TODO: find watering speed of pump
     pump_time = int(flow/flow_per_second)
 
     # Operate the pump
