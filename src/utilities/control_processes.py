@@ -10,7 +10,7 @@ import statistics
 import sys
 
 
-def watering_process(msg, controls, queue):
+def watering_process(msg, controls, queue, db):
     """!
     Based on the calculated level it is provided, the watering_process
     will determine how long it needs to water for, then it will
@@ -18,10 +18,12 @@ def watering_process(msg, controls, queue):
     """
 
     current_level = msg[1]
-    # TODO: flow will be determined by the moisture level, also needs to be dynamically calculated
-    # flow = 3000  # Units of mL, aim for 3L of water per water cycle
-    flow = 50  # FOR TESTING
-    flow_per_second = 1  # [mL/s]  # TODO: find watering speed of pump
+    moisture_low = db["Moisture_Low"]
+    moisture_high = db["Moisture_High"]
+    LH = moisture_low-moisture_high
+    max_flow = 2000
+    flow = (max_flow/LH)*current_level + max_flow*(1-moisture_low/LH)
+    flow_per_second = 0.905  # [mL/s]  # TODO: find watering speed of pump
     pump_time = int(flow/flow_per_second)
 
     # Operate the pump

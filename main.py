@@ -287,7 +287,8 @@ class ThreadedClient:
                                     self.control_statuses['pump'] = "Busy"  # Explicitly declare that the pump is now busy
                                     self.control_processes['watering']['Process'] = \
                                         Process(target=watering_process,
-                                                args=(msg, self.controls, self.control_processes['watering']['Queue']))
+                                                args=(msg, self.controls, self.control_processes['watering']['Queue'],
+                                                      self.db_master))
                                     self.control_processes['watering']['Process'].start()
                                 elif flag == "HIGH":  # TODO: Are we going to do anything in this circumstance?
                                     pass
@@ -463,5 +464,5 @@ if __name__ == "__main__":
     # ROOT.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
     # ROOT.resizable()
     ROOT.geometry("1024x600")
-    CLIENT = ThreadedClient(ROOT, gui_refresh_interval=200, polling_interval=2, simulate_environment=False)
+    CLIENT = ThreadedClient(ROOT, gui_refresh_interval=200, polling_interval=2, simulate_environment=True)
     ROOT.mainloop() # Blocking!
