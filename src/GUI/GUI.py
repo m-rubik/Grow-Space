@@ -103,7 +103,7 @@ class GrowSpaceGUI:
 
         ##### Positioning elements within the grid ###################
 
-        self.Title.grid(row=0, column=0, columnspan=5, sticky=W)
+        self.Title.grid(row=0, column=5, columnspan=5, sticky=W)
 
         #Environmental Conditions
         self.EnvironmentalConditionHeader.grid(row=6, column=5, columnspan=10, sticky=W)
@@ -113,10 +113,10 @@ class GrowSpaceGUI:
         self.VOCCondition.grid(row=14, column=5, sticky=W)
 
         # Condition Values
-        self.SoilMoistureCondition_value.grid(row=8, column=11,  sticky=W+E)
-        self.TemperatureCondition_value.grid(row=10, column=11,  sticky=W+E)
-        self.HumidityCondition_value.grid(row=12, column=11,  sticky=W+E)
-        self.VOCCondition_value.grid(row=14, column=11, sticky=W+E)
+        self.SoilMoistureCondition_value.grid(row=8, column=6,  sticky=W+E)
+        self.TemperatureCondition_value.grid(row=10, column=6,  sticky=W+E)
+        self.HumidityCondition_value.grid(row=12, column=6,  sticky=W+E)
+        self.VOCCondition_value.grid(row=14, column=6, sticky=W+E)
 
         # Range Headers
         self.ParameterRangeHeader.grid(row=6, column=22, columnspan=10, sticky=W)
@@ -139,10 +139,10 @@ class GrowSpaceGUI:
         self.VOCStatus.grid(row=32, column=5, sticky=W)
 
         #Environmental Status Values
-        self.SoilMoistureStatus_value.grid(row=26, column=11, sticky=W+E)
-        self.TemperatureStatus_value.grid(row=28, column=11, sticky=W+E)
-        self.HumidityStatus_value.grid(row=30, column=11, sticky=W+E)
-        self.VOCStatus_value.grid(row=32, column=11, sticky=W+E)
+        self.SoilMoistureStatus_value.grid(row=26, column=6, sticky=W+E)
+        self.TemperatureStatus_value.grid(row=28, column=6, sticky=W+E)
+        self.HumidityStatus_value.grid(row=30, column=6, sticky=W+E)
+        self.VOCStatus_value.grid(row=32, column=6, sticky=W+E)
 
         #Device Status Headers
         self.DeviceStatusHeader.grid(row=24, column=22, columnspan=10, sticky=W)
@@ -158,9 +158,9 @@ class GrowSpaceGUI:
         self.UVLEDIntensity_value.grid(row=32, column=29, sticky=W+E)
 
         #Button Locations
-        self.LoadButton.grid(row=45, column=5, columnspan=1, sticky=W)
+        self.LoadButton.grid(row=45, column=6, columnspan=1, sticky=W)
         self.SaveButton.grid(row=45, column=9, columnspan=1, sticky=E)
-        self.PowerButton.grid(row=45, column=1, columnspan=1, sticky = W+E)
+        self.PowerButton.grid(row=45, column=5, columnspan=1, sticky=W+E, padx=(40, 40))
         self.ConfigureButton.grid(row=45, column=22, columnspan=1)
         self.ControlButton.grid(row=45, column=29, columnspan=1)
 
@@ -302,7 +302,7 @@ class GrowSpaceGUI:
                 elif msg[0] == "UV LED Status":
                     self.UVLEDIntensity_value.configure(text=msg[1])
                 elif msg[0] == "RGB LED Status":
-                    self.RGBLEDIntensity_value.configure(text=str(round(msg[1][0]*(100/255),1)) + "% - " + str(round(msg[1][1]*(100/255),1)) + "% - " + str(round(msg[1][2]*(100/255),1)) + "%")
+                    self.RGBLEDIntensity_value.configure(text=str(round(msg[1][0]*(100/255),1)) + "%-" + str(round(msg[1][1]*(100/255),1)) + "%-" + str(round(msg[1][2]*(100/255),1)) + "%")
                 else:
                     print("Unexpected item passed in main_to_gui queue:", msg)
 
