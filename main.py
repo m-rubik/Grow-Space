@@ -239,16 +239,24 @@ class ThreadedClient:
 
                 # If there is data, get it, save it to the master database, then save the master database
                 sensor_data = sensor.queue.get()
-                #current_time = "Empty"
-                #prev_time = current_time
                 current_time = datetime.now().strftime("%m-%d-%y %H:%M:%S")
-                # convert
                 if current_time not in self.db_master:
                     self.db_master[current_time] = {}
                 self.db_master[current_time][sensor_name] = sensor_data
                 self.db_master['latest'][sensor_name] = sensor_data
                 export_object("./database/master", self.db_master)
                 save_as_json("./database/master", self.db_master)
+
+                #### Check if an hour has elapsed ######
+                try:
+                    if current_time > previous_time + timedelta("1h"):
+                        # call lighting algorithm
+                        pass
+                    previous_time = current_time
+                except NameError:
+                    # This happens if this is the first iteration since the system starts up
+                    pass
+                #####################################
 
                 if 'soil_moisture_sensor' in sensor_name:
                     # First, run the watering algorithm to generate the control message.
