@@ -47,7 +47,7 @@ def fan_process(msg, controls, queue):
     sys.exit(0)
 
 
-def light_process(db, controls, off):
+def lighting_process(db, controls, off):
     if off:
         controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
         controls['UV LED'].turn_off()

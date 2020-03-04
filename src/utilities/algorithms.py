@@ -74,24 +74,11 @@ def watering_algorithm(db):
     return msg
 
 
-def lighting_algorithm(db, controls, off):
-    
-    if off:
-        controls['RGB LED'].adjust_color(red_content=0, green_content=0, blue_content=0)
-        controls['UV LED'].turn_off()
-        db['RGB LED Status'] = [0, 0, 0]
-        return
-    import datetime
-    hour = str(datetime.datetime.now().hour)
-    rgb_data = db['RGB_data'][hour]
-    red = rgb_data['R']
-    green = rgb_data['G']
-    blue = rgb_data['B']
-    controls['RGB LED'].adjust_color(red_content=red, green_content=green, blue_content=blue)
-    db['RGB LED Status'] = [red, green, blue]
-    if db['UV_data'][hour]:
-        controls['UV LED'].turn_on()
+def lighting_algorithm(curr, prev):
+    if not curr.hour == prev.hour:
+        light_response = True
     else:
-        controls['UV LED'].turn_off()
+        light_response = False
+    return light_response
 
 

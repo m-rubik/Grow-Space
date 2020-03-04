@@ -16,8 +16,8 @@ from src.GUI.GUI import GrowSpaceGUI
 from datetime import datetime, timedelta
 from src.utilities.pickle_utilities import export_object
 from src.utilities.json_utilities import save_as_json, load_from_json
-from src.utilities.algorithms import watering_algorithm, environment_algorithm
-from src.utilities.control_processes import watering_process, fan_process, light_process
+from src.utilities.algorithms import watering_algorithm, environment_algorithm, lighting_algorithm
+from src.utilities.control_processes import watering_process, fan_process, lighting_process
 
 
 class ThreadedClient:
@@ -233,6 +233,16 @@ class ThreadedClient:
             msg = self.gui_to_main_queue.get()
             self.manual_override(msg) # Execute the manual override command
 
+        # Check if an hour has elapsed
+        self.current_time = datetime.now()
+        try:
+            light_response = lighting_algorithm(self.current_time, self.previous_time)
+            if light_response:
+                lighting_process(self.db_master, self.controls, False)
+        except AttributeError as e:  # This happens if this is the first iteration since the system starts up
+            print(e)
+        self.previous_time = self.current_time
+
         # For each sensor, check if there is any data in its queue
         for sensor_name, sensor in self.sensors.items():
             if not sensor.queue.empty():
@@ -246,17 +256,6 @@ class ThreadedClient:
                 self.db_master['latest'][sensor_name] = sensor_data
                 export_object("./database/master", self.db_master)
                 save_as_json("./database/master", self.db_master)
-
-                #### Check if an hour has elapsed ######
-                try:
-                    if current_time > previous_time + timedelta("1h"):
-                        # call lighting algorithm
-                        pass
-                    previous_time = current_time
-                except NameError:
-                    # This happens if this is the first iteration since the system starts up
-                    pass
-                #####################################
 
                 if 'soil_moisture_sensor' in sensor_name:
                     # First, run the watering algorithm to generate the control message.
@@ -473,4 +472,4 @@ if __name__ == "__main__":
     # ROOT.resizable()
     ROOT.geometry("1024x600")
     CLIENT = ThreadedClient(ROOT, gui_refresh_interval=200, polling_interval=2, simulate_environment=True)
-    ROOT.mainloop() # Blocking!
+    ROOT.mainloop()  # Blocking!
