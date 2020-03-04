@@ -202,8 +202,9 @@ class GrowSpaceGUI:
         self.control_win = Tk()
         self.control_win.title("Control Devices")
         self.control_win.configure(bg="Black")
-        self.control_win.geometry("1000x500")
+        self.control_win.geometry("1024x600")
         self.control_win.protocol("WM_DELETE_WINDOW", on_closing)
+
 
         # creates a grid 50 x 50 in the main window
         rows1 = 0
@@ -242,6 +243,15 @@ class GrowSpaceGUI:
         self.control_win.Blue_Entry_Label.grid(row=0, column=8)
         self.control_win.Blue_Entry.grid(row=0, column=9)
 
+    def configure_window(self):
+
+        def on_closing():
+            self.control_win.destroy()
+
+
+
+
+
     def process_incoming(self):
         """! 
         Receive data from the incoming queue (from the main process)
@@ -249,6 +259,7 @@ class GrowSpaceGUI:
 
         while not self.queue_in.empty():
             msg = self.queue_in.get()
+
 
             # Print whatever it receives from the main thread
             print("GUI: Received data from", msg[0] + ":", msg[1])
