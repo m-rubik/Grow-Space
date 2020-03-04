@@ -16,6 +16,7 @@ import random
 import datetime
 
 
+
 class GrowSpaceGUI:
     """!
     GUI class for any grow space box.
@@ -28,10 +29,14 @@ class GrowSpaceGUI:
     queue_out: Queue = None
     master = None
 
+
+
+
     def __init__(self, master, queue_in, queue_out, endCommand):
         self.queue_in = queue_in
         self.queue_out = queue_out
         self.master = master
+        self.control_window_open = False
 
         self.master.title("Grow Space")
         self.master.configure(background="Black")
@@ -195,56 +200,61 @@ class GrowSpaceGUI:
             save_as_json(config_file.name.split(".json")[0], data)
 
     def control_window(self):
+
         def on_closing():
             self.queue_out.put("END")
             try:
                 self.control_win.destroy()
+                self.control_window_open = False
             except Exception as e:
                 print(e)
 
-        self.control_win = Tk()
-        self.control_win.title("Control Devices")
-        self.control_win.configure(bg="Black")
-        self.control_win.geometry("1024x600")
-        self.control_win.protocol("WM_DELETE_WINDOW", on_closing)
+        if not self.control_window_open:
+
+            self.control_win = Tk()
+            self.control_window_open = True
+            self.control_win.title("Control Devices")
+            self.control_win.configure(bg="Black")
+            self.control_win.geometry("1024x600")
+            self.control_win.protocol("WM_DELETE_WINDOW", on_closing)
 
 
-        # creates a grid 50 x 50 in the main window
-        rows1 = 0
-        while rows1 < 20:
-            self.control_win.grid_rowconfigure(rows1, weight=1, minsize=1)  # Empty Row
-            self.control_win.grid_columnconfigure(rows1, weight=1, minsize=1)  # Empty column
-            rows1 += 1
+            # creates a grid 50 x 50 in the main window
+            rows1 = 0
+            while rows1 < 20:
+                self.control_win.grid_rowconfigure(rows1, weight=1, minsize=1)  # Empty Row
+                self.control_win.grid_columnconfigure(rows1, weight=1, minsize=1)  # Empty column
+                rows1 += 1
 
-        self.Red_val = StringVar()
-        self.Green_val = StringVar()
-        self.Blue_val = StringVar()
+            self.Red_val = StringVar()
+            self.Green_val = StringVar()
+            self.Blue_val = StringVar()
 
-        self.control_win.Red_Entry = Entry(self.control_win,  textvariable = self.Red_val)
-        self.control_win.Red_Entry_Label = Label(self.control_win, fg="Black", bg = "Red", text = "RED", font="Helvetica 24")
-        self.control_win.Green_Entry = Entry(self.control_win, textvariable=self.Green_val)
-        self.control_win.Green_Entry_Label = Label(self.control_win, fg="Black", bg="Green", text="GREEN", font="Helvetica 24")
-        self.control_win.Blue_Entry = Entry(self.control_win,  textvariable=self.Blue_val)
-        self.control_win.Blue_Entry_Label = Label(self.control_win, fg="Black", bg="Blue", text="BLUE",font="Helvetica 24")
+            self.control_win.Red_Entry = Entry(self.control_win,  textvariable = self.Red_val)
+            self.control_win.Red_Entry_Label = Label(self.control_win, fg="Black", bg = "Red", text = "RED", font="Helvetica 24")
+            self.control_win.Green_Entry = Entry(self.control_win, textvariable=self.Green_val)
+            self.control_win.Green_Entry_Label = Label(self.control_win, fg="Black", bg="Green", text="GREEN", font="Helvetica 24")
+            self.control_win.Blue_Entry = Entry(self.control_win,  textvariable=self.Blue_val)
+            self.control_win.Blue_Entry_Label = Label(self.control_win, fg="Black", bg="Blue", text="BLUE",font="Helvetica 24")
 
-        self.control_win.RGBLEDButton = Button(self.control_win, bg = "White", fg="Black", text = "RGB LED",font="Helvetica 24 bold", command=lambda: self.queue_out.put([self.control_win.Red_Entry.get(),self.control_win.Green_Entry.get(),self.control_win.Blue_Entry.get()]))
-        self.control_win.UVLEDButton = Button(self.control_win, bg="White", fg="Black", text="UV LED",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle UV"))
-        self.control_win.FanButton = Button(self.control_win, bg="White", fg="Black", text="Fan",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle Fan"))
-        self.control_win.PumpButton = Button(self.control_win, bg="White", fg="Black", text="Pump",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle Pump"))
-        self.control_win.ExitButton = Button(self.control_win, bg="White", fg="Black", text="BACK",font="Helvetica 24 bold", command=lambda: (self.queue_out.put("END"), self.control_win.destroy()))
+            self.control_win.RGBLEDButton = Button(self.control_win, bg = "White", fg="Black", text = "RGB LED",font="Helvetica 24 bold", command=lambda: self.queue_out.put([self.control_win.Red_Entry.get(),self.control_win.Green_Entry.get(),self.control_win.Blue_Entry.get()]))
+            self.control_win.UVLEDButton = Button(self.control_win, bg="White", fg="Black", text="UV LED",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle UV"))
+            self.control_win.FanButton = Button(self.control_win, bg="White", fg="Black", text="Fan",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle Fan"))
+            self.control_win.PumpButton = Button(self.control_win, bg="White", fg="Black", text="Pump",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle Pump"))
+            self.control_win.ExitButton = Button(self.control_win, bg="White", fg="Black", text="BACK",font="Helvetica 24 bold", command=lambda: (self.queue_out.put("END"), on_closing()))
 
-        self.control_win.RGBLEDButton.grid(row=0, column=0)
-        self.control_win.UVLEDButton.grid(row=1, column=0)
-        self.control_win.FanButton.grid(row=2, column=0)
-        self.control_win.PumpButton.grid(row=3, column=0)
-        self.control_win.ExitButton.grid(row=8, column=0)
+            self.control_win.RGBLEDButton.grid(row=0, column=0)
+            self.control_win.UVLEDButton.grid(row=1, column=0)
+            self.control_win.FanButton.grid(row=2, column=0)
+            self.control_win.PumpButton.grid(row=3, column=0)
+            self.control_win.ExitButton.grid(row=8, column=0)
 
-        self.control_win.Red_Entry_Label.grid(row=0, column=2)
-        self.control_win.Red_Entry.grid(row=0, column=3)
-        self.control_win.Green_Entry_Label.grid(row=0, column=5)
-        self.control_win.Green_Entry.grid(row=0, column=6)
-        self.control_win.Blue_Entry_Label.grid(row=0, column=8)
-        self.control_win.Blue_Entry.grid(row=0, column=9)
+            self.control_win.Red_Entry_Label.grid(row=0, column=2)
+            self.control_win.Red_Entry.grid(row=0, column=3)
+            self.control_win.Green_Entry_Label.grid(row=0, column=5)
+            self.control_win.Green_Entry.grid(row=0, column=6)
+            self.control_win.Blue_Entry_Label.grid(row=0, column=8)
+            self.control_win.Blue_Entry.grid(row=0, column=9)
 
     def configure_window(self):
 
