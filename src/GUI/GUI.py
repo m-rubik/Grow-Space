@@ -197,8 +197,11 @@ class GrowSpaceGUI:
     def control_window(self):
         def on_closing():
             self.queue_out.put("END")
-            self.control_win.destroy()
-        
+            try:
+                self.control_win.destroy()
+            except Exception as e:
+                print(e)
+
         self.control_win = Tk()
         self.control_win.title("Control Devices")
         self.control_win.configure(bg="Black")
@@ -228,13 +231,13 @@ class GrowSpaceGUI:
         self.control_win.UVLEDButton = Button(self.control_win, bg="White", fg="Black", text="UV LED",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle UV"))
         self.control_win.FanButton = Button(self.control_win, bg="White", fg="Black", text="Fan",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle Fan"))
         self.control_win.PumpButton = Button(self.control_win, bg="White", fg="Black", text="Pump",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle Pump"))
-        self.control_win.ExitButton = Button(self.control_win, bg="White", fg="Black", text="\u2190",font="Helvetica 24 bold", command=lambda: (self.queue_out.put("END"), self.control_win.destroy()))
+        self.control_win.ExitButton = Button(self.control_win, bg="White", fg="Black", text="BACK",font="Helvetica 24 bold", command=lambda: (self.queue_out.put("END"), self.control_win.destroy()))
 
         self.control_win.RGBLEDButton.grid(row=0, column=0)
         self.control_win.UVLEDButton.grid(row=1, column=0)
         self.control_win.FanButton.grid(row=2, column=0)
         self.control_win.PumpButton.grid(row=3, column=0)
-        self.control_win.ExitButton.grid(row=4, column=0)
+        self.control_win.ExitButton.grid(row=8, column=0)
 
         self.control_win.Red_Entry_Label.grid(row=0, column=2)
         self.control_win.Red_Entry.grid(row=0, column=3)
@@ -246,11 +249,10 @@ class GrowSpaceGUI:
     def configure_window(self):
 
         def on_closing():
-            self.control_win.destroy()
-
-
-
-
+            try:
+                self.control_win.destroy()
+            except Exception as e:
+                print(e)
 
     def process_incoming(self):
         """! 
