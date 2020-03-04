@@ -228,7 +228,7 @@ class GrowSpaceGUI:
         self.control_win.UVLEDButton = Button(self.control_win, bg="White", fg="Black", text="UV LED",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle UV"))
         self.control_win.FanButton = Button(self.control_win, bg="White", fg="Black", text="Fan",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle Fan"))
         self.control_win.PumpButton = Button(self.control_win, bg="White", fg="Black", text="Pump",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle Pump"))
-        self.control_win.ExitButton = Button(self.control_win, bg="White", fg="Black", text="\u23FB",font="Helvetica 24 bold", command=lambda: (self.queue_out.put("END"), self.control_win.destroy()))
+        self.control_win.ExitButton = Button(self.control_win, bg="White", fg="Black", text="\u2190",font="Helvetica 24 bold", command=lambda: (self.queue_out.put("END"), self.control_win.destroy()))
 
         self.control_win.RGBLEDButton.grid(row=0, column=0)
         self.control_win.UVLEDButton.grid(row=1, column=0)
