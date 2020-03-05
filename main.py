@@ -16,6 +16,7 @@ from src.GUI.GUI import GrowSpaceGUI
 from datetime import datetime, timedelta
 from src.utilities.pickle_utilities import export_object
 from src.utilities.json_utilities import save_as_json, load_from_json
+from src.utilities.logger_utilities import get_logger
 from src.utilities.algorithms import watering_algorithm, environment_algorithm, lighting_algorithm
 from src.utilities.control_processes import watering_process, fan_process, lighting_process
 
@@ -67,6 +68,10 @@ class ThreadedClient:
         if not os.path.exists('logs'):
             os.mkdir('logs')
 
+        # Create the logger for the main process (Main logger)
+        self.logger = get_logger("Main")
+        self.logger.debug("System start up.")
+
         # Ensure that there is a directory for databases to be stored.
         if not os.path.exists('database'):
             os.mkdir('database')
@@ -115,8 +120,6 @@ class ThreadedClient:
 
         # Add control elements
         self.add_controllers()
-
-        # TODO: Start the timekeeper
 
         # Start the periodic call (main loop)
         self.periodic_call(gui_refresh_interval)
@@ -178,13 +181,13 @@ class ThreadedClient:
         as the sensor processes.
         """
         if self.simulated:
-            print("Running simulation...")
+            self.logger.debug("Running simulation...")
             from src.simulations import sim_env_sensor, sim_soil_sensor
             self.sensors['environment_sensor'] = sim_env_sensor.EnvironmentSensor(name="sim_environment_sensor", queue=Queue(), polling_interval=polling_interval)
             self.sensors['soil_moisture_sensor_1'] = sim_soil_sensor.SoilMoistureSensor(name="sim_soil_moisture_sensor_1", queue=Queue(), polling_interval=polling_interval)
             self.sensors['soil_moisture_sensor_2'] = sim_soil_sensor.SoilMoistureSensor(name="sim_soil_moisture_sensor_2", queue=Queue(), polling_interval=polling_interval)
         else:
-            print("Running system...")
+            self.logger.debug("Running system...")
             from src.sensors.soil_moisture_sensor import SoilMoistureSensor
             from src.sensors.env_sensor import EnvironmentSensor
             self.sensors['soil_moisture_sensor_1'] = SoilMoistureSensor(name="soil_moisture_sensor_1", queue=Queue(), polling_interval=polling_interval, channel=0, max_v=3, min_v=1)
@@ -215,7 +218,6 @@ class ThreadedClient:
         """
 
         self.gui.process_incoming()
-        start = datetime.now()
 
         # Check if the user has signaled to shutdown the application
         if not self.main_running:
@@ -233,14 +235,14 @@ class ThreadedClient:
             msg = self.gui_to_main_queue.get()
             self.manual_override(msg) # Execute the manual override command
 
-        # Check if an hour has elapsed
+        # Get the current time and send it to the lighting algorithm
         self.current_time = datetime.now()
         try:
             light_response = lighting_algorithm(self.current_time, self.previous_time)
             if light_response:
-                lighting_process(self.db_master, self.controls, False)
-        except AttributeError as e:  # This happens if this is the first iteration since the system starts up
-            print(e)
+                lighting_process(self.db_master, self.controls)
+        except AttributeError:
+            self.logger.debug("Main loop is running its first iteration...")
         self.previous_time = self.current_time
 
         # For each sensor, check if there is any data in its queue
@@ -273,25 +275,27 @@ class ThreadedClient:
 
                             # Check if the pump is currently being manually overridden
                             if self.db_master['Manual Overrides']['Pump']:
-                                print("Pump is in manual override")
+                                self.logger.info("Pump is in manual override")
                                 do_process = False
 
                             # Check if the pump is already running from a previous algorithm check
                             elif self.control_statuses['pump'] == "Busy":
-                                print("Pump is already running")
+                                self.logger.info("Pump is already running")
                                 do_process = False
 
                             # Check if the system is still waiting for the previous watering to soak into the soil
                             if "soak_end_time" in self.db_master:
                                 if current_time <= self.db_master['soak_end_time']:
-                                    print("Waiting for soak-in to finish. Time remaining: ",
-                                          self.db_master['soak_end_time'] - current_time)
+                                    self.logger.info("Waiting for soak-in to finish. Time remaining: " + str(self.db_master['soak_end_time'] - current_time))
                                     do_process = False
 
                             # If there is no condition blocking the control_process from running, execute it 
                             if do_process:
                                 if flag == "LOW": # Water level is low, need to pump
-                                    self.control_statuses['pump'] = "Busy"  # Explicitly declare that the pump is now busy
+                                    self.db_master["Pump Status"] = "ON"  # Explicitly declare that the pump is now ON
+                                    self.controls['pump'].is_off = False
+                                    self.main_to_gui_queue.put(["Pump Status", self.db_master["Pump Status"]])
+                                    self.control_statuses['pump'] = "Busy"
                                     self.control_processes['watering']['Process'] = \
                                         Process(target=watering_process,
                                                 args=(msg, self.controls, self.control_processes['watering']['Queue'],
@@ -303,7 +307,7 @@ class ThreadedClient:
                                     pass
 
                         except Exception as err:
-                            print("Exception thrown in main:", err)
+                            self.logger.error("Exception thrown in main: "+str(err))
 
                 elif 'environment_sensor' in sensor_name:
                     # First, run the environment algorithm to generate the control message.
@@ -319,17 +323,26 @@ class ThreadedClient:
 
                         # Check if the fan is currently being manually overridden
                         if self.db_master['Manual Overrides']['Fan']:
-                            print("Fan is in manual override")
+                            self.logger.info("Fan is in manual override")
                             do_process = False
 
                         # Check if the fan is already running from a previous algorithm check
                         elif self.control_statuses['fan'] == "Busy":
-                            print("Fan is already running")
+                            self.logger.info("Fan is already running")
                             do_process = False
                         
                         # If there is no condition blocking the control_process from running, execute it 
                         if do_process:
                             self.control_statuses['fan'] = "Busy"  # Explicitly declare that the fan is now busy
+                            if temperature_flag == "HIGH":
+                                self.db_master["Fan Status"] = "ON"
+                            elif temperature_flag == "LOW":
+                                print("_-----------------------------------------------------------------------------------")
+                                self.db_master["Fan Status"] = "OFF"
+                            else:
+                                self.logger.warning("Unexpected temperature flag: "+str(temperature_flag))
+                            self.main_to_gui_queue.put(["Fan Status", self.db_master["Fan Status"]])
+                            self.control_statuses['fan'] = "Busy"
                             self.control_processes['fan']['Process'] = \
                                 Process(target=fan_process,
                                         args=(msg, self.controls, self.control_processes['fan']['Queue']))
@@ -338,19 +351,27 @@ class ThreadedClient:
         for control_process_name, control_process in self.control_processes.items():
             if not control_process['Queue'].empty():
                 msg = control_process['Queue'].get()
-                print("Message from", control_process_name + ": " + msg)
+                self.logger.debug("Message from "+str(control_process_name) + ": " + msg)
                 if control_process_name == "watering":
                     self.db_master['last_watering'] = datetime.now()
                     self.db_master['soak_end_time'] = \
                         self.db_master['last_watering'] + timedelta(minutes=self.db_master['Soak_Minutes'])
                     self.control_statuses['pump'] = "Free"
+                    self.controls['pump'].is_off = True
+                    self.db_master["Pump Status"] = "OFF"
+                    self.main_to_gui_queue.put(["Pump Status", self.db_master["Pump Status"]])
                 if control_process_name == "fan":
                     self.control_statuses['fan'] = "Free"
+                    if msg == "Fan turned ON":
+                        self.db_master["Fan Status"] = "ON"
+                    elif msg == "Fan turned OFF":
+                        self.db_master["Fan Status"] = "OFF"
+                    else:
+                        self.logger.warning("Unexpected msg from fan process" + str(msg))
+                    self.main_to_gui_queue.put(["Fan Status", self.db_master["Fan Status"]])
                 control_process['Process'].terminate()
                 control_process['Process'].join()
     
-        end = datetime.now()
-        # print("Main loop execution time:", end - start)
         # Wait for a refresh interval to elapse, then call itself to execute again
         self.gui.master.after(gui_refresh_interval, self.periodic_call)
 
@@ -361,10 +382,11 @@ class ThreadedClient:
 
         @param msg: The manual override command.
         """
-        print("Received manual override:", msg)
+        self.logger.info("Received manual override: " + msg)
         if msg == "END":
-            print("Control window has been closed. Manual override disengaged.")
+            self.logger.info("Control window has been closed. Manual override disengaged.")
             self.db_master['Manual Overrides']['Pump'] = False
+            self.control_statuses['pump'] = "Free"
             self.db_master['Manual Overrides']['Fan'] = False
             self.db_master['Manual Overrides']['RGB LED'] = False
             self.db_master['Manual Overrides']['UV LED'] = False
@@ -419,7 +441,7 @@ class ThreadedClient:
                     else:
                         blue = int(msg[2])
                 except ValueError as err:
-                    print("ValueError in main:", err)
+                    self.logger.error("ValueError in main:" + str(err))
                     red, green, blue = 0, 0, 0
 
                 # Adjust the RGB lights accordingly

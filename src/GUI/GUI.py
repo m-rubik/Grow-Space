@@ -3,18 +3,15 @@ This is the Graphical User Interface (GUI) that the user can use.
 The GUI is based on a Tkinter widget.
 """
 
-
+import sys
+import time
+import random
+import datetime
 from multiprocessing import Queue
 from tkinter import Tk, Label, Button, Entry, IntVar, END, W, E, N, S, StringVar
 from tkinter.filedialog import askopenfile, asksaveasfile
 from src.utilities.json_utilities import save_as_json
-
-import sys
-import time
-import calendar
-import random
-import datetime
-
+from src.utilities.logger_utilities import get_logger
 
 
 class GrowSpaceGUI:
@@ -30,13 +27,14 @@ class GrowSpaceGUI:
     master = None
 
 
-
-
     def __init__(self, master, queue_in, queue_out, endCommand):
         self.queue_in = queue_in
         self.queue_out = queue_out
         self.master = master
         self.control_window_open = False
+
+        self.logger = get_logger(name="GUI")
+        self.logger.debug("GUI start up.")
 
         self.master.title("Grow Space")
         self.master.configure(background="Black")
@@ -175,7 +173,7 @@ class GrowSpaceGUI:
         files = [("JSON files", "*.json")]
         config_file = askopenfile(filetypes=files, defaultextension = files)
         if config_file is None: # User closes the dialog with "cancel"
-            print("User did not chose a configuration file to load")
+            self.logger.warning("User did not chose a configuration file to load")
         else:
             self.queue_out.put(["RELOAD", config_file.name.split(".json")[0]])
            
@@ -183,7 +181,7 @@ class GrowSpaceGUI:
         files = [("JSON files", "*.json")] 
         config_file = asksaveasfile(filetypes = files, defaultextension = files)
         if config_file is None: # User closes the dialog with "cancel"
-            print("User cancelled configuration file save")
+            self.logger.warning("User cancelled configuration file save")
         else:
             # TODO: Obtain the data that they entered in the Entry boxes (that are yet to be made), and format it as
             # a dictionnary (see the main call in src.utilities.json_utilities as an example of how the data should be structured). 
@@ -206,8 +204,8 @@ class GrowSpaceGUI:
             try:
                 self.control_win.destroy()
                 self.control_window_open = False
-            except Exception as e:
-                print(e)
+            except Exception as err:
+                self.logger.error(str(err))
 
         if not self.control_window_open:
 
@@ -261,8 +259,8 @@ class GrowSpaceGUI:
         def on_closing():
             try:
                 self.control_win.destroy()
-            except Exception as e:
-                print(e)
+            except Exception as err:
+                self.logger.error(str(err))
 
     def process_incoming(self):
         """! 
@@ -274,7 +272,7 @@ class GrowSpaceGUI:
 
 
             # Print whatever it receives from the main thread
-            print("GUI: Received data from", msg[0] + ":", msg[1])
+            self.logger.info("GUI: Received data from " + str(msg[0]) + ":" + str(msg[1]))
 
             if isinstance(msg[0], str):
                 # Display the data accordingly
@@ -327,7 +325,7 @@ class GrowSpaceGUI:
                 elif msg[0] == "RGB LED Status":
                     self.RGBLEDIntensity_value.configure(text=str(round(msg[1][0]*(100/255),1)) + "%-" + str(round(msg[1][1]*(100/255),1)) + "%-" + str(round(msg[1][2]*(100/255),1)) + "%")
                 else:
-                    print("Unexpected item passed in main_to_gui queue:", msg)
+                    self.logger.warning("Unexpected item passed in main_to_gui queue: "+str(msg))
 
 
 if __name__ == "__main__":

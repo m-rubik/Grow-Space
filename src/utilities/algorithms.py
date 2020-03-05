@@ -75,10 +75,19 @@ def watering_algorithm(db):
 
 
 def lighting_algorithm(curr, prev):
+    """!
+    The purpose of the lighting algorithm is to determine what state the RGB and UV LEDs
+    should be in at any given time.
+
+    The current algorithm detects when the hour changes.
+    It checks for hour changes because the current config files only contain hourly light data.
+
+    @param curr: The current time
+    @param prev: The previous time that the algorithm ran
+    """
     if not curr.hour == prev.hour:
-        light_response = True
+        return True
     else:
-        light_response = False
-    return light_response
+        return False
 
 
