@@ -37,6 +37,7 @@ class GrowSpaceGUI:
         self.queue_out = queue_out
         self.master = master
         self.control_window_open = False
+        self.configure_window_open = False
 
         self.master.title("Grow Space")
         self.master.configure(background="Black")
@@ -258,11 +259,34 @@ class GrowSpaceGUI:
 
     def configure_window(self):
 
+        self.soilmoisture_thresholds = []
+        self.temperature_thresholds = []
+        self.Humidity_thresholds = []
+        self.VOC_thresholds = []
+        self.UV_settings = []
+        self.Red_settings = []
+        self.Green_settings = []
+        self.Blue_settings = []
+
         def on_closing():
+            self.queue_out.put("END")
             try:
-                self.control_win.destroy()
+                self.configure_win.destroy()
+                self.configure_window_open = False
             except Exception as e:
                 print(e)
+
+        if not self.configure_window_open:
+
+            self.configure_win = Tk()
+            self.configure_window_open = True
+            self.configure_win.title("Configure System Parameters")
+            self.configure_win.configure(bg="Black")
+            self.configure_win.geometry("1024x600")
+            self.configure_win.protocol("WM_DELETE_WINDOW", on_closing)
+
+            
+
 
     def process_incoming(self):
         """! 
