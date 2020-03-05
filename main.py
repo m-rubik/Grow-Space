@@ -382,7 +382,7 @@ class ThreadedClient:
 
         @param msg: The manual override command.
         """
-        self.logger.info("Received manual override: " + msg)
+        self.logger.info("Received manual override: "+str(msg))
         if msg == "END":
             self.logger.info("Control window has been closed. Manual override disengaged.")
             self.db_master['Manual Overrides']['Pump'] = False
