@@ -35,7 +35,7 @@ class EnvironmentSensor(Sensor):
 
         # Step 3: Log the reading
         current_time = datetime.now()
-        with open("logs/"+self.name+".txt","a+") as f:
+        with open(self.log_file_name,"w+") as f:
             f.write(str(current_time)+": ")
             for entry, value in self.data_dict.items():
                 f.write(entry + ": " + str(value) + ", ")

@@ -11,7 +11,7 @@ from abc import ABC, abstractmethod
 from multiprocessing import Queue
 from datetime import datetime, timedelta
 import atexit
-
+import os
 
 class Sensor(ABC):
     """!
@@ -28,6 +28,7 @@ class Sensor(ABC):
     _current_val: int = None
     queue: Queue = None
     polling_interval: int = None
+    log_file_name: str = None
 
     def __init__(self, name="default", queue=None, polling_interval=2):
         """!
@@ -40,6 +41,12 @@ class Sensor(ABC):
         self.name = name
         self.queue = queue
         self.polling_interval = polling_interval
+
+        # Generate unique log file name
+        self.log_file_name = generate_unique_filename(self.name)
+        print(self.log_file_name)
+
+        # Register shutdown event
         atexit.register(self.shutdown)
 
     def run(self):
@@ -71,3 +78,15 @@ class Sensor(ABC):
         Since it is an abstract method, it MUST be implemented by all derived classes.
         """
         pass
+
+def generate_unique_filename(name):
+    file_name = "logs/"+name+".txt"
+    if os.path.exists(file_name):
+        expand = 1
+        while True:
+            expand += 1
+            new_file_name = file_name.split(".txt")[0] + "_" + str(expand) + ".txt"
+            print(new_file_name)
+            if not os.path.exists(new_file_name):
+                return new_file_name
+    return file_name
