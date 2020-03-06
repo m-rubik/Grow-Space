@@ -17,7 +17,7 @@ from src.GUI.GUI import GrowSpaceGUI
 from datetime import datetime, timedelta
 from src.utilities.pickle_utilities import export_object
 from src.utilities.json_utilities import save_as_json, load_from_json
-from src.utilities.logger_utilities import get_logger
+from src.utilities.logger_utilities import get_logger, generate_unique_filename
 from src.utilities.algorithms import watering_algorithm, environment_algorithm, lighting_algorithm
 from src.utilities.control_processes import watering_process, fan_process, lighting_process
 
@@ -130,19 +130,25 @@ class ThreadedClient:
         This method is used to load/reload the system based on a configuration file.
         """
         # Load configuration file
+        self.logger.debug("Loading configuration file: "+self.configuration_file)
         configuration_dict = load_from_json("./configuration_files/"+self.configuration_file)
 
         # Transfer configuration file data into master database
+        self.logger.debug("Transferring configuration data into the master database...")
         for item, value in configuration_dict.items():
+            self.logger.debug("Transferring: "+str(item)+" : "+str(value))
             self.db_master[item] = value
+        self.logger.debug("Transfer complete.")
 
         # Set configuration parameters in GUI
+        self.logger.debug("Updating control parameters in GUI...")
         self.gui.SoilMoistureRange_value.configure(text=str(self.db_master["Moisture_Low"])+"% - "+str(self.db_master["Moisture_High"])+"%")
         self.gui.TemperatureRange_value.configure(text=str(self.db_master["Temperature_Low"])+"°C - "+str(self.db_master["Temperature_High"])+"°C")
         self.gui.HumidityRange_value.configure(text=str(self.db_master["Humidity_Low"])+"% - "+str(self.db_master["Humidity_High"])+"%")
         self.gui.VOCRange_value.configure(text=str(self.db_master["VOC_Low"])+"kΩ - "+str(self.db_master["VOC_High"])+"kΩ")
 
         # TODO: Insert RGB and UV LEDs once algorithm is created
+        self.logger.debug("Configuration file loaded. System is now running on new environment parameters.")
     
     def add_controllers(self):
         """!
@@ -276,12 +282,12 @@ class ThreadedClient:
 
                             # Check if the pump is currently being manually overridden
                             if self.db_master['Manual Overrides']['Pump']:
-                                self.logger.info("Pump is in manual override")
+                                self.logger.debug("Moisture detected low, but pump is in manual override")
                                 do_process = False
 
                             # Check if the pump is already running from a previous algorithm check
                             elif self.control_statuses['pump'] == "Busy":
-                                self.logger.info("Pump is already running")
+                                self.logger.debug("Moisture detected low, but pump is already running")
                                 do_process = False
 
                             # Check if the system is still waiting for the previous watering to soak into the soil
@@ -295,6 +301,7 @@ class ThreadedClient:
                                 if flag == "LOW": # Water level is low, need to pump
                                     self.db_master["Pump Status"] = "ON"  # Explicitly declare that the pump is now ON
                                     self.controls['pump'].is_off = False
+                                    self.logger.info("Pump has turned on.")
                                     self.main_to_gui_queue.put(["Pump Status", self.db_master["Pump Status"]])
                                     self.control_statuses['pump'] = "Busy"
                                     self.control_processes['watering']['Process'] = \
@@ -359,6 +366,7 @@ class ThreadedClient:
                     self.control_statuses['pump'] = "Free"
                     self.controls['pump'].is_off = True
                     self.db_master["Pump Status"] = "OFF"
+                    self.logger.info("Pump has turned off.")
                     self.main_to_gui_queue.put(["Pump Status", self.db_master["Pump Status"]])
                 if control_process_name == "fan":
                     self.control_statuses['fan'] = "Free"

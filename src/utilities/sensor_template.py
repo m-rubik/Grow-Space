@@ -10,8 +10,8 @@ import time
 from abc import ABC, abstractmethod
 from multiprocessing import Queue
 from datetime import datetime, timedelta
+from src.utilities.logger_utilities import get_logger, generate_unique_filename
 import atexit
-import os
 
 class Sensor(ABC):
     """!
@@ -77,14 +77,3 @@ class Sensor(ABC):
         Since it is an abstract method, it MUST be implemented by all derived classes.
         """
         pass
-
-def generate_unique_filename(name):
-    file_name = "logs/"+name+".txt"
-    if os.path.exists(file_name):
-        expand = 1
-        while True:
-            expand += 1
-            new_file_name = file_name.split(".txt")[0] + "_" + str(expand) + ".txt"
-            if not os.path.exists(new_file_name):
-                return new_file_name
-    return file_name
