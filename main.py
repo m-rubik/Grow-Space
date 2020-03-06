@@ -8,9 +8,9 @@ and control signals can be generated.
 import sys
 import time
 import datetime
-import os
 import atexit
 import argparse
+import os
 from tkinter import Tk
 from multiprocessing import Queue, Process, active_children, set_start_method
 from src.GUI.GUI import GrowSpaceGUI
