@@ -62,3 +62,8 @@ If when trying to run the code in VSCODE it fails to launch debugger:
 ## Contributing
 Talk to Mason to obtain source directory accessed.  
 Please make sure to update tests as appropriate.
+
+## License
+This work is dual-licensed under BSD-3 and BSD-2.
+
+`SPDX-License-Identifier: BSD-3 and BSD-2`
