@@ -10,6 +10,8 @@ import time
 from abc import ABC, abstractmethod
 from multiprocessing import Queue
 from datetime import datetime, timedelta
+from src.utilities.logger_utilities import get_logger
+from src.utilities.file_utilities import generate_unique_filename
 import atexit
 import os
 
@@ -43,8 +45,7 @@ class Sensor(ABC):
         self.polling_interval = polling_interval
 
         # Generate unique log file name
-        self.log_file_name = generate_unique_filename(self.name)
-        print(self.log_file_name)
+        self.log_file_name = generate_unique_filename(self.name, 'txt')
 
         # Register shutdown event
         atexit.register(self.shutdown)
@@ -78,15 +79,3 @@ class Sensor(ABC):
         Since it is an abstract method, it MUST be implemented by all derived classes.
         """
         pass
-
-def generate_unique_filename(name):
-    file_name = "logs/"+name+".txt"
-    if os.path.exists(file_name):
-        expand = 1
-        while True:
-            expand += 1
-            new_file_name = file_name.split(".txt")[0] + "_" + str(expand) + ".txt"
-            print(new_file_name)
-            if not os.path.exists(new_file_name):
-                return new_file_name
-    return file_name

@@ -4,17 +4,12 @@ The GUI is based on a Tkinter widget.
 """
 
 
+import sys
 from multiprocessing import Queue
 from tkinter import Tk, Label, Button, Entry, IntVar, END, W, E, N, S, StringVar
 from tkinter.filedialog import askopenfile, asksaveasfile
 from src.utilities.json_utilities import save_as_json
-
-import sys
-import time
-import calendar
-import random
-import datetime
-
+from src.utilities.logger_utilities import get_logger
 
 
 class GrowSpaceGUI:
@@ -30,14 +25,15 @@ class GrowSpaceGUI:
     master = None
 
 
-
-
     def __init__(self, master, queue_in, queue_out, endCommand):
         self.queue_in = queue_in
         self.queue_out = queue_out
         self.master = master
         self.control_window_open = False
         self.configure_window_open = False
+
+        self.logger = get_logger(name="GUI")
+        self.logger.debug("GUI start up.")
 
         self.master.title("Grow Space")
         self.master.configure(background="Black")
@@ -176,15 +172,15 @@ class GrowSpaceGUI:
         files = [("JSON files", "*.json")]
         config_file = askopenfile(filetypes=files, defaultextension = files)
         if config_file is None: # User closes the dialog with "cancel"
-            print("User did not chose a configuration file to load")
+            self.logger.warning("User did not chose a configuration file to load")
         else:
-            self.queue_out.put(["RELOAD", config_file.name.split(".json")[0]])
-
-    def save_file(self):
-        files = [("JSON files", "*.json")]
+            self.queue_out.put(["RELOAD", (config_file.name.split(".json")[0]).split("configuration_files/")[1]])
+           
+    def save_file(self): 
+        files = [("JSON files", "*.json")] 
         config_file = asksaveasfile(filetypes = files, defaultextension = files)
         if config_file is None: # User closes the dialog with "cancel"
-            print("User cancelled configuration file save")
+            self.logger.warning("User cancelled configuration file save")
         else:
             # TODO: Obtain the data that they entered in the Entry boxes (that are yet to be made), and format it as
             # a dictionnary (see the main call in src.utilities.json_utilities as an example of how the data should be structured). 
@@ -198,7 +194,7 @@ class GrowSpaceGUI:
             data['VOC_Low'] = 1
             data['VOC_High'] = 1
 
-            save_as_json(config_file.name.split(".json")[0], data)
+            save_as_json((config_file.name.split(".json")[0]).split("configuration_files/")[1], data)
 
     def control_window(self):
 
@@ -208,7 +204,7 @@ class GrowSpaceGUI:
                 self.control_win.destroy()
                 self.control_window_open = False
             except Exception as e:
-                print(e)
+                self.logger.error(str(e))
 
         if not self.control_window_open:
 
@@ -266,7 +262,7 @@ class GrowSpaceGUI:
                 self.configure_win.destroy()
                 self.configure_window_open = False
             except Exception as e:
-                print(e)
+                self.logger.error(str(e))
 
         if not self.configure_window_open:
 
@@ -546,9 +542,8 @@ class GrowSpaceGUI:
         while not self.queue_in.empty():
             msg = self.queue_in.get()
 
-
             # Print whatever it receives from the main thread
-            print("GUI: Received data from", msg[0] + ":", msg[1])
+            self.logger.info("GUI: Received data from " +str(msg[0]) + ": " + str(msg[1]))
 
             if isinstance(msg[0], str):
                 # Display the data accordingly
@@ -601,11 +596,10 @@ class GrowSpaceGUI:
                 elif msg[0] == "RGB LED Status":
                     self.RGBLEDIntensity_value.configure(text=str(round(msg[1][0]*(100/255),1)) + "%-" + str(round(msg[1][1]*(100/255),1)) + "%-" + str(round(msg[1][2]*(100/255),1)) + "%")
                 else:
-                    print("Unexpected item passed in main_to_gui queue:", msg)
+                    self.logger.error("Unexpected item passed in main_to_gui queue: " + str(msg))
 
 
 if __name__ == "__main__":
-    import sys
     ROOT = Tk()
     # ROOT.resizable()
     ROOT.geometry("1024x600")

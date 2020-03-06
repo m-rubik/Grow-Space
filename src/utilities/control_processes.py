@@ -6,7 +6,6 @@ There should be a minimal amount of computation done in these functions.
 
 import datetime
 import time
-import statistics
 import sys
 
 
