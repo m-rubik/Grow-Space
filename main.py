@@ -10,6 +10,7 @@ import time
 import datetime
 import os
 import atexit
+import argparse
 from tkinter import Tk
 from multiprocessing import Queue, Process, active_children, set_start_method
 from src.GUI.GUI import GrowSpaceGUI
@@ -53,7 +54,7 @@ class ThreadedClient:
     sensor_processes: dict = dict()
     simulated: bool = False
 
-    def __init__(self, master, configuration_file="./configuration_files/basil", gui_refresh_interval=200, polling_interval=2, simulate_environment=False):
+    def __init__(self, master, configuration_file="basil", gui_refresh_interval=200, polling_interval=2, simulate_environment=False):
         """!
         Launches the GUI and the asynchronous worker processes (1 for each sensor).
         @param master: The root (instance) of a Tkinter top-level widget.
@@ -129,7 +130,7 @@ class ThreadedClient:
         This method is used to load/reload the system based on a configuration file.
         """
         # Load configuration file
-        configuration_dict = load_from_json(self.configuration_file)
+        configuration_dict = load_from_json("./configuration_files/"+self.configuration_file)
 
         # Transfer configuration file data into master database
         for item, value in configuration_dict.items():
@@ -141,7 +142,7 @@ class ThreadedClient:
         self.gui.HumidityRange_value.configure(text=str(self.db_master["Humidity_Low"])+"% - "+str(self.db_master["Humidity_High"])+"%")
         self.gui.VOCRange_value.configure(text=str(self.db_master["VOC_Low"])+"kΩ - "+str(self.db_master["VOC_High"])+"kΩ")
 
-        ######## Insert RGB and UV LEDs once algorithm is created #########
+        # TODO: Insert RGB and UV LEDs once algorithm is created
     
     def add_controllers(self):
         """!
@@ -337,7 +338,6 @@ class ThreadedClient:
                             if temperature_flag == "HIGH":
                                 self.db_master["Fan Status"] = "ON"
                             elif temperature_flag == "LOW":
-                                print("_-----------------------------------------------------------------------------------")
                                 self.db_master["Fan Status"] = "OFF"
                             else:
                                 self.logger.warning("Unexpected temperature flag: "+str(temperature_flag))
@@ -488,10 +488,21 @@ def check_terminate_process(process):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('-r', '--refresh', type=int, default=200, help='GUI refresh interval (ms)')
+    parser.add_argument('-p', '--polling', type=int, default=2, help='Sensor polling interval (s)')
+    parser.add_argument('-s', '--simulate', action='store_true', help='Boolean for simulating the environment')
+    parser.add_argument('-c', '--config', type=str, default="basil", help="Name of the environment configuration file")
+    args = parser.parse_args()
+
     ROOT = Tk()
     # WIDTH, HEIGHT = ROOT.winfo_screenwidth(), ROOT.winfo_screenheight()
     # ROOT.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
     # ROOT.resizable()
     ROOT.geometry("1024x600")
-    CLIENT = ThreadedClient(ROOT, gui_refresh_interval=200, polling_interval=2, simulate_environment=True)
-    ROOT.mainloop()  # Blocking!
+
+    if args.simulate:
+        CLIENT = ThreadedClient(ROOT, configuration_file= args.config, gui_refresh_interval=args.refresh, polling_interval=args.polling, simulate_environment=True)
+    else:
+        CLIENT = ThreadedClient(ROOT, configuration_file= args.config, gui_refresh_interval=args.refresh, polling_interval=args.polling, simulate_environment=False)
+    ROOT.mainloop()

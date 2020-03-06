@@ -178,7 +178,7 @@ class GrowSpaceGUI:
         if config_file is None: # User closes the dialog with "cancel"
             print("User did not chose a configuration file to load")
         else:
-            self.queue_out.put(["RELOAD", config_file.name.split(".json")[0]])
+            self.queue_out.put(["RELOAD", (config_file.name.split(".json")[0]).split("configuration_files/")[1]])
            
     def save_file(self): 
         files = [("JSON files", "*.json")] 
@@ -198,7 +198,7 @@ class GrowSpaceGUI:
             data['VOC_Low'] = 1
             data['VOC_High'] = 1
 
-            save_as_json(config_file.name.split(".json")[0], data)
+            save_as_json((config_file.name.split(".json")[0]).split("configuration_files/")[1], data)
 
     def control_window(self):
 
