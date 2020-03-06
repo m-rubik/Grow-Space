@@ -8,7 +8,7 @@ from multiprocessing import Queue
 from tkinter import Tk, Label, Button, Entry, IntVar, END, W, E, N, S, StringVar
 from tkinter.filedialog import askopenfile, asksaveasfile
 from src.utilities.json_utilities import save_as_json
-from src.utilities.logger_utilities import get_logger, generate_unique_filename
+from src.utilities.logger_utilities import get_logger
 
 import sys
 import time

@@ -10,8 +10,10 @@ import time
 from abc import ABC, abstractmethod
 from multiprocessing import Queue
 from datetime import datetime, timedelta
-from src.utilities.logger_utilities import get_logger, generate_unique_filename
+from src.utilities.logger_utilities import get_logger
+from src.utilities.file_utilities import generate_unique_filename
 import atexit
+import os
 
 class Sensor(ABC):
     """!
@@ -43,7 +45,7 @@ class Sensor(ABC):
         self.polling_interval = polling_interval
 
         # Generate unique log file name
-        self.log_file_name = generate_unique_filename(self.name)
+        self.log_file_name = generate_unique_filename(self.name, 'txt')
 
         # Register shutdown event
         atexit.register(self.shutdown)

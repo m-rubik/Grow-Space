@@ -17,7 +17,8 @@ from src.GUI.GUI import GrowSpaceGUI
 from datetime import datetime, timedelta
 from src.utilities.pickle_utilities import export_object
 from src.utilities.json_utilities import save_as_json, load_from_json
-from src.utilities.logger_utilities import get_logger, generate_unique_filename
+from src.utilities.logger_utilities import get_logger
+from src.utilities.file_utilities import generate_unique_filename
 from src.utilities.algorithms import watering_algorithm, environment_algorithm, lighting_algorithm
 from src.utilities.control_processes import watering_process, fan_process, lighting_process
 
@@ -105,7 +106,6 @@ class ThreadedClient:
         self.control_statuses['fan'] = "Free"
         self.control_statuses['UV LED'] = "Free"
         self.control_statuses['RGB LED'] = "Free"
-
 
         self.simulated = simulate_environment
         self.configuration_file = configuration_file
