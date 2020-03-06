@@ -44,7 +44,6 @@ class Sensor(ABC):
 
         # Generate unique log file name
         self.log_file_name = generate_unique_filename(self.name)
-        print(self.log_file_name)
 
         # Register shutdown event
         atexit.register(self.shutdown)
@@ -86,7 +85,6 @@ def generate_unique_filename(name):
         while True:
             expand += 1
             new_file_name = file_name.split(".txt")[0] + "_" + str(expand) + ".txt"
-            print(new_file_name)
             if not os.path.exists(new_file_name):
                 return new_file_name
     return file_name
