@@ -19,15 +19,24 @@ ECE490/ECE491 Capstone design project -- Grow Space.
 
 5. You might need to add the correct python path to the env variable. 
 
-To do so, open with a text editor: ```sudo nano .env``` and add the following text: ```PYTHONPATH=${PYTHONPATH}:src```  
+To do so, open with a text editor: ```sudo nano .env``` and add the following text: ```PYTHONPATH=${PYTHONPATH}:src```
+
+## Usage on Raspberry Pi 4b
+
+Open a terminal and navigate to the grow-space directory, then:
+
+```sudo /home/pi/.local/share/virtualenvs/Grow-Space-_9Jpauul/bin/python ./main.py [args]```
 
 ## Usage on Windows/Mac
 
 ### Command Line Arguments [args]
--r, --refresh: Refresh interval of the GUI (ms)  
--p, --polling: Polling interval of the sensors  
--s, --simulate: Boolean for simulating the environment (Default: False)  
--c, --config: Name of the environment configuration file
+
+argument | default |definition
+-------- | ------- | ----------
+-r, --refresh| 200| Refresh interval of the GUI (ms)  
+-p, --polling| 2| Polling interval of the sensors  
+-s, --simulate| False| Boolean for simulating the environment  
+-c, --config| basil|Name of the environment configuration file
 
 ### Windows
 #### Powershell
@@ -47,12 +56,6 @@ Navigate to the directory containing main.py then do:
 ### MAC
 
 _To be updated_
-
-## Usage on Raspberry Pi 4b
-
-Open a terminal and navigate to the grow-space directory, then:
-
-```sudo /home/pi/.local/share/virtualenvs/Grow-Space-_9Jpauul/bin/python ./main.py [args]```
 
 ## Troubleshooting
 If when trying to run the code in VSCODE it fails to launch debugger:
