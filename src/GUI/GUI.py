@@ -97,7 +97,7 @@ class GrowSpaceGUI:
         self.LoadButton = Button(self.master, bg = "White", fg="Black", text="LOAD", font="Helvetica 24 bold", command=self.load_file)
         self.SaveButton = Button(self.master, bg="White", fg="Black", text="SAVE", font="Helvetica 24 bold", command=self.save_file)
         self.PowerButton = Button(self.master, bg="White", fg="Black", text="\u23FB", font="Helvetica 24 bold", command=endCommand)
-        self.ConfigureButton = Button(self.master, bg="White", fg="Black", text="CONFIGURE", font="Helvetica 24 bold", command=None)
+        self.ConfigureButton = Button(self.master, bg="White", fg="Black", text="CONFIGURE", font="Helvetica 24 bold", command=self.configure_window)
         self.ControlButton = Button(self.master, bg="White", fg="Black", text="CONTROL", font="Helvetica 24 bold", command=self.control_window)
 
         # creates a grid 50 x 50 in the main window
@@ -259,16 +259,8 @@ class GrowSpaceGUI:
 
     def configure_window(self):
 
-        self.soilmoisture_thresholds = []
-        self.temperature_thresholds = []
-        self.Humidity_thresholds = []
-        self.VOC_thresholds = []
-        self.UV_settings = []
-        self.Red_settings = []
-        self.Green_settings = []
-        self.Blue_settings = []
 
-        def on_closing():
+        def on_closing_configure():
             self.queue_out.put("END")
             try:
                 self.configure_win.destroy()
@@ -283,9 +275,242 @@ class GrowSpaceGUI:
             self.configure_win.title("Configure System Parameters")
             self.configure_win.configure(bg="Black")
             self.configure_win.geometry("1024x600")
-            self.configure_win.protocol("WM_DELETE_WINDOW", on_closing)
+            self.configure_win.protocol("WM_DELETE_WINDOW", on_closing_configure)
 
-            
+            self.configure_win.Soilmoisture_thresholds = ["-", "-"]
+            self.configure_win.Temperature_thresholds = ["-", "-"]
+            self.configure_win.Humidity_thresholds = ["-", "-"]
+            self.configure_win.VOC_thresholds = ["-", "-"]
+            self.configure_win.UV_settings = ["-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-"]
+            self.configure_win.Red_settings = ["-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-"]
+            self.configure_win.Green_settings = ["-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-"]
+            self.configure_win.Blue_settings = ["-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-","-", "-"]
+
+            self.configure_win.GrowSpaceTitle = Label(self.configure_win, bg="Black", fg="White", text="Grow Space", font="Helvetica 24 bold")
+
+
+            #Environmental Parameter Labels and Entries
+
+
+            self.configure_win.EnvironmentalParametersHeader = Label(self.configure_win, bg="Black", fg="White", text="Environmental Parameters", font="Helvetica 24 bold")
+            self.configure_win.SoilMoistureConfigureLabel = Label(self.configure_win, bg="Black", fg="White", text="Soil Moisture [%]", font="Helvetica 22")
+            self.configure_win.TemperatureConfigureLabel = Label(self.configure_win, bg="Black", fg="White", text="Temperature [°C] ", font="Helvetica 22")
+            self.configure_win.HumidityConfigureLabel = Label(self.configure_win, bg="Black", fg="White", text="Humidity [%]", font="Helvetica 22")
+            self.configure_win.VOCConfigureLabel = Label(self.configure_win, bg="Black", fg="White", text="VOC [kΩ]", font="Helvetica 22")
+            self.configure_win.MinimumValue = Label(self.configure_win, bg="Black", fg="White", text="Minimum", font="Helvetica 22")
+            self.configure_win.MaximumValue = Label(self.configure_win, bg="Black", fg="White", text="Maximum", font="Helvetica 22")
+
+            self.configure_win.SoilMoistureMinEntry = Entry(self.configure_win, textvariable=self.configure_win.Soilmoisture_thresholds[0])
+            self.configure_win.SoilMoistureMaxEntry = Entry(self.configure_win,textvariable=self.configure_win.Soilmoisture_thresholds[1])
+            self.configure_win.TemperatureMinEntry = Entry(self.configure_win,textvariable=self.configure_win.Temperature_thresholds[0])
+            self.configure_win.TemperatureMaxEntry = Entry(self.configure_win,textvariable=self.configure_win.Temperature_thresholds[1])
+            self.configure_win.HumidityMinEntry = Entry(self.configure_win,textvariable=self.configure_win.Humidity_thresholds[0])
+            self.configure_win.HumidityMaxEntry = Entry(self.configure_win,textvariable=self.configure_win.Humidity_thresholds[1])
+            self.configure_win.VOCMinEntry = Entry(self.configure_win,textvariable=self.configure_win.VOC_thresholds[0])
+            self.configure_win.VOCMaxEntry = Entry(self.configure_win,textvariable=self.configure_win.VOC_thresholds[1])
+
+            # Lighting Labels and Entries
+
+            self.configure_win.LightingParametersHeader = Label(self.configure_win, bg="Black", fg="White", text="Lighting Levels", font="Helvetica 24 bold")
+            self.configure_win.UVConfigureLabel = Label(self.configure_win, bg="Black", fg="White", text="UV", font="Helvetica 22")
+            self.configure_win.RedConfigureLabel = Label(self.configure_win, bg="Black", fg="White", text="RED", font="Helvetica 22")
+            self.configure_win.GreenConfigureLabel = Label(self.configure_win, bg="Black", fg="White", text="GREEN", font="Helvetica 22")
+            self.configure_win.BlueConfigureLabel = Label(self.configure_win, bg="Black", fg="White", text="BLUE", font="Helvetica 22")
+
+            self.configure_win.Hour00Label = Label(self.configure_win, bg="Black", fg="White", text="00", font="Helvetica 22")
+            self.configure_win.Hour01Label = Label(self.configure_win, bg="Black", fg="White", text="01", font="Helvetica 22")
+            self.configure_win.Hour02Label = Label(self.configure_win, bg="Black", fg="White", text="02", font="Helvetica 22")
+            self.configure_win.Hour03Label = Label(self.configure_win, bg="Black", fg="White", text="03", font="Helvetica 22")
+            self.configure_win.Hour04Label = Label(self.configure_win, bg="Black", fg="White", text="04", font="Helvetica 22")
+            self.configure_win.Hour05Label = Label(self.configure_win, bg="Black", fg="White", text="05", font="Helvetica 22")
+            self.configure_win.Hour06Label = Label(self.configure_win, bg="Black", fg="White", text="06", font="Helvetica 22")
+            self.configure_win.Hour07Label = Label(self.configure_win, bg="Black", fg="White", text="07", font="Helvetica 22")
+            self.configure_win.Hour08Label = Label(self.configure_win, bg="Black", fg="White", text="08", font="Helvetica 22")
+            self.configure_win.Hour09Label = Label(self.configure_win, bg="Black", fg="White", text="09", font="Helvetica 22")
+            self.configure_win.Hour10Label = Label(self.configure_win, bg="Black", fg="White", text="10", font="Helvetica 22")
+            self.configure_win.Hour11Label = Label(self.configure_win, bg="Black", fg="White", text="11", font="Helvetica 22")
+            self.configure_win.Hour12Label = Label(self.configure_win, bg="Black", fg="White", text="12", font="Helvetica 22")
+            self.configure_win.Hour13Label = Label(self.configure_win, bg="Black", fg="White", text="13", font="Helvetica 22")
+            self.configure_win.Hour14Label = Label(self.configure_win, bg="Black", fg="White", text="14", font="Helvetica 22")
+            self.configure_win.Hour15Label = Label(self.configure_win, bg="Black", fg="White", text="15", font="Helvetica 22")
+            self.configure_win.Hour16Label = Label(self.configure_win, bg="Black", fg="White", text="16", font="Helvetica 22")
+            self.configure_win.Hour17Label = Label(self.configure_win, bg="Black", fg="White", text="17", font="Helvetica 22")
+            self.configure_win.Hour18Label = Label(self.configure_win, bg="Black", fg="White", text="18", font="Helvetica 22")
+            self.configure_win.Hour19Label = Label(self.configure_win, bg="Black", fg="White", text="19", font="Helvetica 22")
+            self.configure_win.Hour20Label = Label(self.configure_win, bg="Black", fg="White", text="20", font="Helvetica 22")
+            self.configure_win.Hour21Label = Label(self.configure_win, bg="Black", fg="White", text="21", font="Helvetica 22")
+            self.configure_win.Hour22Label = Label(self.configure_win, bg="Black", fg="White", text="22", font="Helvetica 22")
+            self.configure_win.Hour23Label = Label(self.configure_win, bg="Black", fg="White", text="23", font="Helvetica 22")
+
+            self.configure_win.UVEntry00 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[0])
+            self.configure_win.UVEntry01 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[1])
+            self.configure_win.UVEntry02 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[2])
+            self.configure_win.UVEntry03 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[3])
+            self.configure_win.UVEntry04 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[4])
+            self.configure_win.UVEntry05 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[5])
+            self.configure_win.UVEntry06 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[6])
+            self.configure_win.UVEntry07 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[7])
+            self.configure_win.UVEntry08 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[8])
+            self.configure_win.UVEntry09 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[9])
+            self.configure_win.UVEntry10 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[10])
+            self.configure_win.UVEntry11 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[11])
+            self.configure_win.UVEntry12 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[12])
+            self.configure_win.UVEntry13 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[13])
+            self.configure_win.UVEntry14 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[14])
+            self.configure_win.UVEntry15 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[15])
+            self.configure_win.UVEntry16 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[16])
+            self.configure_win.UVEntry17 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[17])
+            self.configure_win.UVEntry18 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[18])
+            self.configure_win.UVEntry19 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[19])
+            self.configure_win.UVEntry20 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[20])
+            self.configure_win.UVEntry21 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[21])
+            self.configure_win.UVEntry22 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[22])
+            self.configure_win.UVEntry23 = Entry(self.configure_win, textvariable=self.configure_win.UV_settings[23])
+
+            self.configure_win.RedEntry00 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[0])
+            self.configure_win.RedEntry01 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[1])
+            self.configure_win.RedEntry02 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[2])
+            self.configure_win.RedEntry03 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[3])
+            self.configure_win.RedEntry04 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[4])
+            self.configure_win.RedEntry05 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[5])
+            self.configure_win.RedEntry06 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[6])
+            self.configure_win.RedEntry07 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[7])
+            self.configure_win.RedEntry08 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[8])
+            self.configure_win.RedEntry09 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[9])
+            self.configure_win.RedEntry10 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[10])
+            self.configure_win.RedEntry11 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[11])
+            self.configure_win.RedEntry12 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[12])
+            self.configure_win.RedEntry13 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[13])
+            self.configure_win.RedEntry14 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[14])
+            self.configure_win.RedEntry15 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[15])
+            self.configure_win.RedEntry16 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[16])
+            self.configure_win.RedEntry17 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[17])
+            self.configure_win.RedEntry18 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[18])
+            self.configure_win.RedEntry19 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[19])
+            self.configure_win.RedEntry20 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[20])
+            self.configure_win.RedEntry21 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[21])
+            self.configure_win.RedEntry22 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[22])
+            self.configure_win.RedEntry23 = Entry(self.configure_win, textvariable=self.configure_win.Red_settings[23])
+
+            self.configure_win.GreenEntry00 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[0])
+            self.configure_win.GreenEntry01 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[1])
+            self.configure_win.GreenEntry02 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[2])
+            self.configure_win.GreenEntry03 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[3])
+            self.configure_win.GreenEntry04 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[4])
+            self.configure_win.GreenEntry05 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[5])
+            self.configure_win.GreenEntry06 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[6])
+            self.configure_win.GreenEntry07 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[7])
+            self.configure_win.GreenEntry08 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[8])
+            self.configure_win.GreenEntry09 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[9])
+            self.configure_win.GreenEntry10 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[10])
+            self.configure_win.GreenEntry11 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[11])
+            self.configure_win.GreenEntry12 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[12])
+            self.configure_win.GreenEntry13 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[13])
+            self.configure_win.GreenEntry14 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[14])
+            self.configure_win.GreenEntry15 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[15])
+            self.configure_win.GreenEntry16 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[16])
+            self.configure_win.GreenEntry17 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[17])
+            self.configure_win.GreenEntry18 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[18])
+            self.configure_win.GreenEntry19 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[19])
+            self.configure_win.GreenEntry20 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[20])
+            self.configure_win.GreenEntry21 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[21])
+            self.configure_win.GreenEntry22 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[22])
+            self.configure_win.GreenEntry23 = Entry(self.configure_win, textvariable=self.configure_win.Green_settings[23])
+
+            self.configure_win.BlueEntry00 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[0])
+            self.configure_win.BlueEntry01 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[1])
+            self.configure_win.BlueEntry02 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[2])
+            self.configure_win.BlueEntry03 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[3])
+            self.configure_win.BlueEntry04 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[4])
+            self.configure_win.BlueEntry05 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[5])
+            self.configure_win.BlueEntry06 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[6])
+            self.configure_win.BlueEntry07 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[7])
+            self.configure_win.BlueEntry08 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[8])
+            self.configure_win.BlueEntry09 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[9])
+            self.configure_win.BlueEntry10 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[10])
+            self.configure_win.BlueEntry11 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[11])
+            self.configure_win.BlueEntry12 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[12])
+            self.configure_win.BlueEntry13 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[13])
+            self.configure_win.BlueEntry14 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[14])
+            self.configure_win.BlueEntry15 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[15])
+            self.configure_win.BlueEntry16 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[16])
+            self.configure_win.BlueEntry17 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[17])
+            self.configure_win.BlueEntry18 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[18])
+            self.configure_win.BlueEntry19 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[19])
+            self.configure_win.BlueEntry20 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[20])
+            self.configure_win.BlueEntry21 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[21])
+            self.configure_win.BlueEntry22 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[22])
+            self.configure_win.BlueEntry23 = Entry(self.configure_win, textvariable=self.configure_win.Blue_settings[23])
+
+            #Defining Buttons
+
+            self.configure_win.BackButton = Button(self.configure_win, bg="White", fg="Black", text="BACK", font="Helvetica 24 bold", command=None)
+            self.configure_win.SaveButton = Button(self.configure_win, bg="White", fg="Black", text="SAVE", font="Helvetica 24 bold", command=None)
+
+            #Placing Widgets
+
+            self.configure_win.GrowSpaceTitle.grid(row=1, column=1, columnspan=10, sticky=W)
+
+            self.configure_win.EnvironmentalParametersHeader.grid(row=4, column=1, columnspan=10, sticky=W)
+
+            self.configure_win.UVConfigureLabel.grid(row=14, column=1, sticky=W)
+            self.configure_win.RedConfigureLabel.grid(row=15, column=1, sticky=W)
+            self.configure_win.GreenConfigureLabel.grid(row=16, column=1, sticky=W)
+            self.configure_win.BlueConfigureLabel.grid(row=17, column=1, sticky=W)
+
+
+            self.configure_win.Hour00Label.grid(row=13, column=2, sticky=W+E)
+            self.configure_win.Hour01Label.grid(row=13, column=3, sticky=W+E)
+            self.configure_win.Hour02Label.grid(row=13, column=4, sticky=W+E)
+            self.configure_win.Hour03Label.grid(row=13, column=5, sticky=W+E)
+            self.configure_win.Hour04Label.grid(row=13, column=6, sticky=W+E)
+            self.configure_win.Hour05Label.grid(row=13, column=7, sticky=W+E)
+            self.configure_win.Hour06Label.grid(row=13, column=8, sticky=W+E)
+            self.configure_win.Hour07Label.grid(row=13, column=9, sticky=W+E)
+            self.configure_win.Hour08Label.grid(row=13, column=10, sticky=W+E)
+            self.configure_win.Hour09Label.grid(row=13, column=11, sticky=W+E)
+            self.configure_win.Hour10Label.grid(row=13, column=12, sticky=W+E)
+            self.configure_win.Hour11Label.grid(row=13, column=13, sticky=W+E)
+            self.configure_win.Hour12Label.grid(row=13, column=14, sticky=W+E)
+            self.configure_win.Hour13Label.grid(row=13, column=15, sticky=W+E)
+            self.configure_win.Hour14Label.grid(row=13, column=16, sticky=W+E)
+            self.configure_win.Hour15Label.grid(row=13, column=17, sticky=W+E)
+            self.configure_win.Hour16Label.grid(row=13, column=18, sticky=W+E)
+            self.configure_win.Hour17Label.grid(row=13, column=19, sticky=W+E)
+            self.configure_win.Hour18Label.grid(row=13, column=20, sticky=W+E)
+            self.configure_win.Hour19Label.grid(row=13, column=21, sticky=W+E)
+            self.configure_win.Hour20Label.grid(row=13, column=22, sticky=W+E)
+            self.configure_win.Hour21Label.grid(row=13, column=23, sticky=W+E)
+            self.configure_win.Hour22Label.grid(row=13, column=24, sticky=W+E)
+            self.configure_win.Hour23Label.grid(row=13, column=25, sticky=W+E)
+
+            self.configure_win.UVEntry00.grid(row=14, column=2, sticky=W)
+            self.configure_win.UVEntry01.grid(row=14, column=3, sticky=W)
+            self.configure_win.UVEntry02.grid(row=14, column=4, sticky=W)
+            self.configure_win.UVEntry03.grid(row=14, column=5, sticky=W)
+            self.configure_win.UVEntry04.grid(row=14, column=6, sticky=W)
+            self.configure_win.UVEntry05.grid(row=14, column=7, sticky=W)
+            self.configure_win.UVEntry06.grid(row=14, column=8, sticky=W)
+            self.configure_win.UVEntry07.grid(row=14, column=9, sticky=W)
+            self.configure_win.UVEntry08.grid(row=14, column=10, sticky=W)
+            self.configure_win.UVEntry09.grid(row=14, column=11, sticky=W)
+            self.configure_win.UVEntry10.grid(row=14, column=12, sticky=W)
+            self.configure_win.UVEntry11.grid(row=14, column=13, sticky=W)
+            self.configure_win.UVEntry12.grid(row=14, column=14, sticky=W)
+            self.configure_win.UVEntry13.grid(row=14, column=15, sticky=W)
+            self.configure_win.UVEntry14.grid(row=14, column=16, sticky=W)
+            self.configure_win.UVEntry15.grid(row=14, column=17, sticky=W)
+            self.configure_win.UVEntry16.grid(row=14, column=18, sticky=W)
+            self.configure_win.UVEntry17.grid(row=14, column=19, sticky=W)
+            self.configure_win.UVEntry18.grid(row=14, column=20, sticky=W)
+            self.configure_win.UVEntry19.grid(row=14, column=21, sticky=W)
+            self.configure_win.UVEntry20.grid(row=14, column=22, sticky=W)
+            self.configure_win.UVEntry21.grid(row=14, column=23, sticky=W)
+            self.configure_win.UVEntry22.grid(row=14, column=24, sticky=W)
+            self.configure_win.UVEntry23.grid(row=14, column=25, sticky=W)
+
+
+
 
 
     def process_incoming(self):
