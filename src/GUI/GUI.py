@@ -160,8 +160,8 @@ class GrowSpaceGUI:
         self.UVLEDIntensity_value.grid(row=32, column=29, sticky=W+E)
 
         #Button Locations
-        self.LoadButton.grid(row=45, column=6, columnspan=1, sticky=W)
-        self.SaveButton.grid(row=45, column=9, columnspan=1, sticky=E)
+        self.LoadButton.grid(row=45, column=6, columnspan=3, sticky=W)
+        self.SaveButton.grid(row=45, column=9, columnspan=3, sticky=E)
         self.PowerButton.grid(row=45, column=5, columnspan=1, sticky=W+E, padx=(40, 40))
         self.ConfigureButton.grid(row=45, column=22, columnspan=1)
         self.ControlButton.grid(row=45, column=29, columnspan=1)
@@ -211,47 +211,65 @@ class GrowSpaceGUI:
             self.control_win = Tk()
             self.control_window_open = True
             self.control_win.title("Control Devices")
-            self.control_win.configure(bg="Black")
-            self.control_win.geometry("1024x600")
+            self.control_win.configure(bg="Gray20")
+            self.control_win.geometry("400x600")
             self.control_win.protocol("WM_DELETE_WINDOW", on_closing)
 
-
-            # creates a grid 50 x 50 in the main window
-            rows1 = 0
-            while rows1 < 20:
-                self.control_win.grid_rowconfigure(rows1, weight=1, minsize=1)  # Empty Row
-                self.control_win.grid_columnconfigure(rows1, weight=1, minsize=1)  # Empty column
-                rows1 += 1
 
             self.Red_val = StringVar()
             self.Green_val = StringVar()
             self.Blue_val = StringVar()
 
-            self.control_win.Red_Entry = Entry(self.control_win,  textvariable = self.Red_val)
-            self.control_win.Red_Entry_Label = Label(self.control_win, fg="Black", bg = "Red", text = "RED", font="Helvetica 24")
-            self.control_win.Green_Entry = Entry(self.control_win, textvariable=self.Green_val)
-            self.control_win.Green_Entry_Label = Label(self.control_win, fg="Black", bg="Green", text="GREEN", font="Helvetica 24")
-            self.control_win.Blue_Entry = Entry(self.control_win,  textvariable=self.Blue_val)
-            self.control_win.Blue_Entry_Label = Label(self.control_win, fg="Black", bg="Blue", text="BLUE",font="Helvetica 24")
+            #Defining Labels
+            self.control_win.GrowSpaceTitle = Label(self.control_win, bg="Gray20", fg="White", text="Grow Space", font="Helvetica 24 bold italic")
+            self.control_win.RGB_Label = Label(self.control_win, bg="Gray20", fg = "White", text="RGB LEDs", font="Helvetica 22 bold")
+            self.control_win.Red_Entry_Label = Label(self.control_win, fg="Red", bg="Gray20", text="RED", font="Helvetica 22 bold")
+            self.control_win.Green_Entry_Label = Label(self.control_win, fg="Green2", bg="Gray20", text="GREEN", font="Helvetica 22 bold")
+            self.control_win.Blue_Entry_Label = Label(self.control_win, fg="DeepSkyBlue", bg="Gray20", text="BLUE",font="Helvetica 22 bold")
+            self.control_win.UV_Label = Label(self.control_win, bg="Gray20", fg = "White", text="UV LEDs", font="Helvetica 22 bold")
+            self.control_win.Fan_Label = Label(self.control_win, bg="Gray20", fg = "White", text="Fan", font="Helvetica 22 bold")
+            self.control_win.Pump_Label = Label(self.control_win, bg="Gray20", fg = "White", text="Pump", font="Helvetica 22 bold")
 
-            self.control_win.RGBLEDButton = Button(self.control_win, bg = "White", fg="Black", text = "RGB LED",font="Helvetica 24 bold", command=lambda: self.queue_out.put([self.control_win.Red_Entry.get(),self.control_win.Green_Entry.get(),self.control_win.Blue_Entry.get()]))
-            self.control_win.UVLEDButton = Button(self.control_win, bg="White", fg="Black", text="UV LED",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle UV"))
-            self.control_win.FanButton = Button(self.control_win, bg="White", fg="Black", text="Fan",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle Fan"))
-            self.control_win.PumpButton = Button(self.control_win, bg="White", fg="Black", text="Pump",font="Helvetica 24 bold", command=lambda: self.queue_out.put("Toggle Pump"))
+            #Defining Entries
+            self.control_win.Red_Entry = Entry(self.control_win, width=4, textvariable=self.Red_val)
+            self.control_win.Green_Entry = Entry(self.control_win, width=4, textvariable=self.Green_val)
+            self.control_win.Blue_Entry = Entry(self.control_win, width=4, textvariable=self.Blue_val)
+
+            # Defining Control Window Buttons
+            self.control_win.RGBLED_Set = Button(self.control_win, bg = "White", fg="Black", text = "SET",font="Helvetica 24 bold", command=lambda: self.queue_out.put([self.control_win.Red_Entry.get(),self.control_win.Green_Entry.get(),self.control_win.Blue_Entry.get()]))
+            self.control_win.UV_OFF = Button(self.control_win, bg="White", fg="Black", text="OFF", width=4,font="Helvetica 24 bold", command=lambda: self.queue_out.put("UV OFF"))
+            self.control_win.UV_ON = Button(self.control_win, bg="White", fg="Black", text="ON", width=4, font="Helvetica 24 bold", command=lambda: self.queue_out.put("UV ON"))
+            self.control_win.Fan_OFF = Button(self.control_win, bg="White", fg="Black", text="OFF", width=4, font="Helvetica 24 bold", command=lambda: self.queue_out.put("Fan OFF"))
+            self.control_win.Fan_ON = Button(self.control_win, bg="White", fg="Black", text="ON", width=4, font="Helvetica 24 bold", command=lambda: self.queue_out.put("Fan ON"))
+            self.control_win.Pump_OFF = Button(self.control_win, bg="White", fg="Black", text="OFF", width=4, font="Helvetica 24 bold", command=lambda: self.queue_out.put("Pump OFF"))
+            self.control_win.Pump_ON = Button(self.control_win, bg="White", fg="Black", text="ON", width=4, font="Helvetica 24 bold", command=lambda: self.queue_out.put("Pump ON"))
             self.control_win.ExitButton = Button(self.control_win, bg="White", fg="Black", text="BACK",font="Helvetica 24 bold", command=lambda: (self.queue_out.put("END"), on_closing()))
 
-            self.control_win.RGBLEDButton.grid(row=0, column=0)
-            self.control_win.UVLEDButton.grid(row=1, column=0)
-            self.control_win.FanButton.grid(row=2, column=0)
-            self.control_win.PumpButton.grid(row=3, column=0)
-            self.control_win.ExitButton.grid(row=8, column=0)
+            self.control_win.GrowSpaceTitle.grid(row=0, column=0,  pady=(0,20))
+            self.control_win.RGB_Label.grid(row=1,column=0,  pady=(0,10), sticky=W)
+            self.control_win.Red_Entry_Label.grid(row=2, column=0, pady=(0,10), sticky=W)
+            self.control_win.Red_Entry.grid(row=2, column=1, pady=(0,10), sticky=W+E)
+            self.control_win.Green_Entry_Label.grid(row=3, column=0, pady=(0,10), sticky=W)
+            self.control_win.Green_Entry.grid(row=3,column=1, pady=(0,10), sticky=W+E)
+            self.control_win.Blue_Entry_Label.grid(row=4, column=0, pady=(0,10), sticky=W)
+            self.control_win.Blue_Entry.grid(row=4, column=1, pady=(0,10), sticky=W + E)
+            self.control_win.RGBLED_Set.grid(row=5, column=1, pady=(10,40), sticky=W + E)
 
-            self.control_win.Red_Entry_Label.grid(row=0, column=2)
-            self.control_win.Red_Entry.grid(row=0, column=3)
-            self.control_win.Green_Entry_Label.grid(row=0, column=5)
-            self.control_win.Green_Entry.grid(row=0, column=6)
-            self.control_win.Blue_Entry_Label.grid(row=0, column=8)
-            self.control_win.Blue_Entry.grid(row=0, column=9)
+            self.control_win.UV_Label.grid(row=6, column=0, pady=(0,20), sticky=W)
+            self.control_win.UV_OFF.grid(row=6, column=1,  pady=(0,20), sticky=W+E)
+            self.control_win.UV_ON.grid(row=6, column=2, padx=(10,0), pady=(0, 20), sticky=W + E)
+
+            self.control_win.Fan_Label.grid(row=7, column=0, pady=(0, 20), sticky=W)
+            self.control_win.Fan_OFF.grid(row=7, column=1, pady=(0, 20),  sticky=W + E)
+            self.control_win.Fan_ON.grid(row=7, column=2, padx=(10,0),  pady=(0, 20), sticky=W + E)
+
+            self.control_win.Pump_Label.grid(row=8, column=0, pady=(0, 20), sticky=W)
+            self.control_win.Pump_OFF.grid(row=8, column=1,  pady=(0, 20), sticky=W + E)
+            self.control_win.Pump_ON.grid(row=8, column=2, padx=(10,0), pady=(0, 20), sticky=W + E)
+
+            self.control_win.ExitButton.grid(row=9, column=1, pady=(30,0))
+
+
 
     def configure_window(self):
 
@@ -309,10 +327,10 @@ class GrowSpaceGUI:
             # Lighting Labels and Entries
 
             self.configure_win.LightingParametersHeader = Label(self.configure_win, bg="Black", fg="White", text="Lighting Levels", font="Helvetica 22 bold")
-            self.configure_win.UVConfigureLabel = Label(self.configure_win, bg="Black", fg="MediumPurple1", text="UV", font="Helvetica 20")
-            self.configure_win.RedConfigureLabel = Label(self.configure_win, bg="Black", fg="Red", text="R", font="Helvetica 20")
-            self.configure_win.GreenConfigureLabel = Label(self.configure_win, bg="Black", fg="Green2", text="G", font="Helvetica 20")
-            self.configure_win.BlueConfigureLabel = Label(self.configure_win, bg="Black", fg="Deep Sky Blue", text="B", font="Helvetica 20")
+            self.configure_win.UVConfigureLabel = Label(self.configure_win, bg="Black", fg="MediumPurple1", text="UV", font="Helvetica 20 bold")
+            self.configure_win.RedConfigureLabel = Label(self.configure_win, bg="Black", fg="Red", text="R", font="Helvetica 20 bold")
+            self.configure_win.GreenConfigureLabel = Label(self.configure_win, bg="Black", fg="Green2", text="G", font="Helvetica 20 bold")
+            self.configure_win.BlueConfigureLabel = Label(self.configure_win, bg="Black", fg="Deep Sky Blue", text="B", font="Helvetica 20 bold")
 
             self.configure_win.Hour00Label = Label(self.configure_win, bg="Black", fg="White", text="00", font="Helvetica 20")
             self.configure_win.Hour01Label = Label(self.configure_win, bg="Black", fg="White", text="01", font="Helvetica 20")
@@ -444,8 +462,7 @@ class GrowSpaceGUI:
             #####################Defining Buttons###############################
 
             self.configure_win.BackButton = Button(self.configure_win, bg="White", fg="Black", text="BACK", font="Helvetica 24 bold", command=on_closing_configure)
-            self.configure_win.SaveButton = Button(self.configure_win, bg="White", fg="Black", text="SAVE", font="Helvetica 24 bold", command=None)
-
+            self.configure_win.ConfigureButton = Button(self.configure_win, bg="White", fg="Black", text="CONFIGURE", font="Helvetica 24 bold", command=None)
             ####################Placing Widgets##################################
 
             self.configure_win.GrowSpaceTitle.grid(row=1, column=0, columnspan=12, padx=(10,0), sticky=W)
@@ -608,7 +625,7 @@ class GrowSpaceGUI:
 
 
             self.configure_win.BackButton.grid(row = 26, column = 11, columnspan=4, pady=(40,0), command=None)
-            self.configure_win.SaveButton.grid(row=26, column=15, columnspan=4, pady=(40, 0), command=None)
+            self.configure_win.ConfigureButton.grid(row=26, column=15, columnspan=4, pady=(40, 0), command=None)
 
 
 
