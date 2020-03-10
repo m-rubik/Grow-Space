@@ -212,7 +212,7 @@ class GrowSpaceGUI:
             self.control_window_open = True
             self.control_win.title("Control Devices")
             self.control_win.configure(bg="Gray20")
-            self.control_win.geometry("400x600")
+            self.control_win.geometry("800x800")
             self.control_win.protocol("WM_DELETE_WINDOW", on_closing)
 
 
