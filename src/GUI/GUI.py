@@ -237,12 +237,12 @@ class GrowSpaceGUI:
 
             # Defining Control Window Buttons
             self.control_win.RGBLED_Set = Button(self.control_win, bg = "White", fg="Black", text = "SET",font="Helvetica 20 bold", command=lambda: self.queue_out.put([self.control_win.Red_Entry.get(),self.control_win.Green_Entry.get(),self.control_win.Blue_Entry.get()]))
-            self.control_win.UV_OFF = Button(self.control_win, bg="White", fg="Black", text="OFF", width=4,font="Helvetica 20 bold", command=lambda: self.queue_out.put("UV OFF"))
-            self.control_win.UV_ON = Button(self.control_win, bg="White", fg="Black", text="ON", width=4, font="Helvetica 20 bold", command=lambda: self.queue_out.put("UV ON"))
-            self.control_win.Fan_OFF = Button(self.control_win, bg="White", fg="Black", text="OFF", width=4, font="Helvetica 20 bold", command=lambda: self.queue_out.put("Fan OFF"))
-            self.control_win.Fan_ON = Button(self.control_win, bg="White", fg="Black", text="ON", width=4, font="Helvetica 20 bold", command=lambda: self.queue_out.put("Fan ON"))
-            self.control_win.Pump_OFF = Button(self.control_win, bg="White", fg="Black", text="OFF", width=4, font="Helvetica 20 bold", command=lambda: self.queue_out.put("Pump OFF"))
-            self.control_win.Pump_ON = Button(self.control_win, bg="White", fg="Black", text="ON", width=4, font="Helvetica 20 bold", command=lambda: self.queue_out.put("Pump ON"))
+            self.control_win.UV_OFF = Button(self.control_win, bg="White", fg="Black", text="OFF", font="Helvetica 20 bold", command=lambda: self.queue_out.put("UV OFF"))
+            self.control_win.UV_ON = Button(self.control_win, bg="White", fg="Black", text="ON",  font="Helvetica 20 bold", command=lambda: self.queue_out.put("UV ON"))
+            self.control_win.Fan_OFF = Button(self.control_win, bg="White", fg="Black", text="OFF",  font="Helvetica 20 bold", command=lambda: self.queue_out.put("Fan OFF"))
+            self.control_win.Fan_ON = Button(self.control_win, bg="White", fg="Black", text="ON",  font="Helvetica 20 bold", command=lambda: self.queue_out.put("Fan ON"))
+            self.control_win.Pump_OFF = Button(self.control_win, bg="White", fg="Black", text="OFF",  font="Helvetica 20 bold", command=lambda: self.queue_out.put("Pump OFF"))
+            self.control_win.Pump_ON = Button(self.control_win, bg="White", fg="Black", text="ON",  font="Helvetica 20 bold", command=lambda: self.queue_out.put("Pump ON"))
             self.control_win.ExitButton = Button(self.control_win, bg="White", fg="Black", text="BACK",font="Helvetica 20 bold", command=lambda: (self.queue_out.put("END"), on_closing()))
 
             self.control_win.GrowSpaceTitle.grid(row=0, column=0,  pady=(0,20))
@@ -253,7 +253,7 @@ class GrowSpaceGUI:
             self.control_win.Green_Entry.grid(row=3,column=1, pady=(0,10), sticky=W+E)
             self.control_win.Blue_Entry_Label.grid(row=4, column=0, pady=(0,10), sticky=W)
             self.control_win.Blue_Entry.grid(row=4, column=1, pady=(0,10), sticky=W + E)
-            self.control_win.RGBLED_Set.grid(row=5, column=1, pady=(10,40), sticky=W + E)
+            self.control_win.RGBLED_Set.grid(row=5, column=1, pady=(10,20), sticky=W + E)
 
             self.control_win.UV_Label.grid(row=6, column=0, pady=(0,20), sticky=W)
             self.control_win.UV_OFF.grid(row=6, column=1,  pady=(0,20), sticky=W+E)
