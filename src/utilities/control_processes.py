@@ -20,8 +20,13 @@ def watering_process(msg, controls, queue, db):
     moisture_low = db["Moisture_Low"]
     moisture_high = db["Moisture_High"]
     LH = moisture_low-moisture_high
-    max_flow = 2000
-    flow = (max_flow/LH)*current_level + max_flow*(1-moisture_low/LH)
+    max_flow = 500  # [mL]
+    if current_level < moisture_high:
+        flow = 0
+    elif current_level >= moisture_high:
+        flow = (max_flow/(2*LH))*current_level + 50
+        if flow > max_flow:
+            flow = max_flow
     flow_per_second = 0.905  # [mL/s]  # TODO: find watering speed of pump
     pump_time = int(flow/flow_per_second)
 
