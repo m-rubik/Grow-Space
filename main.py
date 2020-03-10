@@ -399,7 +399,7 @@ class ThreadedClient:
             self.db_master['Manual Overrides']['RGB LED'] = False
             self.db_master['Manual Overrides']['UV LED'] = False
 
-        if msg == "Pump OFF":
+        elif msg == "Pump OFF":
             self.db_master['Manual Overrides']['Pump'] = True
             self.controls['pump'].turn_off()
             self.db_master["Pump Status"] = "OFF"
