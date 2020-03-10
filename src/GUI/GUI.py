@@ -474,22 +474,22 @@ class GrowSpaceGUI:
 
             # Placing Environmental Labels
             self.configure_win.MinimumValue.grid(row=9, column=14, columnspan=4, sticky=W+E)
-            self.configure_win.MaximumValue.grid(row=9, column=18, columnspan=4, sticky=W+E)
+            self.configure_win.MaximumValue.grid(row=9, column=19, columnspan=4, sticky=W+E)
             self.configure_win.SoilMoistureConfigureLabel.grid(row=10, column=7, columnspan=6, sticky=W)
             self.configure_win.TemperatureConfigureLabel.grid(row=11, column=7, columnspan=6, sticky=W)
             self.configure_win.HumidityConfigureLabel.grid(row=12, column=7, columnspan=6, sticky=W)
             self.configure_win.VOCConfigureLabel.grid(row=13, column=7, columnspan=6, pady=(0,20), sticky=W)
 
             #Placing Environmental Entries
-            self.configure_win.SoilMoistureMinEntry.grid(row=10, column=16, columnspan=2, sticky= E)
-            self.configure_win.TemperatureMinEntry.grid(row=11, column=16, columnspan=2, sticky=E)
-            self.configure_win.HumidityMinEntry.grid(row=12, column=16, columnspan=2, sticky=E)
-            self.configure_win.VOCMinEntry.grid(row=13, column=16, columnspan=2, pady=(0,20), sticky=E)
+            self.configure_win.SoilMoistureMinEntry.grid(row=10, column=15, columnspan=2, sticky= E)
+            self.configure_win.TemperatureMinEntry.grid(row=11, column=15, columnspan=2, sticky=E)
+            self.configure_win.HumidityMinEntry.grid(row=12, column=15, columnspan=2, sticky=E)
+            self.configure_win.VOCMinEntry.grid(row=13, column=15, columnspan=2, pady=(0,20), sticky=E)
 
-            self.configure_win.SoilMoistureMaxEntry.grid(row=10, column=19, columnspan=2, sticky=E)
-            self.configure_win.TemperatureMaxEntry.grid(row=11, column=19, columnspan=2, sticky=E)
-            self.configure_win.HumidityMaxEntry.grid(row=12, column=19, columnspan=2, sticky=E)
-            self.configure_win.VOCMaxEntry.grid(row=13, column=19, columnspan=2, pady=(0, 20), sticky=E)
+            self.configure_win.SoilMoistureMaxEntry.grid(row=10, column=20, columnspan=2, sticky=E)
+            self.configure_win.TemperatureMaxEntry.grid(row=11, column=20, columnspan=2, sticky=E)
+            self.configure_win.HumidityMaxEntry.grid(row=12, column=20, columnspan=2, sticky=E)
+            self.configure_win.VOCMaxEntry.grid(row=13, column=20, columnspan=2, pady=(0, 20), sticky=E)
 
             # Placing Lighting Labels
             self.configure_win.LightingParametersHeader.grid(row=20, column=0, columnspan=12, padx=(10,0), pady=(0,10), sticky=W)
