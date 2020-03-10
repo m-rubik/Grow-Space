@@ -312,7 +312,7 @@ class GrowSpaceGUI:
 
             self.configure_win.EnvironmentalParametersHeader = Label(self.configure_win, bg="Black", fg="White", text="Environmental Parameters", font="Helvetica 18 bold")
             self.configure_win.SoilMoistureConfigureLabel = Label(self.configure_win, bg="Black", fg="White", text="Soil Moisture [%]", font="Helvetica 18")
-            self.configure_win.TemperatureConfigureLabel = Label(self.configure_win, bg="Black", fg="White", text="Temperature [°C] ", font="Helvetica 18")
+            self.configure_win.TemperatureConfigureLabel = Label(self.configure_win, bg="Black", fg="White", text="Temperature [°C]", font="Helvetica 18")
             self.configure_win.HumidityConfigureLabel = Label(self.configure_win, bg="Black", fg="White", text="Humidity [%]", font="Helvetica 18")
             self.configure_win.VOCConfigureLabel = Label(self.configure_win, bg="Black", fg="White", text="VOC [kΩ]", font="Helvetica 18")
             self.configure_win.MinimumValue = Label(self.configure_win, bg="Black", fg="White", text="Minimum", font="Helvetica 18")
@@ -329,7 +329,8 @@ class GrowSpaceGUI:
 
             # Lighting Labels and Entries
 
-            self.configure_win.LightingParametersHeader = Label(self.configure_win, bg="Black", fg="White", text="Lighting Levels", font="Helvetica 18 bold")
+            self.configure_win.LightingParametersHeader = Label(self.configure_win, bg="Black", fg="White", text="Lighting Intensities", font="Helvetica 18 bold")
+            self.configure_win.HourLabel = Label(self.configure_win, bg="Black", fg="White", text="Hour", font="Helvetica 18 bold")
             self.configure_win.UVConfigureLabel = Label(self.configure_win, bg="Black", fg="MediumPurple1", text="UV", font="Helvetica 18 bold")
             self.configure_win.RedConfigureLabel = Label(self.configure_win, bg="Black", fg="Red", text="R", font="Helvetica 18 bold")
             self.configure_win.GreenConfigureLabel = Label(self.configure_win, bg="Black", fg="Green2", text="G", font="Helvetica 18 bold")
@@ -470,34 +471,34 @@ class GrowSpaceGUI:
 
             self.configure_win.GrowSpaceTitle.grid(row=1, column=0, columnspan=12, padx=(10,0), sticky=W)
 
-            self.configure_win.EnvironmentalParametersHeader.grid(row=4, column=0, columnspan=12, padx=(10,0), pady=(10,20), sticky=W)
+            self.configure_win.EnvironmentalParametersHeader.grid(row=4, column=0, columnspan=12, padx=(10,0), pady=(10,10), sticky=W)
 
             # Placing Environmental Labels
-            self.configure_win.MinimumValue.grid(row=9, column=14, columnspan=4, sticky=W+E)
-            self.configure_win.MaximumValue.grid(row=9, column=19, columnspan=4, sticky=W+E)
-            self.configure_win.SoilMoistureConfigureLabel.grid(row=10, column=7, columnspan=6, sticky=W)
-            self.configure_win.TemperatureConfigureLabel.grid(row=11, column=7, columnspan=6, sticky=W)
-            self.configure_win.HumidityConfigureLabel.grid(row=12, column=7, columnspan=6, sticky=W)
-            self.configure_win.VOCConfigureLabel.grid(row=13, column=7, columnspan=6, pady=(0,20), sticky=W)
+            self.configure_win.MinimumValue.grid(row=9, column=12, columnspan=4, padx=(20,0), sticky=W+E)
+            self.configure_win.MaximumValue.grid(row=9, column=17, columnspan=4, padx=(20,0), sticky=W+E)
+            self.configure_win.SoilMoistureConfigureLabel.grid(row=10, column=5, columnspan=6, sticky=E)
+            self.configure_win.TemperatureConfigureLabel.grid(row=11, column=5, columnspan=6, sticky=E)
+            self.configure_win.HumidityConfigureLabel.grid(row=12, column=5, columnspan=6, sticky=E)
+            self.configure_win.VOCConfigureLabel.grid(row=13, column=5, columnspan=6, pady=(0,10), sticky=E)
 
             #Placing Environmental Entries
-            self.configure_win.SoilMoistureMinEntry.grid(row=10, column=15, columnspan=2, sticky= E)
-            self.configure_win.TemperatureMinEntry.grid(row=11, column=15, columnspan=2, sticky=E)
-            self.configure_win.HumidityMinEntry.grid(row=12, column=15, columnspan=2, sticky=E)
-            self.configure_win.VOCMinEntry.grid(row=13, column=15, columnspan=2, pady=(0,20), sticky=E)
+            self.configure_win.SoilMoistureMinEntry.grid(row=10, column=13, columnspan=2, sticky= E)
+            self.configure_win.TemperatureMinEntry.grid(row=11, column=13, columnspan=2, sticky=E)
+            self.configure_win.HumidityMinEntry.grid(row=12, column=13, columnspan=2, sticky=E)
+            self.configure_win.VOCMinEntry.grid(row=13, column=13, columnspan=2, pady=(0,10), sticky=E)
 
-            self.configure_win.SoilMoistureMaxEntry.grid(row=10, column=20, columnspan=2, sticky=E)
-            self.configure_win.TemperatureMaxEntry.grid(row=11, column=20, columnspan=2, sticky=E)
-            self.configure_win.HumidityMaxEntry.grid(row=12, column=20, columnspan=2, sticky=E)
-            self.configure_win.VOCMaxEntry.grid(row=13, column=20, columnspan=2, pady=(0, 20), sticky=E)
+            self.configure_win.SoilMoistureMaxEntry.grid(row=10, column=18, columnspan=2, sticky=E)
+            self.configure_win.TemperatureMaxEntry.grid(row=11, column=18, columnspan=2, sticky=E)
+            self.configure_win.HumidityMaxEntry.grid(row=12, column=18, columnspan=2, sticky=E)
+            self.configure_win.VOCMaxEntry.grid(row=13, column=18, columnspan=2, pady=(0, 10), sticky=E)
 
             # Placing Lighting Labels
             self.configure_win.LightingParametersHeader.grid(row=20, column=0, columnspan=12, padx=(10,0), pady=(0,10), sticky=W)
-            self.configure_win.UVConfigureLabel.grid(row=22, column=1, padx=(10,70),sticky=W+E)
-            self.configure_win.RedConfigureLabel.grid(row=23, column=1, padx=(10,70), sticky=W+E)
-            self.configure_win.GreenConfigureLabel.grid(row=24, column=1, padx=(10,70), sticky=W+E)
-            self.configure_win.BlueConfigureLabel.grid(row=25, column=1, padx=(10,70), sticky=W+E)
-
+            self.configure_win.UVConfigureLabel.grid(row=22, column=0, padx=(10,80),sticky=W+E)
+            self.configure_win.RedConfigureLabel.grid(row=23, column=0, padx=(10,80), sticky=W+E)
+            self.configure_win.GreenConfigureLabel.grid(row=24, column=0, padx=(10,80), sticky=W+E)
+            self.configure_win.BlueConfigureLabel.grid(row=25, column=0, padx=(10,80), sticky=W+E)
+            self.configure_win.HourLabel.grid(row=21, column=0, padx=(10,80),sticky=W+E)
 
             x=3;
             self.configure_win.Hour00Label.grid(row=21, column=x, sticky=W+E)
@@ -627,8 +628,8 @@ class GrowSpaceGUI:
             self.configure_win.BlueEntry23.grid(row=25, column=x + 23, sticky=W)
 
 
-            self.configure_win.BackButton.grid(row = 26, column = 9, columnspan=7, pady=(40,0), command=None)
-            self.configure_win.ConfigureButton.grid(row=26, column=16, columnspan=7, pady=(40, 0), command=None)
+            self.configure_win.BackButton.grid(row = 26, column = 9, columnspan=7, pady=(20,0), command=None)
+            self.configure_win.ConfigureButton.grid(row=26, column=16, columnspan=7, pady=(20, 0), command=None)
 
 
 
