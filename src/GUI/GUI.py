@@ -211,8 +211,7 @@ class GrowSpaceGUI:
             self.control_win = Tk()
             self.control_window_open = True
             self.control_win.title("Control Devices")
-            self.control_win.configure(bg="Gray20")
-            self.control_win.geometry("600x900")
+            self.control_win.configure(bg="Gray60")
             self.control_win.protocol("WM_DELETE_WINDOW", on_closing)
 
 
@@ -268,7 +267,7 @@ class GrowSpaceGUI:
             self.control_win.Pump_OFF.grid(row=8, column=1,  pady=(0, 20), sticky=W + E)
             self.control_win.Pump_ON.grid(row=8, column=2, padx=(10,0), pady=(0, 20), sticky=W + E)
 
-            self.control_win.ExitButton.grid(row=9, column=1, pady=(30,0))
+            self.control_win.ExitButton.grid(row=9, column=1, pady=(10,0))
 
 
 
