@@ -70,7 +70,7 @@ class SoilMoistureSensor(Sensor):
 
         # Step 3: Log the reading
         current_time = datetime.now()
-        with open(self.log_file_name,"a+", "a+") as f:
+        with open(self.log_file_name, "a+") as f:
             f.write(str(current_time)+": "+str(self._current_val)+"\n")
 
     def shutdown(self):

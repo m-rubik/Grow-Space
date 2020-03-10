@@ -21,9 +21,9 @@ def watering_process(msg, controls, queue, db):
     moisture_high = db["Moisture_High"]
     LH = moisture_low-moisture_high
     max_flow = 500  # [mL]
-    if current_level < moisture_high:
+    if current_level > moisture_high:
         flow = 0
-    elif current_level >= moisture_high:
+    elif current_level <= moisture_high:
         flow = (max_flow/(2*LH))*current_level + 50
         if flow > max_flow:
             flow = max_flow
@@ -32,6 +32,7 @@ def watering_process(msg, controls, queue, db):
 
     # Operate the pump
     controls['pump'].turn_on()
+    print(pump_time)
     for _ in range(pump_time):
         if not queue.empty():
             msg = queue.get()
