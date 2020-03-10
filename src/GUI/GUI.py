@@ -220,14 +220,14 @@ class GrowSpaceGUI:
             self.Blue_val = StringVar()
 
             #Defining Labels
-            self.control_win.GrowSpaceTitle = Label(self.control_win, bg="Gray20", fg="White", text="Grow Space", font="Helvetica 24 bold italic")
-            self.control_win.RGB_Label = Label(self.control_win, bg="Gray20", fg = "White", text="RGB LEDs", font="Helvetica 22 bold")
-            self.control_win.Red_Entry_Label = Label(self.control_win, fg="Red", bg="Gray20", text="RED", font="Helvetica 22 bold")
-            self.control_win.Green_Entry_Label = Label(self.control_win, fg="Green2", bg="Gray20", text="GREEN", font="Helvetica 22 bold")
-            self.control_win.Blue_Entry_Label = Label(self.control_win, fg="DeepSkyBlue", bg="Gray20", text="BLUE",font="Helvetica 22 bold")
-            self.control_win.UV_Label = Label(self.control_win, bg="Gray20", fg = "White", text="UV LEDs", font="Helvetica 22 bold")
-            self.control_win.Fan_Label = Label(self.control_win, bg="Gray20", fg = "White", text="Fan", font="Helvetica 22 bold")
-            self.control_win.Pump_Label = Label(self.control_win, bg="Gray20", fg = "White", text="Pump", font="Helvetica 22 bold")
+            self.control_win.GrowSpaceTitle = Label(self.control_win, bg="Gray20", fg="White", text="Grow Space", font="Helvetica 20 bold italic")
+            self.control_win.RGB_Label = Label(self.control_win, bg="Gray20", fg = "White", text="RGB LEDs", font="Helvetica 20 bold")
+            self.control_win.Red_Entry_Label = Label(self.control_win, fg="Red", bg="Gray20", text="RED", font="Helvetica 20 bold")
+            self.control_win.Green_Entry_Label = Label(self.control_win, fg="Green2", bg="Gray20", text="GREEN", font="Helvetica 20 bold")
+            self.control_win.Blue_Entry_Label = Label(self.control_win, fg="DeepSkyBlue", bg="Gray20", text="BLUE",font="Helvetica 20 bold")
+            self.control_win.UV_Label = Label(self.control_win, bg="Gray20", fg = "White", text="UV LEDs", font="Helvetica 20 bold")
+            self.control_win.Fan_Label = Label(self.control_win, bg="Gray20", fg = "White", text="Fan", font="Helvetica 20 bold")
+            self.control_win.Pump_Label = Label(self.control_win, bg="Gray20", fg = "White", text="Pump", font="Helvetica 20 bold")
 
             #Defining Entries
             self.control_win.Red_Entry = Entry(self.control_win, width=4, textvariable=self.Red_val)
