@@ -142,10 +142,14 @@ class ThreadedClient:
 
         # Set configuration parameters in GUI
         self.logger.debug("Updating control parameters in GUI...")
-        self.gui.SoilMoistureRange_value.configure(text=str(self.db_master["Moisture_Low"])+"% - "+str(self.db_master["Moisture_High"])+"%")
-        self.gui.TemperatureRange_value.configure(text=str(self.db_master["Temperature_Low"])+"°C - "+str(self.db_master["Temperature_High"])+"°C")
-        self.gui.HumidityRange_value.configure(text=str(self.db_master["Humidity_Low"])+"% - "+str(self.db_master["Humidity_High"])+"%")
-        self.gui.VOCRange_value.configure(text=str(self.db_master["VOC_Low"])+"kΩ - "+str(self.db_master["VOC_High"])+"kΩ")
+        self.gui.SoilMoistureRange_value.\
+            configure(text=str(self.db_master["Moisture_Low"])+"% - "+str(self.db_master["Moisture_High"])+"%")
+        self.gui.TemperatureRange_value.\
+            configure(text=str(self.db_master["Temperature_Low"])+"°C - "+str(self.db_master["Temperature_High"])+"°C")
+        self.gui.HumidityRange_value.\
+            configure(text=str(self.db_master["Humidity_Low"])+"% - "+str(self.db_master["Humidity_High"])+"%")
+        self.gui.VOCRange_value.\
+            configure(text=str(self.db_master["VOC_Low"])+"kΩ - "+str(self.db_master["VOC_High"])+"kΩ")
 
         # TODO: Insert RGB and UV LEDs once algorithm is created
         self.logger.debug("Configuration file loaded. System is now running on new environment parameters.")
@@ -211,17 +215,21 @@ class ThreadedClient:
     def periodic_call(self, gui_refresh_interval=200):
         """!
         This is the "main loop" of the main thread.
-        In order to conserve processing power, this loop has a delay between iterations equal to the gui_refresh_interval.
+        In order to conserve processing power, this loop has a delay between iterations equal to the
+        gui_refresh_interval.
         The process is as follows:
         1. Check if the user has signalled for the application to shutdown. If so, shutdown everything.
         2. Check if the user is trying to do any manual overrides using the "control" window of the GUI.
         For each control element that is manually overriden, it will add a corresponding flag into the master database.
-        This flag is checked by the control algorithms, and if it is present, it will prevent the algorithms from controlling that control element.
+        This flag is checked by the control algorithms, and if it is present, it will prevent the algorithms from
+        controlling that control element.
         These flags are cleared and automaticity is regained when the user closes the "control" window. 
-        3. Check if there is new data coming in from a sensor. If there is, run an algorithm on the data to generate a control message.
+        3. Check if there is new data coming in from a sensor. If there is, run an algorithm on the data to generate a
+        control message.
         This control message is then passed to a control_process (if necessary and not blocked)
 
-        @param gui_refresh_interval: How often (in miliseconds) the GUI will get check its inbound queue for new data to display
+        @param gui_refresh_interval: How often (in miliseconds) the GUI will get check its inbound queue for new data
+        to display
         """
 
         self.gui.process_incoming()
@@ -293,12 +301,13 @@ class ThreadedClient:
                             # Check if the system is still waiting for the previous watering to soak into the soil
                             if "soak_end_time" in self.db_master:
                                 if current_time <= self.db_master['soak_end_time']:
-                                    self.logger.info("Waiting for soak-in to finish. Time remaining: " + str(self.db_master['soak_end_time'] - current_time))
+                                    self.logger.info("Waiting for soak-in to finish. Time remaining: "
+                                                     + str(self.db_master['soak_end_time'] - current_time))
                                     do_process = False
 
                             # If there is no condition blocking the control_process from running, execute it 
                             if do_process:
-                                if flag == "LOW": # Water level is low, need to pump
+                                if flag == "LOW":  # Water level is low, need to pump
                                     self.db_master["Pump Status"] = "ON"  # Explicitly declare that the pump is now ON
                                     self.controls['pump'].is_off = False
                                     self.logger.info("Pump has turned on.")
@@ -399,7 +408,7 @@ class ThreadedClient:
             self.db_master['Manual Overrides']['RGB LED'] = False
             self.db_master['Manual Overrides']['UV LED'] = False
 
-        if msg == "Pump OFF":
+        elif msg == "Pump OFF":
             self.db_master['Manual Overrides']['Pump'] = True
             self.controls['pump'].turn_off()
             self.db_master["Pump Status"] = "OFF"

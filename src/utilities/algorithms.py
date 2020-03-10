@@ -47,6 +47,7 @@ def watering_algorithm(db):
     The watering algorithm takes the raw sensor data and determines
     if the soil moisture within the enclosure is within the acceptable range
     (as provided by the configuraiton file).
+     Physical Parameters dictate that the sensors should be 12cm apart (center2center), centred in the enclosure.
     """
     try:
         # Get the most recent soil_moisture_levels

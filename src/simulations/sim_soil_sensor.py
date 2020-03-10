@@ -29,7 +29,7 @@ class SoilMoistureSensor(Sensor):
         self.queue.put(self._current_val)
         
         # Step 3: Log the reading
-        with open(self.log_file_name,"w+") as f:
+        with open(self.log_file_name,"a+") as f:
             f.write(str(current_time)+": "+str(self._current_val)+"\n")
 
     def shutdown(self):
