@@ -304,7 +304,7 @@ class GrowSpaceGUI:
             self.configure_win.Green_settings = [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None]
             self.configure_win.Blue_settings = [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None]
 
-            self.configure_win.GrowSpaceTitle = Label(self.configure_win, bg="Black", fg="White", text="Grow Space", font="Helvetica 24 bold italic")
+            self.configure_win.GrowSpaceTitle = Label(self.configure_win, bg="Black", fg="White", text="Grow Space", font="Helvetica 18 bold italic")
 
 
             #Environmental Parameter Labels and Entries
@@ -464,8 +464,8 @@ class GrowSpaceGUI:
 
             #####################Defining Buttons###############################
 
-            self.configure_win.BackButton = Button(self.configure_win, bg="White", fg="Black", text="BACK", font="Helvetica 24 bold", command=on_closing_configure)
-            self.configure_win.ConfigureButton = Button(self.configure_win, bg="White", fg="Black", text="CONFIGURE", font="Helvetica 24 bold", command=None)
+            self.configure_win.BackButton = Button(self.configure_win, bg="White", fg="Black", text="BACK", font="Helvetica 16 bold", command=on_closing_configure)
+            self.configure_win.ConfigureButton = Button(self.configure_win, bg="White", fg="Black", text="CONFIGURE", font="Helvetica 16 bold", command=None)
             ####################Placing Widgets##################################
 
             self.configure_win.GrowSpaceTitle.grid(row=1, column=0, columnspan=12, padx=(10,0), sticky=W)
@@ -493,10 +493,10 @@ class GrowSpaceGUI:
 
             # Placing Lighting Labels
             self.configure_win.LightingParametersHeader.grid(row=20, column=0, columnspan=12, padx=(10,0), pady=(0,10), sticky=W)
-            self.configure_win.UVConfigureLabel.grid(row=22, column=1, padx=(10,10),sticky=W+E)
-            self.configure_win.RedConfigureLabel.grid(row=23, column=1, padx=(10,10), sticky=W+E)
-            self.configure_win.GreenConfigureLabel.grid(row=24, column=1, padx=(10,10), sticky=W+E)
-            self.configure_win.BlueConfigureLabel.grid(row=25, column=1, padx=(10,10), sticky=W+E)
+            self.configure_win.UVConfigureLabel.grid(row=22, column=1, padx=(10,70),sticky=W+E)
+            self.configure_win.RedConfigureLabel.grid(row=23, column=1, padx=(10,70), sticky=W+E)
+            self.configure_win.GreenConfigureLabel.grid(row=24, column=1, padx=(10,70), sticky=W+E)
+            self.configure_win.BlueConfigureLabel.grid(row=25, column=1, padx=(10,70), sticky=W+E)
 
 
             x=3;
@@ -627,8 +627,8 @@ class GrowSpaceGUI:
             self.configure_win.BlueEntry23.grid(row=25, column=x + 23, sticky=W)
 
 
-            self.configure_win.BackButton.grid(row = 26, column = 11, columnspan=4, pady=(40,0), command=None)
-            self.configure_win.ConfigureButton.grid(row=26, column=15, columnspan=4, pady=(40, 0), command=None)
+            self.configure_win.BackButton.grid(row = 26, column = 9, columnspan=7, pady=(40,0), command=None)
+            self.configure_win.ConfigureButton.grid(row=26, column=17, columnspan=7, pady=(40, 0), command=None)
 
 
 
