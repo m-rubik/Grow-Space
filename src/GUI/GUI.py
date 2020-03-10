@@ -221,14 +221,14 @@ class GrowSpaceGUI:
             self.Blue_val = StringVar()
 
             #Defining Labels
-            self.control_win.GrowSpaceTitle = Label(self.control_win, bg="Gray20", fg="White", text="Grow Space", font="Helvetica 20 bold italic")
-            self.control_win.RGB_Label = Label(self.control_win, bg="Gray20", fg = "White", text="RGB LEDs", font="Helvetica 20 bold")
-            self.control_win.Red_Entry_Label = Label(self.control_win, fg="Red", bg="Gray20", text="RED", font="Helvetica 20 bold")
-            self.control_win.Green_Entry_Label = Label(self.control_win, fg="Green2", bg="Gray20", text="GREEN", font="Helvetica 20 bold")
-            self.control_win.Blue_Entry_Label = Label(self.control_win, fg="DeepSkyBlue", bg="Gray20", text="BLUE",font="Helvetica 20 bold")
-            self.control_win.UV_Label = Label(self.control_win, bg="Gray20", fg = "White", text="UV LEDs", font="Helvetica 20 bold")
-            self.control_win.Fan_Label = Label(self.control_win, bg="Gray20", fg = "White", text="Fan", font="Helvetica 20 bold")
-            self.control_win.Pump_Label = Label(self.control_win, bg="Gray20", fg = "White", text="Pump", font="Helvetica 20 bold")
+            self.control_win.GrowSpaceTitle = Label(self.control_win, bg="Light Slate Gray", fg="White", text="Grow Space", font="Helvetica 20 bold italic")
+            self.control_win.RGB_Label = Label(self.control_win, bg="Light Slate Gray", fg = "White", text="RGB LEDs", font="Helvetica 18 bold")
+            self.control_win.Red_Entry_Label = Label(self.control_win, fg="Red", bg="Light Slate Gray", text="RED", font="Helvetica 18 bold")
+            self.control_win.Green_Entry_Label = Label(self.control_win, fg="Green2", bg="Light Slate Gray", text="GREEN", font="Helvetica 18 bold")
+            self.control_win.Blue_Entry_Label = Label(self.control_win, fg="DeepSkyBlue", bg="Light Slate Gray", text="BLUE",font="Helvetica 18 bold")
+            self.control_win.UV_Label = Label(self.control_win, bg="Light Slate Gray", fg = "White", text="UV LEDs", font="Helvetica 18 bold")
+            self.control_win.Fan_Label = Label(self.control_win, bg="Light Slate Gray", fg = "White", text="Fan", font="Helvetica 18 bold")
+            self.control_win.Pump_Label = Label(self.control_win, bg="Light Slate Gray", fg = "White", text="Pump", font="Helvetica 18 bold")
 
             #Defining Entries
             self.control_win.Red_Entry = Entry(self.control_win, width=4, textvariable=self.Red_val)
@@ -237,6 +237,7 @@ class GrowSpaceGUI:
 
             # Defining Control Window Buttons
             self.control_win.RGBLED_Set = Button(self.control_win, bg = "White", fg="Black", text = "SET",font="Helvetica 16 bold", command=lambda: self.queue_out.put([self.control_win.Red_Entry.get(),self.control_win.Green_Entry.get(),self.control_win.Blue_Entry.get()]))
+            self.control_win.RGBLED_OFF = Button(self.control_win, bg="White", fg="Black", text="OFF", font="Helvetica 16 bold", command=lambda: self.queue_out.put(["0","0","0"]))
             self.control_win.UV_OFF = Button(self.control_win, bg="White", fg="Black", text="OFF", font="Helvetica 16 bold", command=lambda: self.queue_out.put("UV OFF"))
             self.control_win.UV_ON = Button(self.control_win, bg="White", fg="Black", text="ON",  font="Helvetica 16 bold", command=lambda: self.queue_out.put("UV ON"))
             self.control_win.Fan_OFF = Button(self.control_win, bg="White", fg="Black", text="OFF",  font="Helvetica 16 bold", command=lambda: self.queue_out.put("Fan OFF"))
@@ -246,14 +247,14 @@ class GrowSpaceGUI:
             self.control_win.ExitButton = Button(self.control_win, bg="White", fg="Black", text="BACK",font="Helvetica 16 bold", command=lambda: (self.queue_out.put("END"), on_closing()))
 
 
-            self.control_win.GrowSpaceTitle.grid(row=0, column=0,  pady=(0,10))
+            self.control_win.GrowSpaceTitle.grid(row=0, column=0, pady=(0,20))
             self.control_win.RGB_Label.grid(row=1,column=0,  pady=(0,10), sticky=W)
             self.control_win.Red_Entry_Label.grid(row=2, column=0, pady=(0,10), sticky=W)
-            self.control_win.Red_Entry.grid(row=2, column=1, pady=(0,10), sticky=W+E)
+            self.control_win.Red_Entry.grid(row=2, column=1, columnspan=2, pady=(0,10), sticky=W+E)
             self.control_win.Green_Entry_Label.grid(row=3, column=0, pady=(0,10), sticky=W)
-            self.control_win.Green_Entry.grid(row=3,column=1, pady=(0,10), sticky=W+E)
+            self.control_win.Green_Entry.grid(row=3,column=1, columnspan=2, pady=(0,10), sticky=W+E)
             self.control_win.Blue_Entry_Label.grid(row=4, column=0, pady=(0,10), sticky=W)
-            self.control_win.Blue_Entry.grid(row=4, column=1, pady=(0,10), sticky=W + E)
+            self.control_win.Blue_Entry.grid(row=4, column=1, columnspan=2, pady=(0,10), sticky=W + E)
             self.control_win.RGBLED_Set.grid(row=5, column=1, pady=(10,20), sticky=W + E)
 
             self.control_win.UV_Label.grid(row=6, column=0, pady=(0,10), sticky=W)
