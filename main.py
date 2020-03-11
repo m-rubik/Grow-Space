@@ -202,7 +202,7 @@ class ThreadedClient:
             from src.sensors.soil_moisture_sensor import SoilMoistureSensor
             from src.sensors.env_sensor import EnvironmentSensor
             self.sensors['soil_moisture_sensor_1'] = SoilMoistureSensor(name="soil_moisture_sensor_1", queue=Queue(), polling_interval=polling_interval, channel=0)
-            self.sensors['soil_moisture_sensor_2'] = SoilMoistureSensor(name="soil_moisture_sensor_2", queue=Queue(), polling_interval=polling_interval, channel=1)
+            #self.sensors['soil_moisture_sensor_2'] = SoilMoistureSensor(name="soil_moisture_sensor_2", queue=Queue(), polling_interval=polling_interval, channel=2)
             self.sensors['environment_sensor'] = EnvironmentSensor(name="environment_sensor", queue=Queue(), polling_interval=polling_interval)
 
         # Add all processes to dict
