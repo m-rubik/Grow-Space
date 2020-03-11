@@ -50,7 +50,7 @@ class SoilMoistureSensor(Sensor):
         self._current_val[2]= (-100/(self.max_volt-self.min_volt))*(self._current_val[1]-self.max_volt)
         if self._current_val[2] > 99.7:
             self._current_val[2] = 100.00
-        elif self._current_val[2]< 0.3:
+        elif self._current_val[2] < 0.3:
             self._current_val[2] = 0.00
             
         self.queue.put(round(self._current_val[2],2)) # This is passing the raw value to the queue?
@@ -63,6 +63,7 @@ class SoilMoistureSensor(Sensor):
 
     def shutdown(self):
         print(self.name, "shutting down.")
+
 
 if __name__ == "__main__":
 
