@@ -9,6 +9,7 @@ These message are passed back to the main thread, so that the information can be
 """
 
 import statistics
+import numbers
 
 
 def environment_algorithm(db):
@@ -42,7 +43,7 @@ def environment_algorithm(db):
     return msg
 
 
-def watering_algorithm(db):
+def watering_algorithm(db, water_list):
     """!
     The watering algorithm takes the raw sensor data and determines
     if the soil moisture within the enclosure is within the acceptable range
@@ -52,11 +53,42 @@ def watering_algorithm(db):
     try:
         # Get the most recent soil_moisture_levels
         current_level_1 = int(db['latest']['soil_moisture_sensor_1'])
-        current_level_2 = int(db['latest']['soil_moisture_sensor_2'])
+
+        # Will return the average and std. of numbers only, ignoring "None" entries
+        try:
+            water_average = statistics.mean([x for x in water_list if isinstance(x, numbers.Number)])
+            water_std = statistics.stdev([x for x in water_list if isinstance(x, numbers.Number)])
+        except statistics.StatisticsError:
+            print("\n System initialization: No values for water average")
+        # for x in [x for x in water_list if isinstance(x, numbers.Number)]:
+        try:
+            for x in range(len(water_list)):
+                if isinstance(water_list[x], numbers.Number):
+                    if water_std < abs(water_average-water_list[x]):
+                        water_list[x] = "None"
+                    else:
+                        pass
+                else:
+                    pass
+        except UnboundLocalError:
+            print("\n System initialization: No values for water average")
+
+        try:
+            water_average = statistics.mean([x for x in water_list if isinstance(x, numbers.Number)])
+        except statistics.StatisticsError:
+            print("\n System initialization: No values for water average")
+
+        # current_level_2 = int(db['latest']['soil_moisture_sensor_2'])
 
         # Calculate the overall soil moisture level
-        # TODO: Find a better way of calculating the level or maybe don't even do it this way idk
-        calculated_level = int(statistics.mean([current_level_1, current_level_2]))
+        #  TODO: Find a better way of calculating the level or maybe don't even do it this way idk
+        #  calculated_level = int(statistics.mean([current_level_1, current_level_2]))
+
+        measured_level = int(current_level_1)
+        try:
+            calculated_level = int(water_average)
+        except UnboundLocalError:
+            calculated_level = measured_level
 
         # Determine the flag from the accepted range & the calculated level
         flag = None
@@ -71,7 +103,7 @@ def watering_algorithm(db):
         flag = None
 
     # Generate & relay the message containing the calculated level for the GUI to display
-    msg = ['soil_moisture_sensor', calculated_level, flag]
+    msg = ['soil_moisture_sensor', measured_level, flag, calculated_level]
     return msg
 
 
