@@ -85,6 +85,8 @@ def watering_algorithm(db, water_list):
         #  calculated_level = int(statistics.mean([current_level_1, current_level_2]))
 
         measured_level = int(current_level_1)
+
+        #  First run the calculated level won't work as the water_average won't work. Set to raw value.
         try:
             calculated_level = int(water_average)
         except UnboundLocalError:
@@ -92,14 +94,14 @@ def watering_algorithm(db, water_list):
 
         # Determine the flag from the accepted range & the calculated level
         flag = None
-        if calculated_level < db['Moisture_Low']:
+        if measured_level < db['Moisture_Low']:
             flag = "LOW"
-        elif calculated_level > db['Moisture_High']:
+        elif measured_level > db['Moisture_High']:
             flag = "HIGH"
 
     except KeyError as err:
         print("Unable to obtain latest sensor data for", str(err) + ". Likely due to the system just starting up.")
-        calculated_level = '-'
+        measured_level = '-'
         flag = None
 
     # Generate & relay the message containing the calculated level for the GUI to display
