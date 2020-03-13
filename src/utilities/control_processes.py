@@ -20,7 +20,7 @@ def watering_process(msg, controls, queue, db):
     calculated_level = msg[3]
     moisture_low = db["Moisture_Low"]
     moisture_high = db["Moisture_High"]
-    lh = moisture_low-moisture_high
+    lh = abs(moisture_low-moisture_high)
     max_flow = 500  # [mL]
     if calculated_level > moisture_high:
         flow = 0
