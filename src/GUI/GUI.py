@@ -90,11 +90,11 @@ class GrowSpaceGUI:
 
 
         #Creating Buttons
-        self.LoadButton = HoverButton(self.master, bg="White", activebackground='yellow', fg="Black", text="LOAD", font="Helvetica 24 bold", command=self.load_file)
-        self.SaveButton = HoverButton(self.master, bg="White", activebackground='yellow', fg="Black", text="SAVE", font="Helvetica 24 bold", command=self.save_file)
+        self.LoadButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="LOAD", font="Helvetica 24 bold", command=self.load_file)
+        self.SaveButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="SAVE", font="Helvetica 24 bold", command=self.save_file)
         self.PowerButton = HoverButton(self.master, bg="White", activebackground='red', fg="Black", text="\u23FB", font="Helvetica 24 bold", command=endCommand)
-        self.ConfigureButton = Button(self.master, bg="White", fg="Black", text="CONFIGURE", font="Helvetica 24 bold", command=self.configure_window)
-        self.ControlButton = Button(self.master, bg="White", fg="Black", text="CONTROL", font="Helvetica 24 bold", command=self.control_window)
+        self.ConfigureButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="CONFIGURE", font="Helvetica 24 bold", command=self.configure_window)
+        self.ControlButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="CONTROL", font="Helvetica 24 bold", command=self.control_window)
 
         # creates a grid 50 x 50 in the main window
         rows = 0
