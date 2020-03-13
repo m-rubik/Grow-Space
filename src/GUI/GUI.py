@@ -194,7 +194,8 @@ class GrowSpaceGUI:
             data['VOC_Low'] = 1
             data['VOC_High'] = 1
 
-            save_as_json((config_file.name.split(".json")[0]).split("configuration_files/")[1], data)
+            filename = "./configuration_files/"+(config_file.name.split(".json")[0]).split("configuration_files/")[1]
+            save_as_json(filename, data)
 
     def control_window(self):
 
