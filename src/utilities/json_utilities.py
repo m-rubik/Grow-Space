@@ -47,7 +47,7 @@ if __name__ == "__main__":
     RGB_data['21'] = {"R": 52, "G": 52, "B": 52}
     RGB_data['22'] = {"R": 0, "G": 0, "B": 0}
     RGB_data['23'] = {"R": 0, "G": 0, "B": 0}
-    RGB_data['24'] = {"R": 0, "G": 0, "B": 0}
+
 
     UV_data = {}
     UV_data['0'] = 0
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     UV_data['21'] = 0
     UV_data['22'] = 0
     UV_data['23'] = 0
-    UV_data['24'] = 0
+
 
     data = {}
     data['Temperature_Low'] = 21

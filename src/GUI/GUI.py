@@ -186,68 +186,68 @@ class GrowSpaceGUI:
             # TODO: Obtain the data that they entered in the Entry boxes (that are yet to be made), and format it as
             # a dictionnary (see the main call in src.utilities.json_utilities as an example of how the data should be structured).
             RGB_data = {}
-            RGB_data['0'] = {"R": 0, "G": 0, "B": 0}
-            RGB_data['1'] = {"R": 0, "G": 0, "B": 0}
-            RGB_data['2'] = {"R": 0, "G": 0, "B": 0}
-            RGB_data['3'] = {"R": 0, "G": 0, "B": 0}
-            RGB_data['4'] = {"R": 0, "G": 0, "B": 0}
-            RGB_data['5'] = {"R": 0, "G": 0, "B": 0}
-            RGB_data['6'] = {"R": 100, "G": 100, "B": 100}
-            RGB_data['7'] = {"R": 52, "G": 52, "B": 52}
-            RGB_data['8'] = {"R": 105, "G": 105, "B": 105}
-            RGB_data['9'] = {"R": 154, "G": 154, "B": 154}
-            RGB_data['10'] = {"R": 154, "G": 154, "B": 154}
-            RGB_data['11'] = {"R": 154, "G": 154, "B": 154}
-            RGB_data['12'] = {"R": 154, "G": 154, "B": 154}
-            RGB_data['13'] = {"R": 154, "G": 154, "B": 154}
-            RGB_data['14'] = {"R": 154, "G": 154, "B": 154}
-            RGB_data['15'] = {"R": 154, "G": 154, "B": 154}
-            RGB_data['16'] = {"R": 154, "G": 154, "B": 154}
-            RGB_data['17'] = {"R": 154, "G": 154, "B": 154}
-            RGB_data['18'] = {"R": 105, "G": 105, "B": 105}
-            RGB_data['19'] = {"R": 105, "G": 105, "B": 105}
-            RGB_data['20'] = {"R": 52, "G": 52, "B": 52}
-            RGB_data['21'] = {"R": 52, "G": 52, "B": 52}
-            RGB_data['22'] = {"R": 0, "G": 0, "B": 0}
-            RGB_data['23'] = {"R": 0, "G": 0, "B": 0}
-            RGB_data['24'] = {"R": 0, "G": 0, "B": 0}
+            RGB_data['0'] = {"R": int(self.configure_win.RedList[0]), "G": int(self.configure_win.GreenList[0]), "B": int(self.configure_win.BlueList[0])}
+            RGB_data['1'] = {"R": int(self.configure_win.RedList[1]), "G": int(self.configure_win.GreenList[1]), "B": int(self.configure_win.BlueList[1])}
+            RGB_data['2'] = {"R": int(self.configure_win.RedList[2]), "G": int(self.configure_win.GreenList[2]), "B": int(self.configure_win.BlueList[2])}
+            RGB_data['3'] = {"R": int(self.configure_win.RedList[3]), "G": int(self.configure_win.GreenList[3]), "B": int(self.configure_win.BlueList[3])}
+            RGB_data['4'] = {"R": int(self.configure_win.RedList[4]), "G": int(self.configure_win.GreenList[4]), "B": int(self.configure_win.BlueList[4])}
+            RGB_data['5'] = {"R": int(self.configure_win.RedList[5]), "G": int(self.configure_win.GreenList[5]), "B": int(self.configure_win.BlueList[5])}
+            RGB_data['6'] = {"R": int(self.configure_win.RedList[6]), "G": int(self.configure_win.GreenList[6]), "B": int(self.configure_win.BlueList[6])}
+            RGB_data['7'] = {"R": int(self.configure_win.RedList[7]), "G": int(self.configure_win.GreenList[7]), "B": int(self.configure_win.BlueList[7])}
+            RGB_data['8'] = {"R": int(self.configure_win.RedList[8]), "G": int(self.configure_win.GreenList[8]), "B": int(self.configure_win.BlueList[8])}
+            RGB_data['9'] = {"R": int(self.configure_win.RedList[9]), "G": int(self.configure_win.GreenList[9]), "B": int(self.configure_win.BlueList[9])}
+            RGB_data['10'] = {"R": int(self.configure_win.RedList[10]), "G": int(self.configure_win.GreenList[10]), "B": int(self.configure_win.BlueList[10])}
+            RGB_data['11'] = {"R": int(self.configure_win.RedList[11]), "G": int(self.configure_win.GreenList[11]), "B": int(self.configure_win.BlueList[11])}
+            RGB_data['12'] = {"R": int(self.configure_win.RedList[12]), "G": int(self.configure_win.GreenList[12]), "B": int(self.configure_win.BlueList[12])}
+            RGB_data['13'] = {"R": int(self.configure_win.RedList[13]), "G": int(self.configure_win.GreenList[13]), "B": int(self.configure_win.BlueList[13])}
+            RGB_data['14'] = {"R": int(self.configure_win.RedList[14]), "G": int(self.configure_win.GreenList[14]), "B": int(self.configure_win.BlueList[14])}
+            RGB_data['15'] = {"R": int(self.configure_win.RedList[15]), "G": int(self.configure_win.GreenList[15]), "B": int(self.configure_win.BlueList[15])}
+            RGB_data['16'] = {"R": int(self.configure_win.RedList[16]), "G": int(self.configure_win.GreenList[16]), "B": int(self.configure_win.BlueList[16])}
+            RGB_data['17'] = {"R": int(self.configure_win.RedList[17]), "G": int(self.configure_win.GreenList[17]), "B": int(self.configure_win.BlueList[17])}
+            RGB_data['18'] = {"R": int(self.configure_win.RedList[18]), "G": int(self.configure_win.GreenList[18]), "B": int(self.configure_win.BlueList[18])}
+            RGB_data['19'] = {"R": int(self.configure_win.RedList[19]), "G": int(self.configure_win.GreenList[19]), "B": int(self.configure_win.BlueList[19])}
+            RGB_data['20'] = {"R": int(self.configure_win.RedList[20]), "G": int(self.configure_win.GreenList[20]), "B": int(self.configure_win.BlueList[20])}
+            RGB_data['21'] = {"R": int(self.configure_win.RedList[21]), "G": int(self.configure_win.GreenList[21]), "B": int(self.configure_win.BlueList[21])}
+            RGB_data['22'] = {"R": int(self.configure_win.RedList[22]), "G": int(self.configure_win.GreenList[22]), "B": int(self.configure_win.BlueList[22])}
+            RGB_data['23'] = {"R": int(self.configure_win.RedList[23]), "G": int(self.configure_win.GreenList[23]), "B": int(self.configure_win.BlueList[23])}
+
 
             UV_data = {}
-            UV_data['0'] = 0
-            UV_data['1'] = 0
-            UV_data['2'] = 0
-            UV_data['3'] = 0
-            UV_data['4'] = 0
-            UV_data['5'] = 0
-            UV_data['6'] = 0
-            UV_data['7'] = 0
-            UV_data['8'] = 0
-            UV_data['9'] = 0
-            UV_data['10'] = 1
-            UV_data['11'] = 1
-            UV_data['12'] = 1
-            UV_data['13'] = 1
-            UV_data['14'] = 1
-            UV_data['15'] = 1
-            UV_data['16'] = 0
-            UV_data['17'] = 0
-            UV_data['18'] = 0
-            UV_data['19'] = 0
-            UV_data['20'] = 0
-            UV_data['21'] = 0
-            UV_data['22'] = 0
-            UV_data['23'] = 0
-            UV_data['24'] = 0
+            UV_data['0'] = int(self.configure_win.UVList[0])
+            UV_data['1'] = int(self.configure_win.UVList[1])
+            UV_data['2'] = int(self.configure_win.UVList[2])
+            UV_data['3'] = int(self.configure_win.UVList[3])
+            UV_data['4'] = int(self.configure_win.UVList[4])
+            UV_data['5'] = int(self.configure_win.UVList[5])
+            UV_data['6'] = int(self.configure_win.UVList[6])
+            UV_data['7'] = int(self.configure_win.UVList[7])
+            UV_data['8'] = int(self.configure_win.UVList[8])
+            UV_data['9'] = int(self.configure_win.UVList[9])
+            UV_data['10'] = int(self.configure_win.UVList[10])
+            UV_data['11'] = int(self.configure_win.UVList[11])
+            UV_data['12'] = int(self.configure_win.UVList[12])
+            UV_data['13'] = int(self.configure_win.UVList[13])
+            UV_data['14'] = int(self.configure_win.UVList[14])
+            UV_data['15'] = int(self.configure_win.UVList[15])
+            UV_data['16'] = int(self.configure_win.UVList[16])
+            UV_data['17'] = int(self.configure_win.UVList[17])
+            UV_data['18'] = int(self.configure_win.UVList[18])
+            UV_data['19'] = int(self.configure_win.UVList[19])
+            UV_data['20'] = int(self.configure_win.UVList[20])
+            UV_data['21'] = int(self.configure_win.UVList[21])
+            UV_data['22'] = int(self.configure_win.UVList[22])
+            UV_data['23'] = int(self.configure_win.UVList[23])
+
 
             data = {}
-            data['Temperature_Low'] = 0
-            data['Temperature_High'] = 50
-            data['Moisture_Low'] = 0
-            data['Moisture_High'] = 100
-            data['Humidity_Low'] = 0
-            data['Humidity_High'] = 0
-            data['VOC_Low'] = 400
-            data['VOC_High'] = 800
+            data['Temperature_Low'] = int(self.configure_win.TemperatureList[0])
+            data['Temperature_High'] = int(self.configure_win.TemperatureList[1])
+            data['Moisture_Low'] = int(self.configure_win.SoilMoistureList[0])
+            data['Moisture_High'] = int(self.configure_win.SoilMoistureList[1])
+            data['Humidity_Low'] = int(self.configure_win.HumidityList[0])
+            data['Humidity_High'] = int(self.configure_win.HumidityList[1])
+            data['VOC_Low'] = int(self.configure_win.VOCList[0])
+            data['VOC_High'] = int(self.configure_win.VOCList[1])
             data['RGB_data'] = RGB_data
             data['UV_data'] = UV_data
             data['Soak_Minutes'] = 0.5
@@ -462,95 +462,103 @@ class GrowSpaceGUI:
 
         for i in self.configure_win.SoilMoistureList:
             if i == '' or i.isdigit() == False:
-                messagebox.showerror(title="Error - Soil Moisture Values", message="Please enter an integer from 0 to 100 for the soil moisture thresholds")
+                messagebox.showerror(title="Error - Soil Moisture Values", message="Please enter an integer from 0 to 100 for the soil moisture thresholds", icon="error")
                 return
 
         if any( i > 100 for i in list(map(int, self.configure_win.SoilMoistureList)))  or any( i < 0 for i in list(map(int, self.configure_win.SoilMoistureList))):
-            messagebox.showerror(title="Error - Soil Moisture Values", message="Please enter an integer from 0 to 100 for the soil moisture thresholds")
+            messagebox.showerror(title="Error - Soil Moisture Values", message="Please enter an integer from 0 to 100 for the soil moisture thresholds", icon="error")
             return
 
         if self.configure_win.SoilMoistureList[0] >= self.configure_win.SoilMoistureList[1]:
-            messagebox.showerror(title="Error - Soil Moisture Values", message="Please ensure the soil moisture maximum is greater than the soil moisture minimum")
+            messagebox.showerror(title="Error - Soil Moisture Values", message="Please ensure the soil moisture maximum is greater than the soil moisture minimum", icon="error")
             return
 
 
         for i in self.configure_win.TemperatureList:
             if i == '' or i.isdigit() == False:
-                messagebox.showerror(title="Error - Temperature Values", message="Please enter a positive integer for the temperature thresholds")
+                messagebox.showerror(title="Error - Temperature Values", message="Please enter a positive integer for the temperature thresholds", icon="error")
                 return
 
         if  any( i < 0 for i in list(map(int, self.configure_win.TemperatureList))) < 0:
-            messagebox.showerror(title="Error - Temperature Values", message="Please enter a positive integer for the temperature thresholds")
+            messagebox.showerror(title="Error - Temperature Values", message="Please enter a positive integer for the temperature thresholds", icon="error")
             return
 
         if self.configure_win.TemperatureList[0] >= self.configure_win.TemperatureList[1]:
-            messagebox.showerror(title="Error - Temperature Values", message="Please ensure the temperature maximum is greater than the temperature minimum")
+            messagebox.showerror(title="Error - Temperature Values", message="Please ensure the temperature maximum is greater than the temperature minimum", icon="error")
             return
 
 
         for i in self.configure_win.HumidityList:
             if i == '' or i.isdigit() == False:
-                messagebox.showerror(title="Error - Humidity Values",message="Please enter an integer from 0 to 100 for the humidity thresholds")
+                messagebox.showerror(title="Error - Humidity Values",message="Please enter an integer from 0 to 100 for the humidity thresholds", icon="error")
                 return
 
         if any(i > 100 for i in list(map(int, self.configure_win.HumidityList))) or any( i < 0 for i in list(map(int, self.configure_win.HumidityList))):
-            messagebox.showerror(title="Error - Humidity Values", message="Please enter an integer from 0 to 100 for the humidity thresholds")
+            messagebox.showerror(title="Error - Humidity Values", message="Please enter an integer from 0 to 100 for the humidity thresholds", icon="error")
             return
 
         if self.configure_win.HumidityList[0] >= self.configure_win.HumidityList[1]:
-            messagebox.showerror(title="Error - Humidity Values", message="Please ensure the humidity maximum is greater than the humidity minimum")
+            messagebox.showerror(title="Error - Humidity Values", message="Please ensure the humidity maximum is greater than the humidity minimum", icon="error")
             return
 
         for i in self.configure_win.VOCList:
             if i == '' or i.isdigit() == False:
-                messagebox.showerror(title="Error - VOC Values", message="Please enter a positive integer for the VOC thresholds")
+                messagebox.showerror(title="Error - VOC Values", message="Please enter a positive integer for the VOC thresholds", icon="error")
                 return
 
         if  any(i < 0 for i in list(map(int, self.configure_win.VOCList))):
-            messagebox.showerror(title="Error - VOC Values", message="Please enter a positive integer for the VOC thresholds")
+            messagebox.showerror(title="Error - VOC Values", message="Please enter a positive integer for the VOC thresholds", icon="error")
             return
 
         if self.configure_win.VOCList[0] >= self.configure_win.VOCList[1]:
-            messagebox.showerror(title="Error - VOC Values", message="Please ensure the VOC maximum is greater than the VOC minimum")
+            messagebox.showerror(title="Error - VOC Values", message="Please ensure the VOC maximum is greater than the VOC minimum", icon="error")
             return
 
         for i in self.configure_win.UVList:
             if i == '' or i.isdigit() == False:
-                messagebox.showerror(title="Error - UV Values", message="Please ensure the UV values are 0 (off) or 1 (on)")
+                messagebox.showerror(title="Error - UV Values", message="Please ensure the UV values are 0 (off) or 1 (on)", icon="error")
                 return
 
         if any(i > 1 for i in list(map(int, self.configure_win.UVList))) or any(i < 0 for i in list(map(int, self.configure_win.UVList))):
-            messagebox.showerror(title="Error - UV Values", message="Please ensure the UV values are 0 (off) or 1 (on)")
+            messagebox.showerror(title="Error - UV Values", message="Please ensure the UV values are 0 (off) or 1 (on)", icon="error")
             return
 
         for i in self.configure_win.RedList:
             if i == '' or i.isdigit() == False:
-                messagebox.showerror(title="Error - Red LED Values",message="Please enter an integer from 0 to 100 for the red LED intensities")
+                messagebox.showerror(title="Error - Red LED Values",message="Please enter an integer from 0 to 100 for the red LED intensities", icon="error")
                 return
 
         if any( i > 100 for i in list(map(int, self.configure_win.RedList))) or any(i < 0 for i in list(map(int, self.configure_win.RedList))):
-            messagebox.showerror(title="Error - Red LED Values",message="Please enter an integer from 0 to 100 for the red LED intensities")
+            messagebox.showerror(title="Error - Red LED Values",message="Please enter an integer from 0 to 100 for the red LED intensities", icon="error")
             return
 
         for i in self.configure_win.GreenList:
             if i == '' or i.isdigit() == False:
-                messagebox.showerror(title="Error - Green LED Values",message="Please enter an integer from 0 to 100 for the green LED intensities")
+                messagebox.showerror(title="Error - Green LED Values",message="Please enter an integer from 0 to 100 for the green LED intensities", icon="error")
                 return
 
         if any(i > 100 for i in list(map(int, self.configure_win.GreenList))) or any(i < 0 for i in list(map(int, self.configure_win.GreenList))):
-            messagebox.showerror(title="Error - Green LED Values", message="Please enter an integer from 0 to 100 for the green LED intensities")
+            messagebox.showerror(title="Error - Green LED Values", message="Please enter an integer from 0 to 100 for the green LED intensities", icon="error")
             return
 
         for i in self.configure_win.BlueList:
             if i == '' or i.isdigit() == False:
-                messagebox.showerror(title="Error - Blue LED Values",message="Please enter an integer from 0 to 100 for the blue LED intensities")
+                messagebox.showerror(title="Error - Blue LED Values",message="Please enter an integer from 0 to 100 for the blue LED intensities", icon="error")
                 return
 
         if any(i > 100 for i in list(map(int, self.configure_win.BlueList))) or any(i < 0 for i in list(map(int, self.configure_win.BlueList))):
-            messagebox.showerror(title="Error - Blue LED Values",message="Please enter an integer from 0 to 100 for the blue LED intensities")
+            messagebox.showerror(title="Error - Blue LED Values",message="Please enter an integer from 0 to 100 for the blue LED intensities", icon="error")
             return
 
         ##### Verification Box ######
+        self.configure_win.verify = messagebox.askyesno(title="Verify your settings", message= "Are you sure you want to save the above configuration settings?")
+
+        if self.configure_win.verify == True:
+            self.save_file()
+
+        else:
+            return
+
 
 
 
