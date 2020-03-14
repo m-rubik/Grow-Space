@@ -1,5 +1,6 @@
 import os
 
+
 def generate_unique_filename(name, filetype):
     extension = "."+filetype
     file_name = "logs/"+name+extension

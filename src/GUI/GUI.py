@@ -91,11 +91,11 @@ class GrowSpaceGUI:
 
 
         #Creating Buttons
-        self.LoadButton = Button(self.master, bg = "White", fg="Black", text="LOAD", font="Helvetica 24 bold", command=self.load_file)
-        self.SaveButton = Button(self.master, bg="White", fg="Black", text="SAVE", font="Helvetica 24 bold", command=self.save_file)
-        self.PowerButton = Button(self.master, bg="White", fg="Black", text="\u23FB", font="Helvetica 24 bold", command=endCommand)
-        self.ConfigureButton = Button(self.master, bg="White", fg="Black", text="CONFIGURE", font="Helvetica 24 bold", command=self.configure_window)
-        self.ControlButton = Button(self.master, bg="White", fg="Black", text="CONTROL", font="Helvetica 24 bold", command=self.control_window)
+        self.LoadButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="LOAD", font="Helvetica 24 bold", command=self.load_file)
+        self.SaveButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="SAVE", font="Helvetica 24 bold", command=self.save_file)
+        self.PowerButton = HoverButton(self.master, bg="White", activebackground='red', fg="Black", text="\u23FB", font="Helvetica 24 bold", command=endCommand)
+        self.ConfigureButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="CONFIGURE", font="Helvetica 24 bold", command=self.configure_window)
+        self.ControlButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="CONTROL", font="Helvetica 24 bold", command=self.control_window)
 
         # creates a grid 50 x 50 in the main window
         rows = 0
@@ -252,7 +252,8 @@ class GrowSpaceGUI:
             data['UV_data'] = UV_data
             data['Soak_Minutes'] = 0.5
 
-            save_as_json((config_file.name.split(".json")[0]).split("configuration_files/")[1], data)
+            filename = "./configuration_files/"+(config_file.name.split(".json")[0]).split("configuration_files/")[1]
+            save_as_json(filename, data)
 
     def control_window(self):
 
@@ -979,6 +980,18 @@ class GrowSpaceGUI:
                 else:
                     self.logger.error("Unexpected item passed in main_to_gui queue: " + str(msg))
 
+class HoverButton(Button):
+    def __init__(self, master, **kw):
+        Button.__init__(self,master=master,**kw)
+        self.defaultBackground = self["background"]
+        self.bind("<Enter>", self.on_enter)
+        self.bind("<Leave>", self.on_leave)
+
+    def on_enter(self, e):
+        self['background'] = self['activebackground']
+
+    def on_leave(self, e):
+        self['background'] = self.defaultBackground
 
 if __name__ == "__main__":
     ROOT = Tk()

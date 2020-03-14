@@ -28,7 +28,7 @@ def extract_environment_data(data):
 
 def extract_soil_data(data):
     import re
-    pattern = re.compile(r"([0-9-]+)\s([0-9:.]+)\[([0-9]+),\s([0-9.]+),\s([0-9.]+)\]", re.MULTILINE)
+    pattern = re.compile(r"([0-9-]+)\s([0-9:.]+)\s\[([0-9]+),\s([0-9.]+),\s([0-9.]+)\]", re.MULTILINE)
     matches = list()
     for line in data:
         matches.append(re.match(pattern, line))
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     max_volt = 3.292
     min_volt = 1.30
 
-    with open("./logs/Test_Results/Second Watering Test/soil_moisture_sensor_1.txt", "r") as myfile:
+    with open("./logs/Test_Results/Watering Test (New)/soil_moisture_sensor_1.txt", "r") as myfile:
         data = myfile.readlines()
     matches = extract_soil_data(data)
     data_dict = dict()
@@ -59,7 +59,7 @@ if __name__ == "__main__":
             current_val = 0.00
         data_dict[match.group(2)] = current_val
 
-    with open("./logs/Test_Results/Second Watering Test/soil_moisture_sensor_2.txt", "r") as myfile:
+    with open("./logs/Test_Results/Watering Test (New)/soil_moisture_sensor_2.txt", "r") as myfile:
         data2 = myfile.readlines()
     matches2 = extract_soil_data(data2)
     data_dict2 = dict()

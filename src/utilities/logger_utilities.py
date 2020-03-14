@@ -6,6 +6,7 @@ import logging
 import sys
 from src.utilities.file_utilities import generate_unique_filename
 
+
 def get_logger(name="Main", stdout_stream=True):
     filename = generate_unique_filename(name, 'log')
     file_handler = logging.FileHandler(filename=filename)

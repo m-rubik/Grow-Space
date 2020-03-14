@@ -125,6 +125,9 @@ class ThreadedClient:
         # Start the periodic call (main loop)
         self.periodic_call(gui_refresh_interval)
 
+        # Initialize list of previous 10 moisture sensor readings
+        self.water_list = ["None"] * 10
+
     def load_configuration(self):
         """!
         This method is used to load/reload the system based on a configuration file.
@@ -201,8 +204,8 @@ class ThreadedClient:
             self.logger.debug("Running system...")
             from src.sensors.soil_moisture_sensor import SoilMoistureSensor
             from src.sensors.env_sensor import EnvironmentSensor
-            self.sensors['soil_moisture_sensor_1'] = SoilMoistureSensor(name="soil_moisture_sensor_1", queue=Queue(), polling_interval=polling_interval, channel=0, max_v=3, min_v=1)
-            self.sensors['soil_moisture_sensor_2'] = SoilMoistureSensor(name="soil_moisture_sensor_2", queue=Queue(), polling_interval=polling_interval, channel=1, max_v=3, min_v=1)
+            self.sensors['soil_moisture_sensor_1'] = SoilMoistureSensor(name="soil_moisture_sensor_1", queue=Queue(), polling_interval=polling_interval, channel=0)
+            #self.sensors['soil_moisture_sensor_2'] = SoilMoistureSensor(name="soil_moisture_sensor_2", queue=Queue(), polling_interval=polling_interval, channel=2)
             self.sensors['environment_sensor'] = EnvironmentSensor(name="environment_sensor", queue=Queue(), polling_interval=polling_interval)
 
         # Add all processes to dict
@@ -236,8 +239,8 @@ class ThreadedClient:
 
         # Check if the user has signaled to shutdown the application
         if not self.main_running:
-            self.gui.master.destroy() # Close the GUI
-            for process in active_children(): # Terminate each process
+            self.gui.master.destroy()  # Close the GUI
+            for process in active_children():  # Terminate each process
                 process.terminate()
                 process.join()
             # Save database
@@ -276,7 +279,10 @@ class ThreadedClient:
 
                 if 'soil_moisture_sensor' in sensor_name:
                     # First, run the watering algorithm to generate the control message.
-                    msg = watering_algorithm(self.db_master)
+                    msg = watering_algorithm(self.db_master, self.water_list)
+                    self.water_list.append(msg[1])
+                    # self.logger.debug(self.water_list)
+                    self.water_list.pop(0)
 
                     # Relay the message to the GUI so the values can be updated
                     self.main_to_gui_queue.put(msg)
