@@ -6,7 +6,7 @@ The GUI is based on a Tkinter widget.
 
 import sys
 from multiprocessing import Queue
-from tkinter import Tk, Label, Button, Entry, IntVar, END, W, E, N, S, StringVar
+from tkinter import Tk, Label, Button, Entry, IntVar, END, W, E, N, S, StringVar, messagebox
 from tkinter.filedialog import askopenfile, asksaveasfile
 from src.utilities.json_utilities import save_as_json
 from src.utilities.logger_utilities import get_logger
@@ -31,6 +31,7 @@ class GrowSpaceGUI:
         self.master = master
         self.control_window_open = False
         self.configure_window_open = False
+        self.environment_condition_issue = [False, False, False, False, False, False, False, False]
 
         self.logger = get_logger(name="GUI")
         self.logger.debug("GUI start up.")
@@ -175,24 +176,81 @@ class GrowSpaceGUI:
             self.logger.warning("User did not chose a configuration file to load")
         else:
             self.queue_out.put(["RELOAD", (config_file.name.split(".json")[0]).split("configuration_files/")[1]])
-           
-    def save_file(self): 
-        files = [("JSON files", "*.json")] 
+
+    def save_file(self):
+        files = [("JSON files", "*.json")]
         config_file = asksaveasfile(filetypes = files, defaultextension = files)
         if config_file is None: # User closes the dialog with "cancel"
             self.logger.warning("User cancelled configuration file save")
         else:
             # TODO: Obtain the data that they entered in the Entry boxes (that are yet to be made), and format it as
-            # a dictionnary (see the main call in src.utilities.json_utilities as an example of how the data should be structured). 
+            # a dictionnary (see the main call in src.utilities.json_utilities as an example of how the data should be structured).
+            RGB_data = {}
+            RGB_data['0'] = {"R": 0, "G": 0, "B": 0}
+            RGB_data['1'] = {"R": 0, "G": 0, "B": 0}
+            RGB_data['2'] = {"R": 0, "G": 0, "B": 0}
+            RGB_data['3'] = {"R": 0, "G": 0, "B": 0}
+            RGB_data['4'] = {"R": 0, "G": 0, "B": 0}
+            RGB_data['5'] = {"R": 0, "G": 0, "B": 0}
+            RGB_data['6'] = {"R": 100, "G": 100, "B": 100}
+            RGB_data['7'] = {"R": 52, "G": 52, "B": 52}
+            RGB_data['8'] = {"R": 105, "G": 105, "B": 105}
+            RGB_data['9'] = {"R": 154, "G": 154, "B": 154}
+            RGB_data['10'] = {"R": 154, "G": 154, "B": 154}
+            RGB_data['11'] = {"R": 154, "G": 154, "B": 154}
+            RGB_data['12'] = {"R": 154, "G": 154, "B": 154}
+            RGB_data['13'] = {"R": 154, "G": 154, "B": 154}
+            RGB_data['14'] = {"R": 154, "G": 154, "B": 154}
+            RGB_data['15'] = {"R": 154, "G": 154, "B": 154}
+            RGB_data['16'] = {"R": 154, "G": 154, "B": 154}
+            RGB_data['17'] = {"R": 154, "G": 154, "B": 154}
+            RGB_data['18'] = {"R": 105, "G": 105, "B": 105}
+            RGB_data['19'] = {"R": 105, "G": 105, "B": 105}
+            RGB_data['20'] = {"R": 52, "G": 52, "B": 52}
+            RGB_data['21'] = {"R": 52, "G": 52, "B": 52}
+            RGB_data['22'] = {"R": 0, "G": 0, "B": 0}
+            RGB_data['23'] = {"R": 0, "G": 0, "B": 0}
+            RGB_data['24'] = {"R": 0, "G": 0, "B": 0}
+
+            UV_data = {}
+            UV_data['0'] = 0
+            UV_data['1'] = 0
+            UV_data['2'] = 0
+            UV_data['3'] = 0
+            UV_data['4'] = 0
+            UV_data['5'] = 0
+            UV_data['6'] = 0
+            UV_data['7'] = 0
+            UV_data['8'] = 0
+            UV_data['9'] = 0
+            UV_data['10'] = 1
+            UV_data['11'] = 1
+            UV_data['12'] = 1
+            UV_data['13'] = 1
+            UV_data['14'] = 1
+            UV_data['15'] = 1
+            UV_data['16'] = 0
+            UV_data['17'] = 0
+            UV_data['18'] = 0
+            UV_data['19'] = 0
+            UV_data['20'] = 0
+            UV_data['21'] = 0
+            UV_data['22'] = 0
+            UV_data['23'] = 0
+            UV_data['24'] = 0
+
             data = {}
-            data['Temperature_Low'] = 1
-            data['Temperature_High'] = 1
-            data['Moisture_Low'] = 1
-            data['Moisture_High'] = 1
-            data['Humidity_Low'] = 1
-            data['Humidity_High'] = 1
-            data['VOC_Low'] = 1
-            data['VOC_High'] = 1
+            data['Temperature_Low'] = 0
+            data['Temperature_High'] = 50
+            data['Moisture_Low'] = 0
+            data['Moisture_High'] = 100
+            data['Humidity_Low'] = 0
+            data['Humidity_High'] = 0
+            data['VOC_Low'] = 400
+            data['VOC_High'] = 800
+            data['RGB_data'] = RGB_data
+            data['UV_data'] = UV_data
+            data['Soak_Minutes'] = 0.5
 
             save_as_json((config_file.name.split(".json")[0]).split("configuration_files/")[1], data)
 
@@ -273,17 +331,239 @@ class GrowSpaceGUI:
             self.control_win.ExitButton.grid(row=9, column=1, pady=(20,0))
 
 
+    def Saving_configuration(self):
+
+        #Setting lists to equal entries
+
+
+        self.configure_win.SoilMoistureList = []
+        self.configure_win.TemperatureList = []
+        self.configure_win.HumidityList = []
+        self.configure_win.VOCList = []
+        self.configure_win.RedList = []
+        self.configure_win.GreenList = []
+        self.configure_win.BlueList = []
+        self.configure_win.UVList = []
+
+
+        self.configure_win.SoilMoistureList.append(self.configure_win.SoilMoistureMinEntry.get())
+        self.configure_win.SoilMoistureList.append(self.configure_win.SoilMoistureMaxEntry.get())
+        self.configure_win.TemperatureList.append(self.configure_win.TemperatureMinEntry.get())
+        self.configure_win.TemperatureList.append(self.configure_win.TemperatureMaxEntry.get())
+        self.configure_win.HumidityList.append(self.configure_win.HumidityMinEntry.get())
+        self.configure_win.HumidityList.append(self.configure_win.HumidityMaxEntry.get())
+        self.configure_win.VOCList.append(self.configure_win.VOCMinEntry.get())
+        self.configure_win.VOCList.append(self.configure_win.VOCMaxEntry.get())
+
+        self.configure_win.UVList.append(self.configure_win.UVEntry00.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry01.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry02.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry03.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry04.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry05.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry06.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry07.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry08.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry09.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry10.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry11.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry12.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry13.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry14.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry15.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry16.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry17.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry18.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry19.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry20.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry21.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry22.get())
+        self.configure_win.UVList.append(self.configure_win.UVEntry23.get())
+
+        self.configure_win.RedList.append(self.configure_win.RedEntry00.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry01.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry02.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry03.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry04.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry05.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry06.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry07.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry08.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry09.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry10.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry11.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry12.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry13.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry14.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry15.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry16.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry17.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry18.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry19.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry20.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry21.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry22.get())
+        self.configure_win.RedList.append(self.configure_win.RedEntry23.get())
+
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry00.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry01.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry02.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry03.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry04.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry05.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry06.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry07.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry08.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry09.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry10.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry11.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry12.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry13.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry14.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry15.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry16.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry17.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry18.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry19.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry20.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry21.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry22.get())
+        self.configure_win.GreenList.append(self.configure_win.GreenEntry23.get())
+
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry00.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry01.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry02.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry03.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry04.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry05.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry06.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry07.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry08.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry09.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry10.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry11.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry12.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry13.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry14.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry15.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry16.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry17.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry18.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry19.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry20.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry21.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry22.get())
+        self.configure_win.BlueList.append(self.configure_win.BlueEntry23.get())
+
+
+
+        #Ensuring all values are correctly inputted
+
+        for i in self.configure_win.SoilMoistureList:
+            if i == '' or i.isdigit() == False:
+                messagebox.showerror(title="Error - Soil Moisture Values", message="Please enter an integer from 0 to 100 for the soil moisture thresholds")
+                return
+
+        if any( i > 100 for i in list(map(int, self.configure_win.SoilMoistureList)))  or any( i < 0 for i in list(map(int, self.configure_win.SoilMoistureList))):
+            messagebox.showerror(title="Error - Soil Moisture Values", message="Please enter an integer from 0 to 100 for the soil moisture thresholds")
+            return
+
+        if self.configure_win.SoilMoistureList[0] >= self.configure_win.SoilMoistureList[1]:
+            messagebox.showerror(title="Error - Soil Moisture Values", message="Please ensure the soil moisture maximum is greater than the soil moisture minimum")
+            return
+
+
+        for i in self.configure_win.TemperatureList:
+            if i == '' or i.isdigit() == False:
+                messagebox.showerror(title="Error - Temperature Values", message="Please enter a positive integer for the temperature thresholds")
+                return
+
+        if  any( i < 0 for i in list(map(int, self.configure_win.TemperatureList))) < 0:
+            messagebox.showerror(title="Error - Temperature Values", message="Please enter a positive integer for the temperature thresholds")
+            return
+
+        if self.configure_win.TemperatureList[0] >= self.configure_win.TemperatureList[1]:
+            messagebox.showerror(title="Error - Temperature Values", message="Please ensure the temperature maximum is greater than the temperature minimum")
+            return
+
+
+        for i in self.configure_win.HumidityList:
+            if i == '' or i.isdigit() == False:
+                messagebox.showerror(title="Error - Humidity Values",message="Please enter an integer from 0 to 100 for the humidity thresholds")
+                return
+
+        if any(i > 100 for i in list(map(int, self.configure_win.HumidityList))) or any( i < 0 for i in list(map(int, self.configure_win.HumidityList))):
+            messagebox.showerror(title="Error - Humidity Values", message="Please enter an integer from 0 to 100 for the humidity thresholds")
+            return
+
+        if self.configure_win.HumidityList[0] >= self.configure_win.HumidityList[1]:
+            messagebox.showerror(title="Error - Humidity Values", message="Please ensure the humidity maximum is greater than the humidity minimum")
+            return
+
+        for i in self.configure_win.VOCList:
+            if i == '' or i.isdigit() == False:
+                messagebox.showerror(title="Error - VOC Values", message="Please enter a positive integer for the VOC thresholds")
+                return
+
+        if  any(i < 0 for i in list(map(int, self.configure_win.VOCList))):
+            messagebox.showerror(title="Error - VOC Values", message="Please enter a positive integer for the VOC thresholds")
+            return
+
+        if self.configure_win.VOCList[0] >= self.configure_win.VOCList[1]:
+            messagebox.showerror(title="Error - VOC Values", message="Please ensure the VOC maximum is greater than the VOC minimum")
+            return
+
+        for i in self.configure_win.UVList:
+            if i == '' or i.isdigit() == False:
+                messagebox.showerror(title="Error - UV Values", message="Please ensure the UV values are 0 (off) or 1 (on)")
+                return
+
+        if any(i > 1 for i in list(map(int, self.configure_win.UVList))) or any(i < 0 for i in list(map(int, self.configure_win.UVList))):
+            messagebox.showerror(title="Error - UV Values", message="Please ensure the UV values are 0 (off) or 1 (on)")
+            return
+
+        for i in self.configure_win.RedList:
+            if i == '' or i.isdigit() == False:
+                messagebox.showerror(title="Error - Red LED Values",message="Please enter an integer from 0 to 100 for the red LED intensities")
+                return
+
+        if any( i > 100 for i in list(map(int, self.configure_win.RedList))) or any(i < 0 for i in list(map(int, self.configure_win.RedList))):
+            messagebox.showerror(title="Error - Red LED Values",message="Please enter an integer from 0 to 100 for the red LED intensities")
+            return
+
+        for i in self.configure_win.GreenList:
+            if i == '' or i.isdigit() == False:
+                messagebox.showerror(title="Error - Green LED Values",message="Please enter an integer from 0 to 100 for the green LED intensities")
+                return
+
+        if any(i > 100 for i in list(map(int, self.configure_win.GreenList))) or any(i < 0 for i in list(map(int, self.configure_win.GreenList))):
+            messagebox.showerror(title="Error - Green LED Values", message="Please enter an integer from 0 to 100 for the green LED intensities")
+            return
+
+        for i in self.configure_win.BlueList:
+            if i == '' or i.isdigit() == False:
+                messagebox.showerror(title="Error - Blue LED Values",message="Please enter an integer from 0 to 100 for the blue LED intensities")
+                return
+
+        if any(i > 100 for i in list(map(int, self.configure_win.BlueList))) or any(i < 0 for i in list(map(int, self.configure_win.BlueList))):
+            messagebox.showerror(title="Error - Blue LED Values",message="Please enter an integer from 0 to 100 for the blue LED intensities")
+            return
+
+        ##### Verification Box ######
+
+
 
     def configure_window(self):
 
 
         def on_closing_configure():
-            self.queue_out.put("END")
             try:
                 self.configure_win.destroy()
                 self.configure_window_open = False
             except Exception as e:
                 self.logger.error(str(e))
+
+
 
         if not self.configure_window_open:
 
@@ -295,14 +575,14 @@ class GrowSpaceGUI:
             self.configure_win.protocol("WM_DELETE_WINDOW", on_closing_configure)
 
 
-            self.configure_win.Soilmoisture_thresholds = [None, None]
-            self.configure_win.Temperature_thresholds = [None, None]
-            self.configure_win.Humidity_thresholds = [None, None]
-            self.configure_win.VOC_thresholds = [None, None]
-            self.configure_win.UV_settings = [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None,  None, None, None, None, None, None, None, None, None]
-            self.configure_win.Red_settings = [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None]
-            self.configure_win.Green_settings = [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None]
-            self.configure_win.Blue_settings = [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None]
+            self.configure_win.SoilMoisture_thresholds = [StringVar(), StringVar()]
+            self.configure_win.Temperature_thresholds = [StringVar(), StringVar()]
+            self.configure_win.Humidity_thresholds = [StringVar(), StringVar()]
+            self.configure_win.VOC_thresholds = [StringVar(), StringVar()]
+            self.configure_win.UV_settings = [StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(),  StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar()]
+            self.configure_win.Red_settings = [StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar()]
+            self.configure_win.Green_settings = [StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar()]
+            self.configure_win.Blue_settings = [StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar()]
 
             self.configure_win.GrowSpaceTitle = Label(self.configure_win, bg="Black", fg="White", text="Grow Space", font="Helvetica 18 bold italic")
 
@@ -318,8 +598,8 @@ class GrowSpaceGUI:
             self.configure_win.MinimumValue = Label(self.configure_win, bg="Black", fg="White", text="Minimum", font="Helvetica 18")
             self.configure_win.MaximumValue = Label(self.configure_win, bg="Black", fg="White", text="Maximum", font="Helvetica 18")
 
-            self.configure_win.SoilMoistureMinEntry = Entry(self.configure_win, width = 4, bg="Gray85",textvariable=self.configure_win.Soilmoisture_thresholds[0])
-            self.configure_win.SoilMoistureMaxEntry = Entry(self.configure_win, width = 4, bg="Gray85",textvariable=self.configure_win.Soilmoisture_thresholds[1])
+            self.configure_win.SoilMoistureMinEntry = Entry(self.configure_win, width = 4, bg="Gray85",textvariable=self.configure_win.SoilMoisture_thresholds[0])
+            self.configure_win.SoilMoistureMaxEntry = Entry(self.configure_win, width = 4, bg="Gray85",textvariable=self.configure_win.SoilMoisture_thresholds[1])
             self.configure_win.TemperatureMinEntry = Entry(self.configure_win, width = 4, bg="Gray85",textvariable=self.configure_win.Temperature_thresholds[0])
             self.configure_win.TemperatureMaxEntry = Entry(self.configure_win, width = 4, bg="Gray85",textvariable=self.configure_win.Temperature_thresholds[1])
             self.configure_win.HumidityMinEntry = Entry(self.configure_win, width = 4, bg="Gray85",textvariable=self.configure_win.Humidity_thresholds[0])
@@ -466,7 +746,7 @@ class GrowSpaceGUI:
             #####################Defining Buttons###############################
 
             self.configure_win.BackButton = Button(self.configure_win, bg="White", fg="Black", text="BACK", font="Helvetica 16 bold", command=on_closing_configure)
-            self.configure_win.ConfigureButton = Button(self.configure_win, bg="White", fg="Black", text="CONFIGURE", font="Helvetica 16 bold", command=None)
+            self.configure_win.SaveButton = Button(self.configure_win, bg="White", fg="Black", text="SAVE", font="Helvetica 16 bold", command=self.Saving_configuration)
             ####################Placing Widgets##################################
 
             self.configure_win.GrowSpaceTitle.grid(row=1, column=0, columnspan=12, padx=(10,0), sticky=W)
@@ -628,15 +908,15 @@ class GrowSpaceGUI:
             self.configure_win.BlueEntry23.grid(row=25, column=x + 23, sticky=W)
 
 
-            self.configure_win.BackButton.grid(row = 26, column = 9, columnspan=7, pady=(20,0), command=None)
-            self.configure_win.ConfigureButton.grid(row=26, column=16, columnspan=7, pady=(20, 0), command=None)
+            self.configure_win.BackButton.grid(row = 26, column = 9, columnspan=7, pady=(20,0))
+            self.configure_win.SaveButton.grid(row=26, column=16, columnspan=7, pady=(20, 0))
 
 
 
 
 
     def process_incoming(self):
-        """! 
+        """!
         Receive data from the incoming queue (from the main process)
         """
 
