@@ -44,10 +44,10 @@ class GrowSpaceGUI:
         self.Title = Label(self.master, bg = "Black", fg = "White", text = "Grow Space", font = "Helvetica 24 bold italic")
 
         self.EnvironmentalConditionHeader = Label(self.master, bg = "Black", fg = "White", text = "Environmental Conditions", font="Helvetica 24 bold")
-        self.SoilMoistureCondition = Label(self.master, bg = "Black", fg = "White", text= "Soil Moisture:", font = "Helvetica 22")
-        self.TemperatureCondition = Label(self.master, bg = "Black", fg = "White", text= "Temperature:", font = "Helvetica 22")
+        self.SoilMoistureCondition = Label(self.master, bg = "Black", fg = "White", text= "Soil Moisture:",  font = "Helvetica 22")
+        self.TemperatureCondition = Label(self.master, bg = "Black", fg = "White", text= "Temperature:",  font = "Helvetica 22")
         self.HumidityCondition = Label(self.master, bg = "Black", fg = "White", text= "Humidity:", font = "Helvetica 22")
-        self.VOCCondition = Label(self.master, bg = "Black", fg = "White", text="VOC:", font = "Helvetica 22")
+        self.VOCCondition = Label(self.master, bg = "Black", fg = "White", text="VOC:",font = "Helvetica 22")
 
         self.ParameterRangeHeader = Label(self.master, bg = "Black", fg = "White", text = "Parameter Ranges", font="Helvetica 24 bold")
         self.SoilMoistureRange= Label(self.master, bg="Black", fg="White", text="Soil Moisture:", font="Helvetica 22")
@@ -69,10 +69,10 @@ class GrowSpaceGUI:
 
 
         #Creating Label Values
-        self.SoilMoistureCondition_value = Label(self.master, bg="Black", fg="White", text=None, font="Helvetica 22")
-        self.TemperatureCondition_value  = Label(self.master, bg="Black", fg="White", text=None, font="Helvetica 22")
-        self.HumidityCondition_value  = Label(self.master, bg="Black", fg="White", text=None, font="Helvetica 22")
-        self.VOCCondition_value  = Label(self.master, bg="Black", fg="White", text=None, font="Helvetica 22")
+        self.SoilMoistureCondition_value = Label(self.master, bg="Black", fg="White", width=7, text=None, font="Helvetica 22")
+        self.TemperatureCondition_value  = Label(self.master, bg="Black", fg="White", width=7, text=None, font="Helvetica 22")
+        self.HumidityCondition_value  = Label(self.master, bg="Black", fg="White", width=7, text=None, font="Helvetica 22")
+        self.VOCCondition_value  = Label(self.master, bg="Black", fg="White", width=7, text=None, font="Helvetica 22")
 
         self.SoilMoistureStatus_value = Label(self.master, bg="Black", fg="White", text=None, font="Helvetica 22")
         self.TemperatureStatus_value = Label(self.master, bg="Black", fg="White", text=None, font="Helvetica 22")
@@ -91,10 +91,9 @@ class GrowSpaceGUI:
 
 
         #Creating Buttons
-        self.LoadButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="LOAD", font="Helvetica 24 bold", command=self.load_file)
-        self.SaveButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="SAVE", font="Helvetica 24 bold", command=self.save_file)
+        self.LoadButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="LOAD", width=7, font="Helvetica 24 bold", command=self.load_file)
         self.PowerButton = HoverButton(self.master, bg="White", activebackground='red', fg="Black", text="\u23FB", font="Helvetica 24 bold", command=endCommand)
-        self.ConfigureButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="CONFIGURE", font="Helvetica 24 bold", command=self.configure_window)
+        self.CreateFileButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="CREATE FILE", font="Helvetica 24 bold", command=self.configure_window)
         self.ControlButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="CONTROL", font="Helvetica 24 bold", command=self.control_window)
 
         # creates a grid 50 x 50 in the main window
@@ -161,10 +160,9 @@ class GrowSpaceGUI:
         self.UVLEDIntensity_value.grid(row=32, column=29, sticky=W+E)
 
         #Button Locations
-        self.LoadButton.grid(row=45, column=6, columnspan=3, sticky=W)
-        self.SaveButton.grid(row=45, column=9, columnspan=3, sticky=E)
+        self.LoadButton.grid(row=45, column=10, columnspan=3, sticky=W)
         self.PowerButton.grid(row=45, column=5, columnspan=1, sticky=W+E, padx=(40, 40))
-        self.ConfigureButton.grid(row=45, column=22, columnspan=1)
+        self.CreateFileButton.grid(row=45, column=22, columnspan=1)
         self.ControlButton.grid(row=45, column=29, columnspan=1)
 
     ##################### FUNCTIONS ################################################################
