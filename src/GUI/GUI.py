@@ -454,7 +454,7 @@ class GrowSpaceGUI:
         self.createfile_win.BlueList.append(self.createfile_win.BlueEntry22.get())
         self.createfile_win.BlueList.append(self.createfile_win.BlueEntry23.get())
 
-
+        print(self.createfile_win.SoilMoistureList)
 
         #Ensuring all values are correctly inputted
 
@@ -463,11 +463,11 @@ class GrowSpaceGUI:
                 messagebox.showerror(title="Error - Soil Moisture Values", message="Please enter an integer from 0 to 100 for the soil moisture thresholds", icon="error")
                 return
 
-        if any( i > 100 for i in list(map(int, self.createfile_win.SoilMoistureList)))  or any( i < 0 for i in list(map(int, self.createfile_win.SoilMoistureList))):
+        if any(i > 100 for i in list(map(int, self.createfile_win.SoilMoistureList)))  or any( i < 0 for i in list(map(int, self.createfile_win.SoilMoistureList))):
             messagebox.showerror(title="Error - Soil Moisture Values", message="Please enter an integer from 0 to 100 for the soil moisture thresholds", icon="error")
             return
 
-        if self.createfile_win.SoilMoistureList[0] >= self.createfile_win.SoilMoistureList[1]:
+        if int(self.createfile_win.SoilMoistureList[0]) >= int(self.createfile_win.SoilMoistureList[1]):
             messagebox.showerror(title="Error - Soil Moisture Values", message="Please ensure the soil moisture maximum is greater than the soil moisture minimum", icon="error")
             return
 
@@ -477,11 +477,11 @@ class GrowSpaceGUI:
                 messagebox.showerror(title="Error - Temperature Values", message="Please enter a positive integer for the temperature thresholds", icon="error")
                 return
 
-        if  any( i < 0 for i in list(map(int, self.createfile_win.TemperatureList))) < 0:
+        if  any(i < 0 for i in list(map(int, self.createfile_win.TemperatureList))) < 0:
             messagebox.showerror(title="Error - Temperature Values", message="Please enter a positive integer for the temperature thresholds", icon="error")
             return
 
-        if self.createfile_win.TemperatureList[0] >= self.createfile_win.TemperatureList[1]:
+        if int(self.createfile_win.TemperatureList[0]) >= int(self.createfile_win.TemperatureList[1]):
             messagebox.showerror(title="Error - Temperature Values", message="Please ensure the temperature maximum is greater than the temperature minimum", icon="error")
             return
 
@@ -495,7 +495,7 @@ class GrowSpaceGUI:
             messagebox.showerror(title="Error - Humidity Values", message="Please enter an integer from 0 to 100 for the humidity thresholds", icon="error")
             return
 
-        if self.createfile_win.HumidityList[0] >= self.createfile_win.HumidityList[1]:
+        if int(self.createfile_win.HumidityList[0] >= self.createfile_win.HumidityList[1]):
             messagebox.showerror(title="Error - Humidity Values", message="Please ensure the humidity maximum is greater than the humidity minimum", icon="error")
             return
 
@@ -508,7 +508,7 @@ class GrowSpaceGUI:
             messagebox.showerror(title="Error - VOC Values", message="Please enter a positive integer for the VOC thresholds", icon="error")
             return
 
-        if self.createfile_win.VOCList[0] >= self.createfile_win.VOCList[1]:
+        if int(self.createfile_win.VOCList[0]) >= int(self.createfile_win.VOCList[1]):
             messagebox.showerror(title="Error - VOC Values", message="Please ensure the VOC maximum is greater than the VOC minimum", icon="error")
             return
 
