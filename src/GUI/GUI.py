@@ -30,7 +30,7 @@ class GrowSpaceGUI:
         self.queue_out = queue_out
         self.master = master
         self.control_window_open = False
-        self.configure_window_open = False
+        self.createfile_window_open = False
         self.environment_condition_issue = [False, False, False, False, False, False, False, False]
 
         self.logger = get_logger(name="GUI")
@@ -93,7 +93,7 @@ class GrowSpaceGUI:
         #Creating Buttons
         self.LoadButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="LOAD", width=7, font="Helvetica 24 bold", command=self.load_file)
         self.PowerButton = HoverButton(self.master, bg="White", activebackground='red', fg="Black", text="\u23FB", font="Helvetica 24 bold", command=endCommand)
-        self.CreateFileButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="CREATE FILE", font="Helvetica 24 bold", command=self.configure_window)
+        self.CreateFileButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="CREATE FILE", font="Helvetica 24 bold", command=self.createfile_window)
         self.ControlButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="CONTROL", font="Helvetica 24 bold", command=self.control_window)
 
         # creates a grid 50 x 50 in the main window
@@ -184,68 +184,68 @@ class GrowSpaceGUI:
             # TODO: Obtain the data that they entered in the Entry boxes (that are yet to be made), and format it as
             # a dictionnary (see the main call in src.utilities.json_utilities as an example of how the data should be structured).
             RGB_data = {}
-            RGB_data['0'] = {"R": int(self.configure_win.RedList[0]), "G": int(self.configure_win.GreenList[0]), "B": int(self.configure_win.BlueList[0])}
-            RGB_data['1'] = {"R": int(self.configure_win.RedList[1]), "G": int(self.configure_win.GreenList[1]), "B": int(self.configure_win.BlueList[1])}
-            RGB_data['2'] = {"R": int(self.configure_win.RedList[2]), "G": int(self.configure_win.GreenList[2]), "B": int(self.configure_win.BlueList[2])}
-            RGB_data['3'] = {"R": int(self.configure_win.RedList[3]), "G": int(self.configure_win.GreenList[3]), "B": int(self.configure_win.BlueList[3])}
-            RGB_data['4'] = {"R": int(self.configure_win.RedList[4]), "G": int(self.configure_win.GreenList[4]), "B": int(self.configure_win.BlueList[4])}
-            RGB_data['5'] = {"R": int(self.configure_win.RedList[5]), "G": int(self.configure_win.GreenList[5]), "B": int(self.configure_win.BlueList[5])}
-            RGB_data['6'] = {"R": int(self.configure_win.RedList[6]), "G": int(self.configure_win.GreenList[6]), "B": int(self.configure_win.BlueList[6])}
-            RGB_data['7'] = {"R": int(self.configure_win.RedList[7]), "G": int(self.configure_win.GreenList[7]), "B": int(self.configure_win.BlueList[7])}
-            RGB_data['8'] = {"R": int(self.configure_win.RedList[8]), "G": int(self.configure_win.GreenList[8]), "B": int(self.configure_win.BlueList[8])}
-            RGB_data['9'] = {"R": int(self.configure_win.RedList[9]), "G": int(self.configure_win.GreenList[9]), "B": int(self.configure_win.BlueList[9])}
-            RGB_data['10'] = {"R": int(self.configure_win.RedList[10]), "G": int(self.configure_win.GreenList[10]), "B": int(self.configure_win.BlueList[10])}
-            RGB_data['11'] = {"R": int(self.configure_win.RedList[11]), "G": int(self.configure_win.GreenList[11]), "B": int(self.configure_win.BlueList[11])}
-            RGB_data['12'] = {"R": int(self.configure_win.RedList[12]), "G": int(self.configure_win.GreenList[12]), "B": int(self.configure_win.BlueList[12])}
-            RGB_data['13'] = {"R": int(self.configure_win.RedList[13]), "G": int(self.configure_win.GreenList[13]), "B": int(self.configure_win.BlueList[13])}
-            RGB_data['14'] = {"R": int(self.configure_win.RedList[14]), "G": int(self.configure_win.GreenList[14]), "B": int(self.configure_win.BlueList[14])}
-            RGB_data['15'] = {"R": int(self.configure_win.RedList[15]), "G": int(self.configure_win.GreenList[15]), "B": int(self.configure_win.BlueList[15])}
-            RGB_data['16'] = {"R": int(self.configure_win.RedList[16]), "G": int(self.configure_win.GreenList[16]), "B": int(self.configure_win.BlueList[16])}
-            RGB_data['17'] = {"R": int(self.configure_win.RedList[17]), "G": int(self.configure_win.GreenList[17]), "B": int(self.configure_win.BlueList[17])}
-            RGB_data['18'] = {"R": int(self.configure_win.RedList[18]), "G": int(self.configure_win.GreenList[18]), "B": int(self.configure_win.BlueList[18])}
-            RGB_data['19'] = {"R": int(self.configure_win.RedList[19]), "G": int(self.configure_win.GreenList[19]), "B": int(self.configure_win.BlueList[19])}
-            RGB_data['20'] = {"R": int(self.configure_win.RedList[20]), "G": int(self.configure_win.GreenList[20]), "B": int(self.configure_win.BlueList[20])}
-            RGB_data['21'] = {"R": int(self.configure_win.RedList[21]), "G": int(self.configure_win.GreenList[21]), "B": int(self.configure_win.BlueList[21])}
-            RGB_data['22'] = {"R": int(self.configure_win.RedList[22]), "G": int(self.configure_win.GreenList[22]), "B": int(self.configure_win.BlueList[22])}
-            RGB_data['23'] = {"R": int(self.configure_win.RedList[23]), "G": int(self.configure_win.GreenList[23]), "B": int(self.configure_win.BlueList[23])}
+            RGB_data['0'] = {"R": int(self.createfile_win.RedList[0]), "G": int(self.createfile_win.GreenList[0]), "B": int(self.createfile_win.BlueList[0])}
+            RGB_data['1'] = {"R": int(self.createfile_win.RedList[1]), "G": int(self.createfile_win.GreenList[1]), "B": int(self.createfile_win.BlueList[1])}
+            RGB_data['2'] = {"R": int(self.createfile_win.RedList[2]), "G": int(self.createfile_win.GreenList[2]), "B": int(self.createfile_win.BlueList[2])}
+            RGB_data['3'] = {"R": int(self.createfile_win.RedList[3]), "G": int(self.createfile_win.GreenList[3]), "B": int(self.createfile_win.BlueList[3])}
+            RGB_data['4'] = {"R": int(self.createfile_win.RedList[4]), "G": int(self.createfile_win.GreenList[4]), "B": int(self.createfile_win.BlueList[4])}
+            RGB_data['5'] = {"R": int(self.createfile_win.RedList[5]), "G": int(self.createfile_win.GreenList[5]), "B": int(self.createfile_win.BlueList[5])}
+            RGB_data['6'] = {"R": int(self.createfile_win.RedList[6]), "G": int(self.createfile_win.GreenList[6]), "B": int(self.createfile_win.BlueList[6])}
+            RGB_data['7'] = {"R": int(self.createfile_win.RedList[7]), "G": int(self.createfile_win.GreenList[7]), "B": int(self.createfile_win.BlueList[7])}
+            RGB_data['8'] = {"R": int(self.createfile_win.RedList[8]), "G": int(self.createfile_win.GreenList[8]), "B": int(self.createfile_win.BlueList[8])}
+            RGB_data['9'] = {"R": int(self.createfile_win.RedList[9]), "G": int(self.createfile_win.GreenList[9]), "B": int(self.createfile_win.BlueList[9])}
+            RGB_data['10'] = {"R": int(self.createfile_win.RedList[10]), "G": int(self.createfile_win.GreenList[10]), "B": int(self.createfile_win.BlueList[10])}
+            RGB_data['11'] = {"R": int(self.createfile_win.RedList[11]), "G": int(self.createfile_win.GreenList[11]), "B": int(self.createfile_win.BlueList[11])}
+            RGB_data['12'] = {"R": int(self.createfile_win.RedList[12]), "G": int(self.createfile_win.GreenList[12]), "B": int(self.createfile_win.BlueList[12])}
+            RGB_data['13'] = {"R": int(self.createfile_win.RedList[13]), "G": int(self.createfile_win.GreenList[13]), "B": int(self.createfile_win.BlueList[13])}
+            RGB_data['14'] = {"R": int(self.createfile_win.RedList[14]), "G": int(self.createfile_win.GreenList[14]), "B": int(self.createfile_win.BlueList[14])}
+            RGB_data['15'] = {"R": int(self.createfile_win.RedList[15]), "G": int(self.createfile_win.GreenList[15]), "B": int(self.createfile_win.BlueList[15])}
+            RGB_data['16'] = {"R": int(self.createfile_win.RedList[16]), "G": int(self.createfile_win.GreenList[16]), "B": int(self.createfile_win.BlueList[16])}
+            RGB_data['17'] = {"R": int(self.createfile_win.RedList[17]), "G": int(self.createfile_win.GreenList[17]), "B": int(self.createfile_win.BlueList[17])}
+            RGB_data['18'] = {"R": int(self.createfile_win.RedList[18]), "G": int(self.createfile_win.GreenList[18]), "B": int(self.createfile_win.BlueList[18])}
+            RGB_data['19'] = {"R": int(self.createfile_win.RedList[19]), "G": int(self.createfile_win.GreenList[19]), "B": int(self.createfile_win.BlueList[19])}
+            RGB_data['20'] = {"R": int(self.createfile_win.RedList[20]), "G": int(self.createfile_win.GreenList[20]), "B": int(self.createfile_win.BlueList[20])}
+            RGB_data['21'] = {"R": int(self.createfile_win.RedList[21]), "G": int(self.createfile_win.GreenList[21]), "B": int(self.createfile_win.BlueList[21])}
+            RGB_data['22'] = {"R": int(self.createfile_win.RedList[22]), "G": int(self.createfile_win.GreenList[22]), "B": int(self.createfile_win.BlueList[22])}
+            RGB_data['23'] = {"R": int(self.createfile_win.RedList[23]), "G": int(self.createfile_win.GreenList[23]), "B": int(self.createfile_win.BlueList[23])}
 
 
             UV_data = {}
-            UV_data['0'] = int(self.configure_win.UVList[0])
-            UV_data['1'] = int(self.configure_win.UVList[1])
-            UV_data['2'] = int(self.configure_win.UVList[2])
-            UV_data['3'] = int(self.configure_win.UVList[3])
-            UV_data['4'] = int(self.configure_win.UVList[4])
-            UV_data['5'] = int(self.configure_win.UVList[5])
-            UV_data['6'] = int(self.configure_win.UVList[6])
-            UV_data['7'] = int(self.configure_win.UVList[7])
-            UV_data['8'] = int(self.configure_win.UVList[8])
-            UV_data['9'] = int(self.configure_win.UVList[9])
-            UV_data['10'] = int(self.configure_win.UVList[10])
-            UV_data['11'] = int(self.configure_win.UVList[11])
-            UV_data['12'] = int(self.configure_win.UVList[12])
-            UV_data['13'] = int(self.configure_win.UVList[13])
-            UV_data['14'] = int(self.configure_win.UVList[14])
-            UV_data['15'] = int(self.configure_win.UVList[15])
-            UV_data['16'] = int(self.configure_win.UVList[16])
-            UV_data['17'] = int(self.configure_win.UVList[17])
-            UV_data['18'] = int(self.configure_win.UVList[18])
-            UV_data['19'] = int(self.configure_win.UVList[19])
-            UV_data['20'] = int(self.configure_win.UVList[20])
-            UV_data['21'] = int(self.configure_win.UVList[21])
-            UV_data['22'] = int(self.configure_win.UVList[22])
-            UV_data['23'] = int(self.configure_win.UVList[23])
+            UV_data['0'] = int(self.createfile_win.UVList[0])
+            UV_data['1'] = int(self.createfile_win.UVList[1])
+            UV_data['2'] = int(self.createfile_win.UVList[2])
+            UV_data['3'] = int(self.createfile_win.UVList[3])
+            UV_data['4'] = int(self.createfile_win.UVList[4])
+            UV_data['5'] = int(self.createfile_win.UVList[5])
+            UV_data['6'] = int(self.createfile_win.UVList[6])
+            UV_data['7'] = int(self.createfile_win.UVList[7])
+            UV_data['8'] = int(self.createfile_win.UVList[8])
+            UV_data['9'] = int(self.createfile_win.UVList[9])
+            UV_data['10'] = int(self.createfile_win.UVList[10])
+            UV_data['11'] = int(self.createfile_win.UVList[11])
+            UV_data['12'] = int(self.createfile_win.UVList[12])
+            UV_data['13'] = int(self.createfile_win.UVList[13])
+            UV_data['14'] = int(self.createfile_win.UVList[14])
+            UV_data['15'] = int(self.createfile_win.UVList[15])
+            UV_data['16'] = int(self.createfile_win.UVList[16])
+            UV_data['17'] = int(self.createfile_win.UVList[17])
+            UV_data['18'] = int(self.createfile_win.UVList[18])
+            UV_data['19'] = int(self.createfile_win.UVList[19])
+            UV_data['20'] = int(self.createfile_win.UVList[20])
+            UV_data['21'] = int(self.createfile_win.UVList[21])
+            UV_data['22'] = int(self.createfile_win.UVList[22])
+            UV_data['23'] = int(self.createfile_win.UVList[23])
 
 
             data = {}
-            data['Temperature_Low'] = int(self.configure_win.TemperatureList[0])
-            data['Temperature_High'] = int(self.configure_win.TemperatureList[1])
-            data['Moisture_Low'] = int(self.configure_win.SoilMoistureList[0])
-            data['Moisture_High'] = int(self.configure_win.SoilMoistureList[1])
-            data['Humidity_Low'] = int(self.configure_win.HumidityList[0])
-            data['Humidity_High'] = int(self.configure_win.HumidityList[1])
-            data['VOC_Low'] = int(self.configure_win.VOCList[0])
-            data['VOC_High'] = int(self.configure_win.VOCList[1])
+            data['Temperature_Low'] = int(self.createfile_win.TemperatureList[0])
+            data['Temperature_High'] = int(self.createfile_win.TemperatureList[1])
+            data['Moisture_Low'] = int(self.createfile_win.SoilMoistureList[0])
+            data['Moisture_High'] = int(self.createfile_win.SoilMoistureList[1])
+            data['Humidity_Low'] = int(self.createfile_win.HumidityList[0])
+            data['Humidity_High'] = int(self.createfile_win.HumidityList[1])
+            data['VOC_Low'] = int(self.createfile_win.VOCList[0])
+            data['VOC_High'] = int(self.createfile_win.VOCList[1])
             data['RGB_data'] = RGB_data
             data['UV_data'] = UV_data
             data['Soak_Minutes'] = 0.5
@@ -335,223 +335,223 @@ class GrowSpaceGUI:
         #Setting lists to equal entries
 
 
-        self.configure_win.SoilMoistureList = []
-        self.configure_win.TemperatureList = []
-        self.configure_win.HumidityList = []
-        self.configure_win.VOCList = []
-        self.configure_win.RedList = []
-        self.configure_win.GreenList = []
-        self.configure_win.BlueList = []
-        self.configure_win.UVList = []
+        self.createfile_win.SoilMoistureList = []
+        self.createfile_win.TemperatureList = []
+        self.createfile_win.HumidityList = []
+        self.createfile_win.VOCList = []
+        self.createfile_win.RedList = []
+        self.createfile_win.GreenList = []
+        self.createfile_win.BlueList = []
+        self.createfile_win.UVList = []
 
 
-        self.configure_win.SoilMoistureList.append(self.configure_win.SoilMoistureMinEntry.get())
-        self.configure_win.SoilMoistureList.append(self.configure_win.SoilMoistureMaxEntry.get())
-        self.configure_win.TemperatureList.append(self.configure_win.TemperatureMinEntry.get())
-        self.configure_win.TemperatureList.append(self.configure_win.TemperatureMaxEntry.get())
-        self.configure_win.HumidityList.append(self.configure_win.HumidityMinEntry.get())
-        self.configure_win.HumidityList.append(self.configure_win.HumidityMaxEntry.get())
-        self.configure_win.VOCList.append(self.configure_win.VOCMinEntry.get())
-        self.configure_win.VOCList.append(self.configure_win.VOCMaxEntry.get())
+        self.createfile_win.SoilMoistureList.append(self.createfile_win.SoilMoistureMinEntry.get())
+        self.createfile_win.SoilMoistureList.append(self.createfile_win.SoilMoistureMaxEntry.get())
+        self.createfile_win.TemperatureList.append(self.createfile_win.TemperatureMinEntry.get())
+        self.createfile_win.TemperatureList.append(self.createfile_win.TemperatureMaxEntry.get())
+        self.createfile_win.HumidityList.append(self.createfile_win.HumidityMinEntry.get())
+        self.createfile_win.HumidityList.append(self.createfile_win.HumidityMaxEntry.get())
+        self.createfile_win.VOCList.append(self.createfile_win.VOCMinEntry.get())
+        self.createfile_win.VOCList.append(self.createfile_win.VOCMaxEntry.get())
 
-        self.configure_win.UVList.append(self.configure_win.UVEntry00.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry01.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry02.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry03.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry04.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry05.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry06.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry07.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry08.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry09.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry10.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry11.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry12.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry13.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry14.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry15.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry16.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry17.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry18.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry19.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry20.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry21.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry22.get())
-        self.configure_win.UVList.append(self.configure_win.UVEntry23.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry00.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry01.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry02.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry03.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry04.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry05.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry06.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry07.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry08.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry09.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry10.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry11.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry12.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry13.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry14.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry15.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry16.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry17.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry18.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry19.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry20.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry21.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry22.get())
+        self.createfile_win.UVList.append(self.createfile_win.UVEntry23.get())
 
-        self.configure_win.RedList.append(self.configure_win.RedEntry00.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry01.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry02.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry03.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry04.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry05.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry06.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry07.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry08.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry09.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry10.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry11.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry12.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry13.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry14.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry15.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry16.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry17.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry18.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry19.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry20.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry21.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry22.get())
-        self.configure_win.RedList.append(self.configure_win.RedEntry23.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry00.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry01.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry02.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry03.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry04.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry05.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry06.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry07.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry08.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry09.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry10.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry11.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry12.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry13.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry14.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry15.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry16.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry17.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry18.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry19.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry20.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry21.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry22.get())
+        self.createfile_win.RedList.append(self.createfile_win.RedEntry23.get())
 
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry00.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry01.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry02.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry03.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry04.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry05.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry06.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry07.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry08.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry09.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry10.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry11.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry12.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry13.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry14.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry15.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry16.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry17.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry18.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry19.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry20.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry21.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry22.get())
-        self.configure_win.GreenList.append(self.configure_win.GreenEntry23.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry00.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry01.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry02.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry03.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry04.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry05.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry06.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry07.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry08.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry09.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry10.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry11.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry12.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry13.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry14.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry15.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry16.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry17.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry18.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry19.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry20.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry21.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry22.get())
+        self.createfile_win.GreenList.append(self.createfile_win.GreenEntry23.get())
 
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry00.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry01.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry02.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry03.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry04.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry05.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry06.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry07.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry08.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry09.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry10.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry11.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry12.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry13.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry14.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry15.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry16.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry17.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry18.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry19.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry20.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry21.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry22.get())
-        self.configure_win.BlueList.append(self.configure_win.BlueEntry23.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry00.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry01.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry02.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry03.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry04.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry05.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry06.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry07.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry08.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry09.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry10.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry11.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry12.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry13.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry14.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry15.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry16.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry17.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry18.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry19.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry20.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry21.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry22.get())
+        self.createfile_win.BlueList.append(self.createfile_win.BlueEntry23.get())
 
 
 
         #Ensuring all values are correctly inputted
 
-        for i in self.configure_win.SoilMoistureList:
+        for i in self.createfile_win.SoilMoistureList:
             if i == '' or i.isdigit() == False:
                 messagebox.showerror(title="Error - Soil Moisture Values", message="Please enter an integer from 0 to 100 for the soil moisture thresholds", icon="error")
                 return
 
-        if any( i > 100 for i in list(map(int, self.configure_win.SoilMoistureList)))  or any( i < 0 for i in list(map(int, self.configure_win.SoilMoistureList))):
+        if any( i > 100 for i in list(map(int, self.createfile_win.SoilMoistureList)))  or any( i < 0 for i in list(map(int, self.createfile_win.SoilMoistureList))):
             messagebox.showerror(title="Error - Soil Moisture Values", message="Please enter an integer from 0 to 100 for the soil moisture thresholds", icon="error")
             return
 
-        if self.configure_win.SoilMoistureList[0] >= self.configure_win.SoilMoistureList[1]:
+        if self.createfile_win.SoilMoistureList[0] >= self.createfile_win.SoilMoistureList[1]:
             messagebox.showerror(title="Error - Soil Moisture Values", message="Please ensure the soil moisture maximum is greater than the soil moisture minimum", icon="error")
             return
 
 
-        for i in self.configure_win.TemperatureList:
+        for i in self.createfile_win.TemperatureList:
             if i == '' or i.isdigit() == False:
                 messagebox.showerror(title="Error - Temperature Values", message="Please enter a positive integer for the temperature thresholds", icon="error")
                 return
 
-        if  any( i < 0 for i in list(map(int, self.configure_win.TemperatureList))) < 0:
+        if  any( i < 0 for i in list(map(int, self.createfile_win.TemperatureList))) < 0:
             messagebox.showerror(title="Error - Temperature Values", message="Please enter a positive integer for the temperature thresholds", icon="error")
             return
 
-        if self.configure_win.TemperatureList[0] >= self.configure_win.TemperatureList[1]:
+        if self.createfile_win.TemperatureList[0] >= self.createfile_win.TemperatureList[1]:
             messagebox.showerror(title="Error - Temperature Values", message="Please ensure the temperature maximum is greater than the temperature minimum", icon="error")
             return
 
 
-        for i in self.configure_win.HumidityList:
+        for i in self.createfile_win.HumidityList:
             if i == '' or i.isdigit() == False:
                 messagebox.showerror(title="Error - Humidity Values",message="Please enter an integer from 0 to 100 for the humidity thresholds", icon="error")
                 return
 
-        if any(i > 100 for i in list(map(int, self.configure_win.HumidityList))) or any( i < 0 for i in list(map(int, self.configure_win.HumidityList))):
+        if any(i > 100 for i in list(map(int, self.createfile_win.HumidityList))) or any( i < 0 for i in list(map(int, self.createfile_win.HumidityList))):
             messagebox.showerror(title="Error - Humidity Values", message="Please enter an integer from 0 to 100 for the humidity thresholds", icon="error")
             return
 
-        if self.configure_win.HumidityList[0] >= self.configure_win.HumidityList[1]:
+        if self.createfile_win.HumidityList[0] >= self.createfile_win.HumidityList[1]:
             messagebox.showerror(title="Error - Humidity Values", message="Please ensure the humidity maximum is greater than the humidity minimum", icon="error")
             return
 
-        for i in self.configure_win.VOCList:
+        for i in self.createfile_win.VOCList:
             if i == '' or i.isdigit() == False:
                 messagebox.showerror(title="Error - VOC Values", message="Please enter a positive integer for the VOC thresholds", icon="error")
                 return
 
-        if  any(i < 0 for i in list(map(int, self.configure_win.VOCList))):
+        if  any(i < 0 for i in list(map(int, self.createfile_win.VOCList))):
             messagebox.showerror(title="Error - VOC Values", message="Please enter a positive integer for the VOC thresholds", icon="error")
             return
 
-        if self.configure_win.VOCList[0] >= self.configure_win.VOCList[1]:
+        if self.createfile_win.VOCList[0] >= self.createfile_win.VOCList[1]:
             messagebox.showerror(title="Error - VOC Values", message="Please ensure the VOC maximum is greater than the VOC minimum", icon="error")
             return
 
-        for i in self.configure_win.UVList:
+        for i in self.createfile_win.UVList:
             if i == '' or i.isdigit() == False:
                 messagebox.showerror(title="Error - UV Values", message="Please ensure the UV values are 0 (off) or 1 (on)", icon="error")
                 return
 
-        if any(i > 1 for i in list(map(int, self.configure_win.UVList))) or any(i < 0 for i in list(map(int, self.configure_win.UVList))):
+        if any(i > 1 for i in list(map(int, self.createfile_win.UVList))) or any(i < 0 for i in list(map(int, self.createfile_win.UVList))):
             messagebox.showerror(title="Error - UV Values", message="Please ensure the UV values are 0 (off) or 1 (on)", icon="error")
             return
 
-        for i in self.configure_win.RedList:
+        for i in self.createfile_win.RedList:
             if i == '' or i.isdigit() == False:
                 messagebox.showerror(title="Error - Red LED Values",message="Please enter an integer from 0 to 100 for the red LED intensities", icon="error")
                 return
 
-        if any( i > 100 for i in list(map(int, self.configure_win.RedList))) or any(i < 0 for i in list(map(int, self.configure_win.RedList))):
+        if any( i > 100 for i in list(map(int, self.createfile_win.RedList))) or any(i < 0 for i in list(map(int, self.createfile_win.RedList))):
             messagebox.showerror(title="Error - Red LED Values",message="Please enter an integer from 0 to 100 for the red LED intensities", icon="error")
             return
 
-        for i in self.configure_win.GreenList:
+        for i in self.createfile_win.GreenList:
             if i == '' or i.isdigit() == False:
                 messagebox.showerror(title="Error - Green LED Values",message="Please enter an integer from 0 to 100 for the green LED intensities", icon="error")
                 return
 
-        if any(i > 100 for i in list(map(int, self.configure_win.GreenList))) or any(i < 0 for i in list(map(int, self.configure_win.GreenList))):
+        if any(i > 100 for i in list(map(int, self.createfile_win.GreenList))) or any(i < 0 for i in list(map(int, self.createfile_win.GreenList))):
             messagebox.showerror(title="Error - Green LED Values", message="Please enter an integer from 0 to 100 for the green LED intensities", icon="error")
             return
 
-        for i in self.configure_win.BlueList:
+        for i in self.createfile_win.BlueList:
             if i == '' or i.isdigit() == False:
                 messagebox.showerror(title="Error - Blue LED Values",message="Please enter an integer from 0 to 100 for the blue LED intensities", icon="error")
                 return
 
-        if any(i > 100 for i in list(map(int, self.configure_win.BlueList))) or any(i < 0 for i in list(map(int, self.configure_win.BlueList))):
+        if any(i > 100 for i in list(map(int, self.createfile_win.BlueList))) or any(i < 0 for i in list(map(int, self.createfile_win.BlueList))):
             messagebox.showerror(title="Error - Blue LED Values",message="Please enter an integer from 0 to 100 for the blue LED intensities", icon="error")
             return
 
         ##### Verification Box ######
-        self.configure_win.verify = messagebox.askyesno(title="Verify your settings", message= "Are you sure you want to save the above configuration settings?")
+        self.createfile_win.verify = messagebox.askyesno(title="Verify your settings", message= "Are you sure you want to save the above configuration settings?")
 
-        if self.configure_win.verify == True:
+        if self.createfile_win.verify == True:
             self.save_file()
 
         else:
@@ -560,363 +560,363 @@ class GrowSpaceGUI:
 
 
 
-    def configure_window(self):
+    def createfile_window(self):
 
 
         def on_closing_configure():
             try:
-                self.configure_win.destroy()
-                self.configure_window_open = False
+                self.createfile_win.destroy()
+                self.createfile_window_open = False
             except Exception as e:
                 self.logger.error(str(e))
 
 
 
-        if not self.configure_window_open:
+        if not self.createfile_window_open:
 
-            self.configure_win = Tk()
-            self.configure_window_open = True
-            self.configure_win.title("Configure System Parameters")
-            self.configure_win.configure(bg="Black")
-            self.configure_win.geometry("1024x600")
-            self.configure_win.protocol("WM_DELETE_WINDOW", on_closing_configure)
+            self.createfile_win = Tk()
+            self.createfile_window_open = True
+            self.createfile_win.title("Create new settings file")
+            self.createfile_win.configure(bg="Black")
+            self.createfile_win.geometry("1024x600")
+            self.createfile_win.protocol("WM_DELETE_WINDOW", on_closing_configure)
 
 
-            self.configure_win.SoilMoisture_thresholds = [StringVar(), StringVar()]
-            self.configure_win.Temperature_thresholds = [StringVar(), StringVar()]
-            self.configure_win.Humidity_thresholds = [StringVar(), StringVar()]
-            self.configure_win.VOC_thresholds = [StringVar(), StringVar()]
-            self.configure_win.UV_settings = [StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(),  StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar()]
-            self.configure_win.Red_settings = [StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar()]
-            self.configure_win.Green_settings = [StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar()]
-            self.configure_win.Blue_settings = [StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar()]
+            self.createfile_win.SoilMoisture_thresholds = [StringVar(), StringVar()]
+            self.createfile_win.Temperature_thresholds = [StringVar(), StringVar()]
+            self.createfile_win.Humidity_thresholds = [StringVar(), StringVar()]
+            self.createfile_win.VOC_thresholds = [StringVar(), StringVar()]
+            self.createfile_win.UV_settings = [StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(),  StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar()]
+            self.createfile_win.Red_settings = [StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar()]
+            self.createfile_win.Green_settings = [StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar()]
+            self.createfile_win.Blue_settings = [StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar(), StringVar()]
 
-            self.configure_win.GrowSpaceTitle = Label(self.configure_win, bg="Black", fg="White", text="Grow Space", font="Helvetica 18 bold italic")
+            self.createfile_win.GrowSpaceTitle = Label(self.createfile_win, bg="Black", fg="White", text="Grow Space", font="Helvetica 18 bold italic")
 
 
             #Environmental Parameter Labels and Entries
 
 
-            self.configure_win.EnvironmentalParametersHeader = Label(self.configure_win, bg="Black", fg="White", text="Environmental Parameters", font="Helvetica 18 bold")
-            self.configure_win.SoilMoistureConfigureLabel = Label(self.configure_win, bg="Black", fg="White", text="Soil Moisture [%]", font="Helvetica 18")
-            self.configure_win.TemperatureConfigureLabel = Label(self.configure_win, bg="Black", fg="White", text="Temperature [°C]", font="Helvetica 18")
-            self.configure_win.HumidityConfigureLabel = Label(self.configure_win, bg="Black", fg="White", text="Humidity [%]", font="Helvetica 18")
-            self.configure_win.VOCConfigureLabel = Label(self.configure_win, bg="Black", fg="White", text="VOC [kΩ]", font="Helvetica 18")
-            self.configure_win.MinimumValue = Label(self.configure_win, bg="Black", fg="White", text="Minimum", font="Helvetica 18")
-            self.configure_win.MaximumValue = Label(self.configure_win, bg="Black", fg="White", text="Maximum", font="Helvetica 18")
+            self.createfile_win.EnvironmentalParametersHeader = Label(self.createfile_win, bg="Black", fg="White", text="Environmental Parameters", font="Helvetica 18 bold")
+            self.createfile_win.SoilMoistureConfigureLabel = Label(self.createfile_win, bg="Black", fg="White", text="Soil Moisture [%]", font="Helvetica 18")
+            self.createfile_win.TemperatureConfigureLabel = Label(self.createfile_win, bg="Black", fg="White", text="Temperature [°C]", font="Helvetica 18")
+            self.createfile_win.HumidityConfigureLabel = Label(self.createfile_win, bg="Black", fg="White", text="Humidity [%]", font="Helvetica 18")
+            self.createfile_win.VOCConfigureLabel = Label(self.createfile_win, bg="Black", fg="White", text="VOC [kΩ]", font="Helvetica 18")
+            self.createfile_win.MinimumValue = Label(self.createfile_win, bg="Black", fg="White", text="Minimum", font="Helvetica 18")
+            self.createfile_win.MaximumValue = Label(self.createfile_win, bg="Black", fg="White", text="Maximum", font="Helvetica 18")
 
-            self.configure_win.SoilMoistureMinEntry = Entry(self.configure_win, width = 4, bg="Gray85",textvariable=self.configure_win.SoilMoisture_thresholds[0])
-            self.configure_win.SoilMoistureMaxEntry = Entry(self.configure_win, width = 4, bg="Gray85",textvariable=self.configure_win.SoilMoisture_thresholds[1])
-            self.configure_win.TemperatureMinEntry = Entry(self.configure_win, width = 4, bg="Gray85",textvariable=self.configure_win.Temperature_thresholds[0])
-            self.configure_win.TemperatureMaxEntry = Entry(self.configure_win, width = 4, bg="Gray85",textvariable=self.configure_win.Temperature_thresholds[1])
-            self.configure_win.HumidityMinEntry = Entry(self.configure_win, width = 4, bg="Gray85",textvariable=self.configure_win.Humidity_thresholds[0])
-            self.configure_win.HumidityMaxEntry = Entry(self.configure_win, width = 4, bg="Gray85",textvariable=self.configure_win.Humidity_thresholds[1])
-            self.configure_win.VOCMinEntry = Entry(self.configure_win, width = 4, bg="Gray85",textvariable=self.configure_win.VOC_thresholds[0])
-            self.configure_win.VOCMaxEntry = Entry(self.configure_win, width = 4, bg="Gray85",textvariable=self.configure_win.VOC_thresholds[1])
+            self.createfile_win.SoilMoistureMinEntry = Entry(self.createfile_win, width = 4, bg="Gray85",textvariable=self.createfile_win.SoilMoisture_thresholds[0])
+            self.createfile_win.SoilMoistureMaxEntry = Entry(self.createfile_win, width = 4, bg="Gray85",textvariable=self.createfile_win.SoilMoisture_thresholds[1])
+            self.createfile_win.TemperatureMinEntry = Entry(self.createfile_win, width = 4, bg="Gray85",textvariable=self.createfile_win.Temperature_thresholds[0])
+            self.createfile_win.TemperatureMaxEntry = Entry(self.createfile_win, width = 4, bg="Gray85",textvariable=self.createfile_win.Temperature_thresholds[1])
+            self.createfile_win.HumidityMinEntry = Entry(self.createfile_win, width = 4, bg="Gray85",textvariable=self.createfile_win.Humidity_thresholds[0])
+            self.createfile_win.HumidityMaxEntry = Entry(self.createfile_win, width = 4, bg="Gray85",textvariable=self.createfile_win.Humidity_thresholds[1])
+            self.createfile_win.VOCMinEntry = Entry(self.createfile_win, width = 4, bg="Gray85",textvariable=self.createfile_win.VOC_thresholds[0])
+            self.createfile_win.VOCMaxEntry = Entry(self.createfile_win, width = 4, bg="Gray85",textvariable=self.createfile_win.VOC_thresholds[1])
 
             # Lighting Labels and Entries
 
-            self.configure_win.LightingParametersHeader = Label(self.configure_win, bg="Black", fg="White", text="Lighting Intensities", font="Helvetica 18 bold")
-            self.configure_win.HourLabel = Label(self.configure_win, bg="Black", fg="White", text="Hour", font="Helvetica 18 bold")
-            self.configure_win.UVConfigureLabel = Label(self.configure_win, bg="Black", fg="MediumPurple1", text="UV", font="Helvetica 18 bold")
-            self.configure_win.RedConfigureLabel = Label(self.configure_win, bg="Black", fg="Red", text="R", font="Helvetica 18 bold")
-            self.configure_win.GreenConfigureLabel = Label(self.configure_win, bg="Black", fg="Green2", text="G", font="Helvetica 18 bold")
-            self.configure_win.BlueConfigureLabel = Label(self.configure_win, bg="Black", fg="Deep Sky Blue", text="B", font="Helvetica 18 bold")
+            self.createfile_win.LightingParametersHeader = Label(self.createfile_win, bg="Black", fg="White", text="Lighting Intensities", font="Helvetica 18 bold")
+            self.createfile_win.HourLabel = Label(self.createfile_win, bg="Black", fg="White", text="Hour", font="Helvetica 18 bold")
+            self.createfile_win.UVConfigureLabel = Label(self.createfile_win, bg="Black", fg="MediumPurple1", text="UV", font="Helvetica 18 bold")
+            self.createfile_win.RedConfigureLabel = Label(self.createfile_win, bg="Black", fg="Red", text="R", font="Helvetica 18 bold")
+            self.createfile_win.GreenConfigureLabel = Label(self.createfile_win, bg="Black", fg="Green2", text="G", font="Helvetica 18 bold")
+            self.createfile_win.BlueConfigureLabel = Label(self.createfile_win, bg="Black", fg="Deep Sky Blue", text="B", font="Helvetica 18 bold")
 
-            self.configure_win.Hour00Label = Label(self.configure_win, bg="Black", fg="White", text="00", font="Helvetica 18")
-            self.configure_win.Hour01Label = Label(self.configure_win, bg="Black", fg="White", text="01", font="Helvetica 18")
-            self.configure_win.Hour02Label = Label(self.configure_win, bg="Black", fg="White", text="02", font="Helvetica 18")
-            self.configure_win.Hour03Label = Label(self.configure_win, bg="Black", fg="White", text="03", font="Helvetica 18")
-            self.configure_win.Hour04Label = Label(self.configure_win, bg="Black", fg="White", text="04", font="Helvetica 18")
-            self.configure_win.Hour05Label = Label(self.configure_win, bg="Black", fg="White", text="05", font="Helvetica 18")
-            self.configure_win.Hour06Label = Label(self.configure_win, bg="Black", fg="White", text="06", font="Helvetica 18")
-            self.configure_win.Hour07Label = Label(self.configure_win, bg="Black", fg="White", text="07", font="Helvetica 18")
-            self.configure_win.Hour08Label = Label(self.configure_win, bg="Black", fg="White", text="08", font="Helvetica 18")
-            self.configure_win.Hour09Label = Label(self.configure_win, bg="Black", fg="White", text="09", font="Helvetica 18")
-            self.configure_win.Hour10Label = Label(self.configure_win, bg="Black", fg="White", text="10", font="Helvetica 18")
-            self.configure_win.Hour11Label = Label(self.configure_win, bg="Black", fg="White", text="11", font="Helvetica 18")
-            self.configure_win.Hour12Label = Label(self.configure_win, bg="Black", fg="White", text="12", font="Helvetica 18")
-            self.configure_win.Hour13Label = Label(self.configure_win, bg="Black", fg="White", text="13", font="Helvetica 18")
-            self.configure_win.Hour14Label = Label(self.configure_win, bg="Black", fg="White", text="14", font="Helvetica 18")
-            self.configure_win.Hour15Label = Label(self.configure_win, bg="Black", fg="White", text="15", font="Helvetica 18")
-            self.configure_win.Hour16Label = Label(self.configure_win, bg="Black", fg="White", text="16", font="Helvetica 18")
-            self.configure_win.Hour17Label = Label(self.configure_win, bg="Black", fg="White", text="17", font="Helvetica 18")
-            self.configure_win.Hour18Label = Label(self.configure_win, bg="Black", fg="White", text="18", font="Helvetica 18")
-            self.configure_win.Hour19Label = Label(self.configure_win, bg="Black", fg="White", text="19", font="Helvetica 18")
-            self.configure_win.Hour20Label = Label(self.configure_win, bg="Black", fg="White", text="20", font="Helvetica 18")
-            self.configure_win.Hour21Label = Label(self.configure_win, bg="Black", fg="White", text="21", font="Helvetica 18")
-            self.configure_win.Hour22Label = Label(self.configure_win, bg="Black", fg="White", text="22", font="Helvetica 18")
-            self.configure_win.Hour23Label = Label(self.configure_win, bg="Black", fg="White", text="23", font="Helvetica 18")
+            self.createfile_win.Hour00Label = Label(self.createfile_win, bg="Black", fg="White", text="00", font="Helvetica 18")
+            self.createfile_win.Hour01Label = Label(self.createfile_win, bg="Black", fg="White", text="01", font="Helvetica 18")
+            self.createfile_win.Hour02Label = Label(self.createfile_win, bg="Black", fg="White", text="02", font="Helvetica 18")
+            self.createfile_win.Hour03Label = Label(self.createfile_win, bg="Black", fg="White", text="03", font="Helvetica 18")
+            self.createfile_win.Hour04Label = Label(self.createfile_win, bg="Black", fg="White", text="04", font="Helvetica 18")
+            self.createfile_win.Hour05Label = Label(self.createfile_win, bg="Black", fg="White", text="05", font="Helvetica 18")
+            self.createfile_win.Hour06Label = Label(self.createfile_win, bg="Black", fg="White", text="06", font="Helvetica 18")
+            self.createfile_win.Hour07Label = Label(self.createfile_win, bg="Black", fg="White", text="07", font="Helvetica 18")
+            self.createfile_win.Hour08Label = Label(self.createfile_win, bg="Black", fg="White", text="08", font="Helvetica 18")
+            self.createfile_win.Hour09Label = Label(self.createfile_win, bg="Black", fg="White", text="09", font="Helvetica 18")
+            self.createfile_win.Hour10Label = Label(self.createfile_win, bg="Black", fg="White", text="10", font="Helvetica 18")
+            self.createfile_win.Hour11Label = Label(self.createfile_win, bg="Black", fg="White", text="11", font="Helvetica 18")
+            self.createfile_win.Hour12Label = Label(self.createfile_win, bg="Black", fg="White", text="12", font="Helvetica 18")
+            self.createfile_win.Hour13Label = Label(self.createfile_win, bg="Black", fg="White", text="13", font="Helvetica 18")
+            self.createfile_win.Hour14Label = Label(self.createfile_win, bg="Black", fg="White", text="14", font="Helvetica 18")
+            self.createfile_win.Hour15Label = Label(self.createfile_win, bg="Black", fg="White", text="15", font="Helvetica 18")
+            self.createfile_win.Hour16Label = Label(self.createfile_win, bg="Black", fg="White", text="16", font="Helvetica 18")
+            self.createfile_win.Hour17Label = Label(self.createfile_win, bg="Black", fg="White", text="17", font="Helvetica 18")
+            self.createfile_win.Hour18Label = Label(self.createfile_win, bg="Black", fg="White", text="18", font="Helvetica 18")
+            self.createfile_win.Hour19Label = Label(self.createfile_win, bg="Black", fg="White", text="19", font="Helvetica 18")
+            self.createfile_win.Hour20Label = Label(self.createfile_win, bg="Black", fg="White", text="20", font="Helvetica 18")
+            self.createfile_win.Hour21Label = Label(self.createfile_win, bg="Black", fg="White", text="21", font="Helvetica 18")
+            self.createfile_win.Hour22Label = Label(self.createfile_win, bg="Black", fg="White", text="22", font="Helvetica 18")
+            self.createfile_win.Hour23Label = Label(self.createfile_win, bg="Black", fg="White", text="23", font="Helvetica 18")
 
 
 
-            self.configure_win.UVEntry00 = Entry(self.configure_win, width = 3, bg="Gray85", textvariable=self.configure_win.UV_settings[0])
-            self.configure_win.UVEntry01 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[1])
-            self.configure_win.UVEntry02 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[2])
-            self.configure_win.UVEntry03 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[3])
-            self.configure_win.UVEntry04 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[4])
-            self.configure_win.UVEntry05 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[5])
-            self.configure_win.UVEntry06 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[6])
-            self.configure_win.UVEntry07 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[7])
-            self.configure_win.UVEntry08 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[8])
-            self.configure_win.UVEntry09 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[9])
-            self.configure_win.UVEntry10 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[10])
-            self.configure_win.UVEntry11 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[11])
-            self.configure_win.UVEntry12 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[12])
-            self.configure_win.UVEntry13 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[13])
-            self.configure_win.UVEntry14 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[14])
-            self.configure_win.UVEntry15 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[15])
-            self.configure_win.UVEntry16 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[16])
-            self.configure_win.UVEntry17 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[17])
-            self.configure_win.UVEntry18 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[18])
-            self.configure_win.UVEntry19 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[19])
-            self.configure_win.UVEntry20 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[20])
-            self.configure_win.UVEntry21 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[21])
-            self.configure_win.UVEntry22 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[22])
-            self.configure_win.UVEntry23 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.UV_settings[23])
+            self.createfile_win.UVEntry00 = Entry(self.createfile_win, width = 3, bg="Gray85", textvariable=self.createfile_win.UV_settings[0])
+            self.createfile_win.UVEntry01 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[1])
+            self.createfile_win.UVEntry02 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[2])
+            self.createfile_win.UVEntry03 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[3])
+            self.createfile_win.UVEntry04 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[4])
+            self.createfile_win.UVEntry05 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[5])
+            self.createfile_win.UVEntry06 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[6])
+            self.createfile_win.UVEntry07 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[7])
+            self.createfile_win.UVEntry08 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[8])
+            self.createfile_win.UVEntry09 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[9])
+            self.createfile_win.UVEntry10 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[10])
+            self.createfile_win.UVEntry11 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[11])
+            self.createfile_win.UVEntry12 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[12])
+            self.createfile_win.UVEntry13 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[13])
+            self.createfile_win.UVEntry14 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[14])
+            self.createfile_win.UVEntry15 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[15])
+            self.createfile_win.UVEntry16 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[16])
+            self.createfile_win.UVEntry17 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[17])
+            self.createfile_win.UVEntry18 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[18])
+            self.createfile_win.UVEntry19 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[19])
+            self.createfile_win.UVEntry20 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[20])
+            self.createfile_win.UVEntry21 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[21])
+            self.createfile_win.UVEntry22 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[22])
+            self.createfile_win.UVEntry23 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.UV_settings[23])
 
-            self.configure_win.RedEntry00 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[0])
-            self.configure_win.RedEntry01 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[1])
-            self.configure_win.RedEntry02 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[2])
-            self.configure_win.RedEntry03 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[3])
-            self.configure_win.RedEntry04 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[4])
-            self.configure_win.RedEntry05 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[5])
-            self.configure_win.RedEntry06 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[6])
-            self.configure_win.RedEntry07 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[7])
-            self.configure_win.RedEntry08 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[8])
-            self.configure_win.RedEntry09 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[9])
-            self.configure_win.RedEntry10 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[10])
-            self.configure_win.RedEntry11 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[11])
-            self.configure_win.RedEntry12 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[12])
-            self.configure_win.RedEntry13 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[13])
-            self.configure_win.RedEntry14 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[14])
-            self.configure_win.RedEntry15 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[15])
-            self.configure_win.RedEntry16 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[16])
-            self.configure_win.RedEntry17 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[17])
-            self.configure_win.RedEntry18 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[18])
-            self.configure_win.RedEntry19 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[19])
-            self.configure_win.RedEntry20 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[20])
-            self.configure_win.RedEntry21 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[21])
-            self.configure_win.RedEntry22 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[22])
-            self.configure_win.RedEntry23 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Red_settings[23])
+            self.createfile_win.RedEntry00 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[0])
+            self.createfile_win.RedEntry01 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[1])
+            self.createfile_win.RedEntry02 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[2])
+            self.createfile_win.RedEntry03 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[3])
+            self.createfile_win.RedEntry04 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[4])
+            self.createfile_win.RedEntry05 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[5])
+            self.createfile_win.RedEntry06 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[6])
+            self.createfile_win.RedEntry07 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[7])
+            self.createfile_win.RedEntry08 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[8])
+            self.createfile_win.RedEntry09 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[9])
+            self.createfile_win.RedEntry10 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[10])
+            self.createfile_win.RedEntry11 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[11])
+            self.createfile_win.RedEntry12 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[12])
+            self.createfile_win.RedEntry13 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[13])
+            self.createfile_win.RedEntry14 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[14])
+            self.createfile_win.RedEntry15 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[15])
+            self.createfile_win.RedEntry16 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[16])
+            self.createfile_win.RedEntry17 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[17])
+            self.createfile_win.RedEntry18 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[18])
+            self.createfile_win.RedEntry19 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[19])
+            self.createfile_win.RedEntry20 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[20])
+            self.createfile_win.RedEntry21 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[21])
+            self.createfile_win.RedEntry22 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[22])
+            self.createfile_win.RedEntry23 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Red_settings[23])
 
-            self.configure_win.GreenEntry00 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[0])
-            self.configure_win.GreenEntry01 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[1])
-            self.configure_win.GreenEntry02 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[2])
-            self.configure_win.GreenEntry03 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[3])
-            self.configure_win.GreenEntry04 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[4])
-            self.configure_win.GreenEntry05 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[5])
-            self.configure_win.GreenEntry06 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[6])
-            self.configure_win.GreenEntry07 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[7])
-            self.configure_win.GreenEntry08 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[8])
-            self.configure_win.GreenEntry09 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[9])
-            self.configure_win.GreenEntry10 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[10])
-            self.configure_win.GreenEntry11 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[11])
-            self.configure_win.GreenEntry12 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[12])
-            self.configure_win.GreenEntry13 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[13])
-            self.configure_win.GreenEntry14 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[14])
-            self.configure_win.GreenEntry15 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[15])
-            self.configure_win.GreenEntry16 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[16])
-            self.configure_win.GreenEntry17 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[17])
-            self.configure_win.GreenEntry18 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[18])
-            self.configure_win.GreenEntry19 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[19])
-            self.configure_win.GreenEntry20 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[20])
-            self.configure_win.GreenEntry21 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[21])
-            self.configure_win.GreenEntry22 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[22])
-            self.configure_win.GreenEntry23 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Green_settings[23])
+            self.createfile_win.GreenEntry00 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[0])
+            self.createfile_win.GreenEntry01 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[1])
+            self.createfile_win.GreenEntry02 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[2])
+            self.createfile_win.GreenEntry03 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[3])
+            self.createfile_win.GreenEntry04 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[4])
+            self.createfile_win.GreenEntry05 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[5])
+            self.createfile_win.GreenEntry06 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[6])
+            self.createfile_win.GreenEntry07 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[7])
+            self.createfile_win.GreenEntry08 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[8])
+            self.createfile_win.GreenEntry09 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[9])
+            self.createfile_win.GreenEntry10 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[10])
+            self.createfile_win.GreenEntry11 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[11])
+            self.createfile_win.GreenEntry12 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[12])
+            self.createfile_win.GreenEntry13 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[13])
+            self.createfile_win.GreenEntry14 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[14])
+            self.createfile_win.GreenEntry15 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[15])
+            self.createfile_win.GreenEntry16 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[16])
+            self.createfile_win.GreenEntry17 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[17])
+            self.createfile_win.GreenEntry18 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[18])
+            self.createfile_win.GreenEntry19 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[19])
+            self.createfile_win.GreenEntry20 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[20])
+            self.createfile_win.GreenEntry21 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[21])
+            self.createfile_win.GreenEntry22 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[22])
+            self.createfile_win.GreenEntry23 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Green_settings[23])
 
-            self.configure_win.BlueEntry00 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[0])
-            self.configure_win.BlueEntry01 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[1])
-            self.configure_win.BlueEntry02 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[2])
-            self.configure_win.BlueEntry03 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[3])
-            self.configure_win.BlueEntry04 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[4])
-            self.configure_win.BlueEntry05 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[5])
-            self.configure_win.BlueEntry06 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[6])
-            self.configure_win.BlueEntry07 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[7])
-            self.configure_win.BlueEntry08 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[8])
-            self.configure_win.BlueEntry09 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[9])
-            self.configure_win.BlueEntry10 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[10])
-            self.configure_win.BlueEntry11 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[11])
-            self.configure_win.BlueEntry12 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[12])
-            self.configure_win.BlueEntry13 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[13])
-            self.configure_win.BlueEntry14 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[14])
-            self.configure_win.BlueEntry15 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[15])
-            self.configure_win.BlueEntry16 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[16])
-            self.configure_win.BlueEntry17 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[17])
-            self.configure_win.BlueEntry18 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[18])
-            self.configure_win.BlueEntry19 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[19])
-            self.configure_win.BlueEntry20 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[20])
-            self.configure_win.BlueEntry21 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[21])
-            self.configure_win.BlueEntry22 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[22])
-            self.configure_win.BlueEntry23 = Entry(self.configure_win, width = 3, bg="Gray85",textvariable=self.configure_win.Blue_settings[23])
+            self.createfile_win.BlueEntry00 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[0])
+            self.createfile_win.BlueEntry01 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[1])
+            self.createfile_win.BlueEntry02 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[2])
+            self.createfile_win.BlueEntry03 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[3])
+            self.createfile_win.BlueEntry04 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[4])
+            self.createfile_win.BlueEntry05 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[5])
+            self.createfile_win.BlueEntry06 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[6])
+            self.createfile_win.BlueEntry07 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[7])
+            self.createfile_win.BlueEntry08 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[8])
+            self.createfile_win.BlueEntry09 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[9])
+            self.createfile_win.BlueEntry10 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[10])
+            self.createfile_win.BlueEntry11 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[11])
+            self.createfile_win.BlueEntry12 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[12])
+            self.createfile_win.BlueEntry13 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[13])
+            self.createfile_win.BlueEntry14 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[14])
+            self.createfile_win.BlueEntry15 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[15])
+            self.createfile_win.BlueEntry16 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[16])
+            self.createfile_win.BlueEntry17 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[17])
+            self.createfile_win.BlueEntry18 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[18])
+            self.createfile_win.BlueEntry19 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[19])
+            self.createfile_win.BlueEntry20 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[20])
+            self.createfile_win.BlueEntry21 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[21])
+            self.createfile_win.BlueEntry22 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[22])
+            self.createfile_win.BlueEntry23 = Entry(self.createfile_win, width = 3, bg="Gray85",textvariable=self.createfile_win.Blue_settings[23])
 
             #####################Defining Buttons###############################
 
-            self.configure_win.BackButton = Button(self.configure_win, bg="White", fg="Black", text="BACK", font="Helvetica 16 bold", command=on_closing_configure)
-            self.configure_win.SaveButton = Button(self.configure_win, bg="White", fg="Black", text="SAVE", font="Helvetica 16 bold", command=self.Saving_configuration)
+            self.createfile_win.BackButton = Button(self.createfile_win, bg="White", fg="Black", text="BACK", font="Helvetica 16 bold", command=on_closing_configure)
+            self.createfile_win.SaveButton = Button(self.createfile_win, bg="White", fg="Black", text="SAVE", font="Helvetica 16 bold", command=self.Saving_configuration)
             ####################Placing Widgets##################################
 
-            self.configure_win.GrowSpaceTitle.grid(row=1, column=0, columnspan=12, padx=(10,0), sticky=W)
+            self.createfile_win.GrowSpaceTitle.grid(row=1, column=0, columnspan=12, padx=(10,0), sticky=W)
 
-            self.configure_win.EnvironmentalParametersHeader.grid(row=4, column=0, columnspan=12, padx=(10,0), pady=(10,10), sticky=W)
+            self.createfile_win.EnvironmentalParametersHeader.grid(row=4, column=0, columnspan=12, padx=(10,0), pady=(10,10), sticky=W)
 
             # Placing Environmental Labels
-            self.configure_win.MinimumValue.grid(row=9, column=12, columnspan=4, padx=(20,0), sticky=W+E)
-            self.configure_win.MaximumValue.grid(row=9, column=17, columnspan=4, padx=(20,0), sticky=W+E)
-            self.configure_win.SoilMoistureConfigureLabel.grid(row=10, column=5, columnspan=6, sticky=E)
-            self.configure_win.TemperatureConfigureLabel.grid(row=11, column=5, columnspan=6, sticky=E)
-            self.configure_win.HumidityConfigureLabel.grid(row=12, column=5, columnspan=6, sticky=E)
-            self.configure_win.VOCConfigureLabel.grid(row=13, column=5, columnspan=6, pady=(0,10), sticky=E)
+            self.createfile_win.MinimumValue.grid(row=9, column=12, columnspan=4, padx=(20,0), sticky=W+E)
+            self.createfile_win.MaximumValue.grid(row=9, column=17, columnspan=4, padx=(20,0), sticky=W+E)
+            self.createfile_win.SoilMoistureConfigureLabel.grid(row=10, column=5, columnspan=6, sticky=E)
+            self.createfile_win.TemperatureConfigureLabel.grid(row=11, column=5, columnspan=6, sticky=E)
+            self.createfile_win.HumidityConfigureLabel.grid(row=12, column=5, columnspan=6, sticky=E)
+            self.createfile_win.VOCConfigureLabel.grid(row=13, column=5, columnspan=6, pady=(0,10), sticky=E)
 
             #Placing Environmental Entries
-            self.configure_win.SoilMoistureMinEntry.grid(row=10, column=13, columnspan=2, sticky= E)
-            self.configure_win.TemperatureMinEntry.grid(row=11, column=13, columnspan=2, sticky=E)
-            self.configure_win.HumidityMinEntry.grid(row=12, column=13, columnspan=2, sticky=E)
-            self.configure_win.VOCMinEntry.grid(row=13, column=13, columnspan=2, pady=(0,10), sticky=E)
+            self.createfile_win.SoilMoistureMinEntry.grid(row=10, column=13, columnspan=2, sticky= E)
+            self.createfile_win.TemperatureMinEntry.grid(row=11, column=13, columnspan=2, sticky=E)
+            self.createfile_win.HumidityMinEntry.grid(row=12, column=13, columnspan=2, sticky=E)
+            self.createfile_win.VOCMinEntry.grid(row=13, column=13, columnspan=2, pady=(0,10), sticky=E)
 
-            self.configure_win.SoilMoistureMaxEntry.grid(row=10, column=18, columnspan=2, sticky=E)
-            self.configure_win.TemperatureMaxEntry.grid(row=11, column=18, columnspan=2, sticky=E)
-            self.configure_win.HumidityMaxEntry.grid(row=12, column=18, columnspan=2, sticky=E)
-            self.configure_win.VOCMaxEntry.grid(row=13, column=18, columnspan=2, pady=(0, 10), sticky=E)
+            self.createfile_win.SoilMoistureMaxEntry.grid(row=10, column=18, columnspan=2, sticky=E)
+            self.createfile_win.TemperatureMaxEntry.grid(row=11, column=18, columnspan=2, sticky=E)
+            self.createfile_win.HumidityMaxEntry.grid(row=12, column=18, columnspan=2, sticky=E)
+            self.createfile_win.VOCMaxEntry.grid(row=13, column=18, columnspan=2, pady=(0, 10), sticky=E)
 
             # Placing Lighting Labels
-            self.configure_win.LightingParametersHeader.grid(row=20, column=0, columnspan=12, padx=(10,0), pady=(0,10), sticky=W)
-            self.configure_win.UVConfigureLabel.grid(row=22, column=0, padx=(10,80),sticky=W+E)
-            self.configure_win.RedConfigureLabel.grid(row=23, column=0, padx=(10,80), sticky=W+E)
-            self.configure_win.GreenConfigureLabel.grid(row=24, column=0, padx=(10,80), sticky=W+E)
-            self.configure_win.BlueConfigureLabel.grid(row=25, column=0, padx=(10,80), sticky=W+E)
-            self.configure_win.HourLabel.grid(row=21, column=0, padx=(10,80),sticky=W+E)
+            self.createfile_win.LightingParametersHeader.grid(row=20, column=0, columnspan=12, padx=(10,0), pady=(0,10), sticky=W)
+            self.createfile_win.UVConfigureLabel.grid(row=22, column=0, padx=(10,80),sticky=W+E)
+            self.createfile_win.RedConfigureLabel.grid(row=23, column=0, padx=(10,80), sticky=W+E)
+            self.createfile_win.GreenConfigureLabel.grid(row=24, column=0, padx=(10,80), sticky=W+E)
+            self.createfile_win.BlueConfigureLabel.grid(row=25, column=0, padx=(10,80), sticky=W+E)
+            self.createfile_win.HourLabel.grid(row=21, column=0, padx=(10,80),sticky=W+E)
 
             x=3;
-            self.configure_win.Hour00Label.grid(row=21, column=x, sticky=W+E)
-            self.configure_win.Hour01Label.grid(row=21, column=x+1, sticky=W+E)
-            self.configure_win.Hour02Label.grid(row=21, column=x+2, sticky=W+E)
-            self.configure_win.Hour03Label.grid(row=21, column=x+3, sticky=W+E)
-            self.configure_win.Hour04Label.grid(row=21, column=x+4, sticky=W+E)
-            self.configure_win.Hour05Label.grid(row=21, column=x+5, sticky=W+E)
-            self.configure_win.Hour06Label.grid(row=21, column=x+6, sticky=W+E)
-            self.configure_win.Hour07Label.grid(row=21, column=x+7, sticky=W+E)
-            self.configure_win.Hour08Label.grid(row=21, column=x+8, sticky=W+E)
-            self.configure_win.Hour09Label.grid(row=21, column=x+9, sticky=W+E)
-            self.configure_win.Hour10Label.grid(row=21, column=x+10, sticky=W+E)
-            self.configure_win.Hour11Label.grid(row=21, column=x+11, sticky=W+E)
-            self.configure_win.Hour12Label.grid(row=21, column=x+12, sticky=W+E)
-            self.configure_win.Hour13Label.grid(row=21, column=x+13, sticky=W+E)
-            self.configure_win.Hour14Label.grid(row=21, column=x+14, sticky=W+E)
-            self.configure_win.Hour15Label.grid(row=21, column=x+15, sticky=W+E)
-            self.configure_win.Hour16Label.grid(row=21, column=x+16, sticky=W+E)
-            self.configure_win.Hour17Label.grid(row=21, column=x+17, sticky=W+E)
-            self.configure_win.Hour18Label.grid(row=21, column=x+18, sticky=W+E)
-            self.configure_win.Hour19Label.grid(row=21, column=x+19, sticky=W+E)
-            self.configure_win.Hour20Label.grid(row=21, column=x+20, sticky=W+E)
-            self.configure_win.Hour21Label.grid(row=21, column=x+21, sticky=W+E)
-            self.configure_win.Hour22Label.grid(row=21, column=x+22, sticky=W+E)
-            self.configure_win.Hour23Label.grid(row=21, column=x+23, sticky=W+E)
+            self.createfile_win.Hour00Label.grid(row=21, column=x, sticky=W+E)
+            self.createfile_win.Hour01Label.grid(row=21, column=x+1, sticky=W+E)
+            self.createfile_win.Hour02Label.grid(row=21, column=x+2, sticky=W+E)
+            self.createfile_win.Hour03Label.grid(row=21, column=x+3, sticky=W+E)
+            self.createfile_win.Hour04Label.grid(row=21, column=x+4, sticky=W+E)
+            self.createfile_win.Hour05Label.grid(row=21, column=x+5, sticky=W+E)
+            self.createfile_win.Hour06Label.grid(row=21, column=x+6, sticky=W+E)
+            self.createfile_win.Hour07Label.grid(row=21, column=x+7, sticky=W+E)
+            self.createfile_win.Hour08Label.grid(row=21, column=x+8, sticky=W+E)
+            self.createfile_win.Hour09Label.grid(row=21, column=x+9, sticky=W+E)
+            self.createfile_win.Hour10Label.grid(row=21, column=x+10, sticky=W+E)
+            self.createfile_win.Hour11Label.grid(row=21, column=x+11, sticky=W+E)
+            self.createfile_win.Hour12Label.grid(row=21, column=x+12, sticky=W+E)
+            self.createfile_win.Hour13Label.grid(row=21, column=x+13, sticky=W+E)
+            self.createfile_win.Hour14Label.grid(row=21, column=x+14, sticky=W+E)
+            self.createfile_win.Hour15Label.grid(row=21, column=x+15, sticky=W+E)
+            self.createfile_win.Hour16Label.grid(row=21, column=x+16, sticky=W+E)
+            self.createfile_win.Hour17Label.grid(row=21, column=x+17, sticky=W+E)
+            self.createfile_win.Hour18Label.grid(row=21, column=x+18, sticky=W+E)
+            self.createfile_win.Hour19Label.grid(row=21, column=x+19, sticky=W+E)
+            self.createfile_win.Hour20Label.grid(row=21, column=x+20, sticky=W+E)
+            self.createfile_win.Hour21Label.grid(row=21, column=x+21, sticky=W+E)
+            self.createfile_win.Hour22Label.grid(row=21, column=x+22, sticky=W+E)
+            self.createfile_win.Hour23Label.grid(row=21, column=x+23, sticky=W+E)
 
             #Placing Lighting Entries
-            self.configure_win.UVEntry00.grid(row=22, column=x, sticky=W)
-            self.configure_win.UVEntry01.grid(row=22, column=x+1, sticky=W)
-            self.configure_win.UVEntry02.grid(row=22, column=x+2, sticky=W)
-            self.configure_win.UVEntry03.grid(row=22, column=x+3, sticky=W)
-            self.configure_win.UVEntry04.grid(row=22, column=x+4, sticky=W)
-            self.configure_win.UVEntry05.grid(row=22, column=x+5,sticky=W)
-            self.configure_win.UVEntry06.grid(row=22, column=x+6, sticky=W)
-            self.configure_win.UVEntry07.grid(row=22, column=x+7, sticky=W)
-            self.configure_win.UVEntry08.grid(row=22, column=x+8, sticky=W)
-            self.configure_win.UVEntry09.grid(row=22, column=x+9, sticky=W)
-            self.configure_win.UVEntry10.grid(row=22, column=x+10, sticky=W)
-            self.configure_win.UVEntry11.grid(row=22, column=x+11, sticky=W)
-            self.configure_win.UVEntry12.grid(row=22, column=x+12, sticky=W)
-            self.configure_win.UVEntry13.grid(row=22, column=x+13, sticky=W)
-            self.configure_win.UVEntry14.grid(row=22, column=x+14, sticky=W)
-            self.configure_win.UVEntry15.grid(row=22, column=x+15, sticky=W)
-            self.configure_win.UVEntry16.grid(row=22, column=x+16, sticky=W)
-            self.configure_win.UVEntry17.grid(row=22, column=x+17, sticky=W)
-            self.configure_win.UVEntry18.grid(row=22, column=x+18, sticky=W)
-            self.configure_win.UVEntry19.grid(row=22, column=x+19, sticky=W)
-            self.configure_win.UVEntry20.grid(row=22, column=x+20, sticky=W)
-            self.configure_win.UVEntry21.grid(row=22, column=x+21, sticky=W)
-            self.configure_win.UVEntry22.grid(row=22, column=x+22, sticky=W)
-            self.configure_win.UVEntry23.grid(row=22, column=x+23, sticky=W)
+            self.createfile_win.UVEntry00.grid(row=22, column=x, sticky=W)
+            self.createfile_win.UVEntry01.grid(row=22, column=x+1, sticky=W)
+            self.createfile_win.UVEntry02.grid(row=22, column=x+2, sticky=W)
+            self.createfile_win.UVEntry03.grid(row=22, column=x+3, sticky=W)
+            self.createfile_win.UVEntry04.grid(row=22, column=x+4, sticky=W)
+            self.createfile_win.UVEntry05.grid(row=22, column=x+5,sticky=W)
+            self.createfile_win.UVEntry06.grid(row=22, column=x+6, sticky=W)
+            self.createfile_win.UVEntry07.grid(row=22, column=x+7, sticky=W)
+            self.createfile_win.UVEntry08.grid(row=22, column=x+8, sticky=W)
+            self.createfile_win.UVEntry09.grid(row=22, column=x+9, sticky=W)
+            self.createfile_win.UVEntry10.grid(row=22, column=x+10, sticky=W)
+            self.createfile_win.UVEntry11.grid(row=22, column=x+11, sticky=W)
+            self.createfile_win.UVEntry12.grid(row=22, column=x+12, sticky=W)
+            self.createfile_win.UVEntry13.grid(row=22, column=x+13, sticky=W)
+            self.createfile_win.UVEntry14.grid(row=22, column=x+14, sticky=W)
+            self.createfile_win.UVEntry15.grid(row=22, column=x+15, sticky=W)
+            self.createfile_win.UVEntry16.grid(row=22, column=x+16, sticky=W)
+            self.createfile_win.UVEntry17.grid(row=22, column=x+17, sticky=W)
+            self.createfile_win.UVEntry18.grid(row=22, column=x+18, sticky=W)
+            self.createfile_win.UVEntry19.grid(row=22, column=x+19, sticky=W)
+            self.createfile_win.UVEntry20.grid(row=22, column=x+20, sticky=W)
+            self.createfile_win.UVEntry21.grid(row=22, column=x+21, sticky=W)
+            self.createfile_win.UVEntry22.grid(row=22, column=x+22, sticky=W)
+            self.createfile_win.UVEntry23.grid(row=22, column=x+23, sticky=W)
 
-            self.configure_win.RedEntry00.grid(row=23, column=x, sticky=W)
-            self.configure_win.RedEntry01.grid(row=23, column=x + 1, sticky=W)
-            self.configure_win.RedEntry02.grid(row=23, column=x + 2, sticky=W)
-            self.configure_win.RedEntry03.grid(row=23, column=x + 3, sticky=W)
-            self.configure_win.RedEntry04.grid(row=23, column=x + 4, sticky=W)
-            self.configure_win.RedEntry05.grid(row=23, column=x + 5, sticky=W)
-            self.configure_win.RedEntry06.grid(row=23, column=x + 6, sticky=W)
-            self.configure_win.RedEntry07.grid(row=23, column=x + 7, sticky=W)
-            self.configure_win.RedEntry08.grid(row=23, column=x + 8, sticky=W)
-            self.configure_win.RedEntry09.grid(row=23, column=x + 9, sticky=W)
-            self.configure_win.RedEntry10.grid(row=23, column=x + 10, sticky=W)
-            self.configure_win.RedEntry11.grid(row=23, column=x + 11, sticky=W)
-            self.configure_win.RedEntry12.grid(row=23, column=x + 12, sticky=W)
-            self.configure_win.RedEntry13.grid(row=23, column=x + 13, sticky=W)
-            self.configure_win.RedEntry14.grid(row=23, column=x + 14, sticky=W)
-            self.configure_win.RedEntry15.grid(row=23, column=x + 15, sticky=W)
-            self.configure_win.RedEntry16.grid(row=23, column=x + 16, sticky=W)
-            self.configure_win.RedEntry17.grid(row=23, column=x + 17, sticky=W)
-            self.configure_win.RedEntry18.grid(row=23, column=x + 18, sticky=W)
-            self.configure_win.RedEntry19.grid(row=23, column=x + 19, sticky=W)
-            self.configure_win.RedEntry20.grid(row=23, column=x + 20, sticky=W)
-            self.configure_win.RedEntry21.grid(row=23, column=x + 21, sticky=W)
-            self.configure_win.RedEntry22.grid(row=23, column=x + 22, sticky=W)
-            self.configure_win.RedEntry23.grid(row=23, column=x + 23, sticky=W)
+            self.createfile_win.RedEntry00.grid(row=23, column=x, sticky=W)
+            self.createfile_win.RedEntry01.grid(row=23, column=x + 1, sticky=W)
+            self.createfile_win.RedEntry02.grid(row=23, column=x + 2, sticky=W)
+            self.createfile_win.RedEntry03.grid(row=23, column=x + 3, sticky=W)
+            self.createfile_win.RedEntry04.grid(row=23, column=x + 4, sticky=W)
+            self.createfile_win.RedEntry05.grid(row=23, column=x + 5, sticky=W)
+            self.createfile_win.RedEntry06.grid(row=23, column=x + 6, sticky=W)
+            self.createfile_win.RedEntry07.grid(row=23, column=x + 7, sticky=W)
+            self.createfile_win.RedEntry08.grid(row=23, column=x + 8, sticky=W)
+            self.createfile_win.RedEntry09.grid(row=23, column=x + 9, sticky=W)
+            self.createfile_win.RedEntry10.grid(row=23, column=x + 10, sticky=W)
+            self.createfile_win.RedEntry11.grid(row=23, column=x + 11, sticky=W)
+            self.createfile_win.RedEntry12.grid(row=23, column=x + 12, sticky=W)
+            self.createfile_win.RedEntry13.grid(row=23, column=x + 13, sticky=W)
+            self.createfile_win.RedEntry14.grid(row=23, column=x + 14, sticky=W)
+            self.createfile_win.RedEntry15.grid(row=23, column=x + 15, sticky=W)
+            self.createfile_win.RedEntry16.grid(row=23, column=x + 16, sticky=W)
+            self.createfile_win.RedEntry17.grid(row=23, column=x + 17, sticky=W)
+            self.createfile_win.RedEntry18.grid(row=23, column=x + 18, sticky=W)
+            self.createfile_win.RedEntry19.grid(row=23, column=x + 19, sticky=W)
+            self.createfile_win.RedEntry20.grid(row=23, column=x + 20, sticky=W)
+            self.createfile_win.RedEntry21.grid(row=23, column=x + 21, sticky=W)
+            self.createfile_win.RedEntry22.grid(row=23, column=x + 22, sticky=W)
+            self.createfile_win.RedEntry23.grid(row=23, column=x + 23, sticky=W)
 
-            self.configure_win.GreenEntry00.grid(row=24, column=x, sticky=W)
-            self.configure_win.GreenEntry01.grid(row=24, column=x + 1, sticky=W)
-            self.configure_win.GreenEntry02.grid(row=24, column=x + 2, sticky=W)
-            self.configure_win.GreenEntry03.grid(row=24, column=x + 3, sticky=W)
-            self.configure_win.GreenEntry04.grid(row=24, column=x + 4, sticky=W)
-            self.configure_win.GreenEntry05.grid(row=24, column=x + 5, sticky=W)
-            self.configure_win.GreenEntry06.grid(row=24, column=x + 6, sticky=W)
-            self.configure_win.GreenEntry07.grid(row=24, column=x + 7, sticky=W)
-            self.configure_win.GreenEntry08.grid(row=24, column=x + 8, sticky=W)
-            self.configure_win.GreenEntry09.grid(row=24, column=x + 9, sticky=W)
-            self.configure_win.GreenEntry10.grid(row=24, column=x + 10, sticky=W)
-            self.configure_win.GreenEntry11.grid(row=24, column=x + 11, sticky=W)
-            self.configure_win.GreenEntry12.grid(row=24, column=x + 12, sticky=W)
-            self.configure_win.GreenEntry13.grid(row=24, column=x + 13, sticky=W)
-            self.configure_win.GreenEntry14.grid(row=24, column=x + 14, sticky=W)
-            self.configure_win.GreenEntry15.grid(row=24, column=x + 15, sticky=W)
-            self.configure_win.GreenEntry16.grid(row=24, column=x + 16, sticky=W)
-            self.configure_win.GreenEntry17.grid(row=24, column=x + 17, sticky=W)
-            self.configure_win.GreenEntry18.grid(row=24, column=x + 18, sticky=W)
-            self.configure_win.GreenEntry19.grid(row=24, column=x + 19, sticky=W)
-            self.configure_win.GreenEntry20.grid(row=24, column=x + 20, sticky=W)
-            self.configure_win.GreenEntry21.grid(row=24, column=x + 21, sticky=W)
-            self.configure_win.GreenEntry22.grid(row=24, column=x + 22, sticky=W)
-            self.configure_win.GreenEntry23.grid(row=24, column=x + 23, sticky=W)
+            self.createfile_win.GreenEntry00.grid(row=24, column=x, sticky=W)
+            self.createfile_win.GreenEntry01.grid(row=24, column=x + 1, sticky=W)
+            self.createfile_win.GreenEntry02.grid(row=24, column=x + 2, sticky=W)
+            self.createfile_win.GreenEntry03.grid(row=24, column=x + 3, sticky=W)
+            self.createfile_win.GreenEntry04.grid(row=24, column=x + 4, sticky=W)
+            self.createfile_win.GreenEntry05.grid(row=24, column=x + 5, sticky=W)
+            self.createfile_win.GreenEntry06.grid(row=24, column=x + 6, sticky=W)
+            self.createfile_win.GreenEntry07.grid(row=24, column=x + 7, sticky=W)
+            self.createfile_win.GreenEntry08.grid(row=24, column=x + 8, sticky=W)
+            self.createfile_win.GreenEntry09.grid(row=24, column=x + 9, sticky=W)
+            self.createfile_win.GreenEntry10.grid(row=24, column=x + 10, sticky=W)
+            self.createfile_win.GreenEntry11.grid(row=24, column=x + 11, sticky=W)
+            self.createfile_win.GreenEntry12.grid(row=24, column=x + 12, sticky=W)
+            self.createfile_win.GreenEntry13.grid(row=24, column=x + 13, sticky=W)
+            self.createfile_win.GreenEntry14.grid(row=24, column=x + 14, sticky=W)
+            self.createfile_win.GreenEntry15.grid(row=24, column=x + 15, sticky=W)
+            self.createfile_win.GreenEntry16.grid(row=24, column=x + 16, sticky=W)
+            self.createfile_win.GreenEntry17.grid(row=24, column=x + 17, sticky=W)
+            self.createfile_win.GreenEntry18.grid(row=24, column=x + 18, sticky=W)
+            self.createfile_win.GreenEntry19.grid(row=24, column=x + 19, sticky=W)
+            self.createfile_win.GreenEntry20.grid(row=24, column=x + 20, sticky=W)
+            self.createfile_win.GreenEntry21.grid(row=24, column=x + 21, sticky=W)
+            self.createfile_win.GreenEntry22.grid(row=24, column=x + 22, sticky=W)
+            self.createfile_win.GreenEntry23.grid(row=24, column=x + 23, sticky=W)
 
-            self.configure_win.BlueEntry00.grid(row=25, column=x, sticky=W)
-            self.configure_win.BlueEntry01.grid(row=25, column=x + 1, sticky=W)
-            self.configure_win.BlueEntry02.grid(row=25, column=x + 2, sticky=W)
-            self.configure_win.BlueEntry03.grid(row=25, column=x + 3, sticky=W)
-            self.configure_win.BlueEntry04.grid(row=25, column=x + 4, sticky=W)
-            self.configure_win.BlueEntry05.grid(row=25, column=x + 5, sticky=W)
-            self.configure_win.BlueEntry06.grid(row=25, column=x + 6, sticky=W)
-            self.configure_win.BlueEntry07.grid(row=25, column=x + 7, sticky=W)
-            self.configure_win.BlueEntry08.grid(row=25, column=x + 8, sticky=W)
-            self.configure_win.BlueEntry09.grid(row=25, column=x + 9, sticky=W)
-            self.configure_win.BlueEntry10.grid(row=25, column=x + 10, sticky=W)
-            self.configure_win.BlueEntry11.grid(row=25, column=x + 11, sticky=W)
-            self.configure_win.BlueEntry12.grid(row=25, column=x + 12, sticky=W)
-            self.configure_win.BlueEntry13.grid(row=25, column=x + 13, sticky=W)
-            self.configure_win.BlueEntry14.grid(row=25, column=x + 14, sticky=W)
-            self.configure_win.BlueEntry15.grid(row=25, column=x + 15, sticky=W)
-            self.configure_win.BlueEntry16.grid(row=25, column=x + 16, sticky=W)
-            self.configure_win.BlueEntry17.grid(row=25, column=x + 17, sticky=W)
-            self.configure_win.BlueEntry18.grid(row=25, column=x + 18, sticky=W)
-            self.configure_win.BlueEntry19.grid(row=25, column=x + 19, sticky=W)
-            self.configure_win.BlueEntry20.grid(row=25, column=x + 20, sticky=W)
-            self.configure_win.BlueEntry21.grid(row=25, column=x + 21, sticky=W)
-            self.configure_win.BlueEntry22.grid(row=25, column=x + 22, sticky=W)
-            self.configure_win.BlueEntry23.grid(row=25, column=x + 23, sticky=W)
+            self.createfile_win.BlueEntry00.grid(row=25, column=x, sticky=W)
+            self.createfile_win.BlueEntry01.grid(row=25, column=x + 1, sticky=W)
+            self.createfile_win.BlueEntry02.grid(row=25, column=x + 2, sticky=W)
+            self.createfile_win.BlueEntry03.grid(row=25, column=x + 3, sticky=W)
+            self.createfile_win.BlueEntry04.grid(row=25, column=x + 4, sticky=W)
+            self.createfile_win.BlueEntry05.grid(row=25, column=x + 5, sticky=W)
+            self.createfile_win.BlueEntry06.grid(row=25, column=x + 6, sticky=W)
+            self.createfile_win.BlueEntry07.grid(row=25, column=x + 7, sticky=W)
+            self.createfile_win.BlueEntry08.grid(row=25, column=x + 8, sticky=W)
+            self.createfile_win.BlueEntry09.grid(row=25, column=x + 9, sticky=W)
+            self.createfile_win.BlueEntry10.grid(row=25, column=x + 10, sticky=W)
+            self.createfile_win.BlueEntry11.grid(row=25, column=x + 11, sticky=W)
+            self.createfile_win.BlueEntry12.grid(row=25, column=x + 12, sticky=W)
+            self.createfile_win.BlueEntry13.grid(row=25, column=x + 13, sticky=W)
+            self.createfile_win.BlueEntry14.grid(row=25, column=x + 14, sticky=W)
+            self.createfile_win.BlueEntry15.grid(row=25, column=x + 15, sticky=W)
+            self.createfile_win.BlueEntry16.grid(row=25, column=x + 16, sticky=W)
+            self.createfile_win.BlueEntry17.grid(row=25, column=x + 17, sticky=W)
+            self.createfile_win.BlueEntry18.grid(row=25, column=x + 18, sticky=W)
+            self.createfile_win.BlueEntry19.grid(row=25, column=x + 19, sticky=W)
+            self.createfile_win.BlueEntry20.grid(row=25, column=x + 20, sticky=W)
+            self.createfile_win.BlueEntry21.grid(row=25, column=x + 21, sticky=W)
+            self.createfile_win.BlueEntry22.grid(row=25, column=x + 22, sticky=W)
+            self.createfile_win.BlueEntry23.grid(row=25, column=x + 23, sticky=W)
 
 
-            self.configure_win.BackButton.grid(row = 26, column = 9, columnspan=7, pady=(20,0))
-            self.configure_win.SaveButton.grid(row=26, column=16, columnspan=7, pady=(20, 0))
+            self.createfile_win.BackButton.grid(row = 26, column = 9, columnspan=7, pady=(20,0))
+            self.createfile_win.SaveButton.grid(row=26, column=16, columnspan=7, pady=(20, 0))
 
 
 
