@@ -450,33 +450,6 @@ class ThreadedClient:
             self.db_master["UV LED Status"] = "ON"
             self.main_to_gui_queue.put(["UV LED Status", self.db_master["UV LED Status"]])
 
-        # if msg == "Toggle Pump":
-        #     self.db_master['Manual Overrides']['Pump'] = True
-        #     self.controls['pump'].toggle()
-        #     if self.db_master["Pump Status"] == "ON":
-        #         self.db_master["Pump Status"] = "OFF"
-        #     else:
-        #         self.db_master["Pump Status"] = "ON"
-        #     self.main_to_gui_queue.put(["Pump Status", self.db_master["Pump Status"]])
-        #
-        # elif msg == "Toggle Fan":
-        #     self.db_master['Manual Overrides']['Fan'] = True
-        #     self.controls['fan'].toggle()
-        #     if self.db_master["Fan Status"] == "ON":
-        #         self.db_master["Fan Status"] = "OFF"
-        #     else:
-        #         self.db_master["Fan Status"] = "ON"
-        #     self.main_to_gui_queue.put(["Fan Status", self.db_master["Fan Status"]])
-        #
-        # elif msg == "Toggle UV":
-        #     self.db_master['Manual Overrides']['UV LED'] = True
-        #     self.controls['UV LED'].toggle()
-        #     if self.db_master["UV LED Status"] == "ON":
-        #         self.db_master["UV LED Status"] = "OFF"
-        #     else:
-        #         self.db_master["UV LED Status"] = "ON"
-        #     self.main_to_gui_queue.put(["UV LED Status", self.db_master["UV LED Status"]])
-    
         elif isinstance(msg, list):
             # It is considered a manual override to load a new configuration file. Hence the code appears here
             if msg[0] == "RELOAD":

@@ -6,8 +6,10 @@ The GUI is based on a Tkinter widget.
 
 import sys
 from multiprocessing import Queue
-from tkinter import Tk, Label, Button, Entry, IntVar, END, W, E, N, S, StringVar, messagebox
+from tkinter import *
 from tkinter.filedialog import askopenfile, asksaveasfile
+from tkinter import colorchooser
+from tkinter import messagebox
 from src.utilities.json_utilities import save_as_json
 from src.utilities.logger_utilities import get_logger
 
@@ -38,6 +40,7 @@ class GrowSpaceGUI:
 
         self.master.title("Grow Space")
         self.master.configure(background="Black")
+        self.master.iconbitmap('./icons/Grow-Space-Icon.ico')
 
         ############################### Declare Labels ####################################################
 
@@ -271,6 +274,7 @@ class GrowSpaceGUI:
             self.control_win.configure(bg="Slate Gray")
             self.control_win.geometry("400x600")
             self.control_win.protocol("WM_DELETE_WINDOW", on_closing)
+            self.control_win.iconbitmap('./icons/Grow-Space-Icon.ico')
 
 
             self.Red_val = StringVar()
@@ -293,16 +297,16 @@ class GrowSpaceGUI:
             self.control_win.Blue_Entry = Entry(self.control_win, width=4, textvariable=self.Blue_val)
 
             # Defining Control Window Buttons
-            self.control_win.RGBLED_Set = Button(self.control_win, bg = "White", fg="Black", text = "SET",font="Helvetica 16 bold", command=lambda: self.queue_out.put([self.control_win.Red_Entry.get(),self.control_win.Green_Entry.get(),self.control_win.Blue_Entry.get()]))
-            self.control_win.RGBLED_OFF = Button(self.control_win, bg="White", fg="Black", text="OFF", font="Helvetica 16 bold", command=lambda: self.queue_out.put(["0","0","0"]))
-            self.control_win.UV_OFF = Button(self.control_win, bg="White", fg="Black", text="OFF", font="Helvetica 16 bold", command=lambda: self.queue_out.put("UV OFF"))
-            self.control_win.UV_ON = Button(self.control_win, bg="White", fg="Black", text="ON",  font="Helvetica 16 bold", command=lambda: self.queue_out.put("UV ON"))
-            self.control_win.Fan_OFF = Button(self.control_win, bg="White", fg="Black", text="OFF",  font="Helvetica 16 bold", command=lambda: self.queue_out.put("Fan OFF"))
-            self.control_win.Fan_ON = Button(self.control_win, bg="White", fg="Black", text="ON",  font="Helvetica 16 bold", command=lambda: self.queue_out.put("Fan ON"))
-            self.control_win.Pump_OFF = Button(self.control_win, bg="White", fg="Black", text="OFF",  font="Helvetica 16 bold", command=lambda: self.queue_out.put("Pump OFF"))
-            self.control_win.Pump_ON = Button(self.control_win, bg="White", fg="Black", text="ON",  font="Helvetica 16 bold", command=lambda: self.queue_out.put("Pump ON"))
-            self.control_win.ExitButton = Button(self.control_win, bg="White", fg="Black", text="BACK",font="Helvetica 16 bold", command=lambda: (self.queue_out.put("END"), on_closing()))
-
+            self.control_win.RGBLED_Set = HoverButton(self.control_win, bg = "White", fg="Black", activebackground='grey', text = "SET",font="Helvetica 16 bold", command=lambda: self.queue_out.put([self.control_win.Red_Entry.get(),self.control_win.Green_Entry.get(),self.control_win.Blue_Entry.get()]))
+            self.control_win.RGBLED_OFF = HoverButton(self.control_win, bg="White", fg="Black", activebackground='grey', text="OFF", font="Helvetica 16 bold", command=lambda: self.queue_out.put(["0","0","0"]))
+            self.control_win.UV_OFF = HoverButton(self.control_win, bg="White", fg="Black", activebackground='grey', text="OFF", font="Helvetica 16 bold", command=lambda: self.queue_out.put("UV OFF"))
+            self.control_win.UV_ON = HoverButton(self.control_win, bg="White", fg="Black", activebackground='grey', text="ON",  font="Helvetica 16 bold", command=lambda: self.queue_out.put("UV ON"))
+            self.control_win.Fan_OFF = HoverButton(self.control_win, bg="White", fg="Black", activebackground='grey', text="OFF",  font="Helvetica 16 bold", command=lambda: self.queue_out.put("Fan OFF"))
+            self.control_win.Fan_ON = HoverButton(self.control_win, bg="White", fg="Black", activebackground='grey', text="ON",  font="Helvetica 16 bold", command=lambda: self.queue_out.put("Fan ON"))
+            self.control_win.Pump_OFF = HoverButton(self.control_win, bg="White", fg="Black", activebackground='grey', text="OFF",  font="Helvetica 16 bold", command=lambda: self.queue_out.put("Pump OFF"))
+            self.control_win.Pump_ON = HoverButton(self.control_win, bg="White", fg="Black", activebackground='grey', text="ON",  font="Helvetica 16 bold", command=lambda: self.queue_out.put("Pump ON"))
+            self.control_win.ExitButton = HoverButton(self.control_win, bg="White", fg="Black", activebackground='red', text="BACK",font="Helvetica 16 bold", command=lambda: (self.queue_out.put("END"), on_closing()))
+            self.control_win.ColorWheelButton = HoverButton(self.control_win, bg="White", fg="Black", activebackground='pink', text="Choose",font="Helvetica 16 bold", command=lambda: self.browse_color_wheel())
 
             self.control_win.GrowSpaceTitle.grid(row=0, column=0, pady=(0,20))
             self.control_win.RGB_Label.grid(row=1,column=0,  pady=(0,10), sticky=W)
@@ -314,6 +318,7 @@ class GrowSpaceGUI:
             self.control_win.Blue_Entry.grid(row=4, column=1, columnspan=2, pady=(0,10), sticky=W + E)
             self.control_win.RGBLED_Set.grid(row=5, column=1, pady=(10,20), sticky=W + E)
             self.control_win.RGBLED_OFF.grid(row=5, column=2, padx=(20,0), pady=(10,20), sticky=E)
+            self.control_win.ColorWheelButton.grid(row=5, column=0, pady=(0,0))
 
             self.control_win.UV_Label.grid(row=6, column=0, pady=(0,10), sticky=W)
             self.control_win.UV_OFF.grid(row=6, column=1,  pady=(0,10), sticky=W+E)
@@ -328,9 +333,19 @@ class GrowSpaceGUI:
             self.control_win.Pump_ON.grid(row=8, column=2, padx=(20,0), pady=(0, 10), sticky=W + E)
 
             self.control_win.ExitButton.grid(row=9, column=1, pady=(20,0))
-
-
-    def Saving_configuration(self):
+            
+            
+    def browse_color_wheel(self):
+        rgb_color, _ = colorchooser.askcolor(parent=self.master, initialcolor=(255, 0, 0))
+        if rgb_color is not None:
+            self.control_win.Red_Entry.delete(0,END)
+            self.control_win.Red_Entry.insert(0,round(rgb_color[0]))
+            self.control_win.Green_Entry.delete(0,END)
+            self.control_win.Green_Entry.insert(0,round(rgb_color[1]))
+            self.control_win.Blue_Entry.delete(0,END)
+            self.control_win.Blue_Entry.insert(0,round(rgb_color[2]))
+    
+    def saving_configuration(self):
 
         #Setting lists to equal entries
 
@@ -558,8 +573,6 @@ class GrowSpaceGUI:
             return
 
 
-
-
     def createfile_window(self):
 
 
@@ -570,16 +583,15 @@ class GrowSpaceGUI:
             except Exception as e:
                 self.logger.error(str(e))
 
-
-
         if not self.createfile_window_open:
 
             self.createfile_win = Tk()
             self.createfile_window_open = True
-            self.createfile_win.title("Create new settings file")
+            self.createfile_win.title("Configuration File Editor")
             self.createfile_win.configure(bg="Black")
             self.createfile_win.geometry("1024x600")
             self.createfile_win.protocol("WM_DELETE_WINDOW", on_closing_configure)
+            self.createfile_win.iconbitmap('./icons/Grow-Space-Icon.ico')
 
 
             self.createfile_win.SoilMoisture_thresholds = [StringVar(), StringVar()]
@@ -752,8 +764,8 @@ class GrowSpaceGUI:
 
             #####################Defining Buttons###############################
 
-            self.createfile_win.BackButton = Button(self.createfile_win, bg="White", fg="Black", text="BACK", font="Helvetica 16 bold", command=on_closing_configure)
-            self.createfile_win.SaveButton = Button(self.createfile_win, bg="White", fg="Black", text="SAVE", font="Helvetica 16 bold", command=self.Saving_configuration)
+            self.createfile_win.BackButton = HoverButton(self.createfile_win, bg="White", fg="Black", activebackground='grey', text="BACK", font="Helvetica 16 bold", command=on_closing_configure)
+            self.createfile_win.SaveButton = HoverButton(self.createfile_win, bg="White", fg="Black", activebackground='yellow', text="SAVE", font="Helvetica 16 bold", command=self.saving_configuration)
             ####################Placing Widgets##################################
 
             self.createfile_win.GrowSpaceTitle.grid(row=1, column=0, columnspan=12, padx=(10,0), sticky=W)
@@ -787,7 +799,7 @@ class GrowSpaceGUI:
             self.createfile_win.BlueConfigureLabel.grid(row=25, column=0, padx=(10,80), sticky=W+E)
             self.createfile_win.HourLabel.grid(row=21, column=0, padx=(10,80),sticky=W+E)
 
-            x=3;
+            x=3
             self.createfile_win.Hour00Label.grid(row=21, column=x, sticky=W+E)
             self.createfile_win.Hour01Label.grid(row=21, column=x+1, sticky=W+E)
             self.createfile_win.Hour02Label.grid(row=21, column=x+2, sticky=W+E)
@@ -919,9 +931,6 @@ class GrowSpaceGUI:
             self.createfile_win.SaveButton.grid(row=26, column=16, columnspan=7, pady=(20, 0))
 
 
-
-
-
     def process_incoming(self):
         """!
         Receive data from the incoming queue (from the main process)
@@ -930,11 +939,11 @@ class GrowSpaceGUI:
         while not self.queue_in.empty():
             msg = self.queue_in.get()
 
-            # Print whatever it receives from the main thread
+            # Log received data
             self.logger.info("GUI: Received data from " +str(msg[0]) + ": " + str(msg[1]))
 
             if isinstance(msg[0], str):
-                # Display the data accordingly
+                # Update the GUI widgets to display the data accordingly
                 if msg[0] == "soil_moisture_sensor":
                     self.SoilMoistureCondition_value.configure(text=str(msg[1])+"%")
                     if msg[2] is not None:
@@ -945,7 +954,6 @@ class GrowSpaceGUI:
                         self.SoilMoistureStatus_value.configure(text="OK")
 
                 elif msg[0] == "environment_sensor":
-                    # Update temperature
                     received_temp = round(msg[1]['temperature']['value'], 2)
                     self.TemperatureCondition_value.configure(text=str(received_temp)+"°C")
                     if msg[1]['temperature']['flag'] is not None:
@@ -955,7 +963,6 @@ class GrowSpaceGUI:
                         self.TemperatureCondition_value.config(fg="Green")
                         self.TemperatureStatus_value.configure(text="OK")
 
-                    # Update humidity
                     received_humidity = round(msg[1]['humidity']['value'], 2)
                     self.HumidityCondition_value.configure(text=str(received_humidity)+"%")
                     if msg[1]['humidity']['flag'] is not None:
@@ -965,7 +972,6 @@ class GrowSpaceGUI:
                         self.HumidityCondition_value.config(fg="Green")
                         self.HumidityStatus_value.configure(text="OK")
 
-                    # Update VOC
                     received_gas = round(msg[1]['gas']['value'], 2)
                     self.VOCCondition_value.configure(text=str(received_gas)+"kΩ")
                     if msg[1]['gas']['flag'] is not None:

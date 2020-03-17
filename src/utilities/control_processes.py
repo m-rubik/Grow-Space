@@ -33,7 +33,7 @@ def watering_process(msg, controls, queue, db):
 
     # Operate the pump
     controls['pump'].turn_on()
-    print(pump_time)
+    print("Beginning pump for", pump_time, "seconds.")
     for _ in range(pump_time):
         if not queue.empty():
             msg = queue.get()

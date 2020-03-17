@@ -59,7 +59,7 @@ def watering_algorithm(db, water_list):
             water_average = statistics.mean([x for x in water_list if isinstance(x, numbers.Number)])
             water_std = statistics.stdev([x for x in water_list if isinstance(x, numbers.Number)])
         except statistics.StatisticsError:
-            print("\n System initialization: No values for water average")
+            print("System initialization: No values for water average")
         # for x in [x for x in water_list if isinstance(x, numbers.Number)]:
         try:
             for x in range(len(water_list)):
@@ -71,12 +71,12 @@ def watering_algorithm(db, water_list):
                 else:
                     pass
         except UnboundLocalError:
-            print("\n System initialization: No values for water average")
+            print("System initialization: No values for water average")
 
         try:
             water_average = statistics.mean([x for x in water_list if isinstance(x, numbers.Number)])
         except statistics.StatisticsError:
-            print("\n System initialization: No values for water average")
+            print("System initialization: No values for water average")
 
         # current_level_2 = int(db['latest']['soil_moisture_sensor_2'])
 
