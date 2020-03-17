@@ -347,8 +347,7 @@ class GrowSpaceGUI:
     
     def saving_configuration(self):
 
-        #Setting lists to equal entries
-
+        ## Setting lists to equal entries ##
 
         self.createfile_win.SoilMoistureList = []
         self.createfile_win.TemperatureList = []
@@ -358,7 +357,6 @@ class GrowSpaceGUI:
         self.createfile_win.GreenList = []
         self.createfile_win.BlueList = []
         self.createfile_win.UVList = []
-
 
         self.createfile_win.SoilMoistureList.append(self.createfile_win.SoilMoistureMinEntry.get())
         self.createfile_win.SoilMoistureList.append(self.createfile_win.SoilMoistureMaxEntry.get())
@@ -471,7 +469,7 @@ class GrowSpaceGUI:
 
         print(self.createfile_win.SoilMoistureList)
 
-        #Ensuring all values are correctly inputted
+        ## Ensuring all values are correctly inputted ##
 
         for i in self.createfile_win.SoilMoistureList:
             if i == '' or i.isdigit() == False:
@@ -575,7 +573,6 @@ class GrowSpaceGUI:
 
     def createfile_window(self):
 
-
         def on_closing_configure():
             try:
                 self.createfile_win.destroy()
@@ -606,7 +603,7 @@ class GrowSpaceGUI:
             self.createfile_win.GrowSpaceTitle = Label(self.createfile_win, bg="Black", fg="White", text="Grow Space", font="Helvetica 18 bold italic")
 
 
-            #Environmental Parameter Labels and Entries
+            ## Environmental Parameter Labels and Entries ##
 
 
             self.createfile_win.EnvironmentalParametersHeader = Label(self.createfile_win, bg="Black", fg="White", text="Environmental Parameters", font="Helvetica 18 bold")
@@ -626,7 +623,7 @@ class GrowSpaceGUI:
             self.createfile_win.VOCMinEntry = Entry(self.createfile_win, width = 4, bg="Gray85",textvariable=self.createfile_win.VOC_thresholds[0])
             self.createfile_win.VOCMaxEntry = Entry(self.createfile_win, width = 4, bg="Gray85",textvariable=self.createfile_win.VOC_thresholds[1])
 
-            # Lighting Labels and Entries
+            ## Lighting Labels and Entries ##
 
             self.createfile_win.LightingParametersHeader = Label(self.createfile_win, bg="Black", fg="White", text="Lighting Intensities", font="Helvetica 18 bold")
             self.createfile_win.HourLabel = Label(self.createfile_win, bg="Black", fg="White", text="Hour", font="Helvetica 18 bold")
