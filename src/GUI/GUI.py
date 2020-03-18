@@ -5,6 +5,7 @@ The GUI is based on a Tkinter widget.
 
 
 import sys
+import math
 from multiprocessing import Queue
 from tkinter import *
 from tkinter.filedialog import askopenfile, asksaveasfile
@@ -338,12 +339,24 @@ class GrowSpaceGUI:
     def browse_color_wheel(self):
         rgb_color, _ = colorchooser.askcolor(parent=self.master, initialcolor=(255, 0, 0))
         if rgb_color is not None:
+
             self.control_win.Red_Entry.delete(0,END)
-            self.control_win.Red_Entry.insert(0,round(rgb_color[0]))
+            red_value = math.floor(rgb_color[0])
+            if red_value == 256:
+                red_value == 255
+            self.control_win.Red_Entry.insert(0,red_value)
+
             self.control_win.Green_Entry.delete(0,END)
-            self.control_win.Green_Entry.insert(0,round(rgb_color[1]))
+            green_value = math.floor(rgb_color[1])
+            if green_value == 256:
+                green_value == 255
+            self.control_win.Green_Entry.insert(0,green_value)
+
             self.control_win.Blue_Entry.delete(0,END)
-            self.control_win.Blue_Entry.insert(0,round(rgb_color[2]))
+            blue_value = math.floor(rgb_color[2])
+            if blue_value == 256:
+                blue_value == 255
+            self.control_win.Blue_Entry.insert(0,blue_value)
     
     def saving_configuration(self):
 
