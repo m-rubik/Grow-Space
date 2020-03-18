@@ -427,13 +427,13 @@ class ThreadedClient:
             self.main_to_gui_queue.put(["Pump Status", self.db_master["Pump Status"]])
 
         elif msg == "Fan OFF":
-            self.db_master['Manual Overrides']['Pump'] = True
+            self.db_master['Manual Overrides']['Fan'] = True
             self.controls['fan'].turn_off()
             self.db_master["Fan Status"] = "OFF"
             self.main_to_gui_queue.put(["Fan Status", self.db_master["Fan Status"]])
 
         elif msg == "Fan ON":
-            self.db_master['Manual Overrides']['Pump'] = True
+            self.db_master['Manual Overrides']['Fan'] = True
             self.controls['fan'].turn_on()
             self.db_master["Fan Status"] = "ON"
             self.main_to_gui_queue.put(["Fan Status", self.db_master["Fan Status"]])
