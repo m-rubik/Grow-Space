@@ -54,7 +54,7 @@ class SoilMoistureSensor(Sensor):
             self._current_val[2] = 0.00
             
         self.queue.put(round(self._current_val[2], 2))
-        print(self.name, self._current_val[2])
+        # print(self.name, self._current_val[2])
 
         # Step 3: Log the reading
         current_time = datetime.now()
