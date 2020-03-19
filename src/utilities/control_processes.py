@@ -92,17 +92,21 @@ def lighting_process(db, controls):
         green = rgb_data['G']
         blue = rgb_data['B']
 
+
         # Adjust the RGB Accordingly and update the status
-        controls['RGB LED'].adjust_color(red_content=red, green_content=green, blue_content=blue)
-        db['RGB LED Status'] = [red, green, blue]
+        if not db['Manual Overrides']['RGB LED']:
+            controls['RGB LED'].adjust_color(red_content=red, green_content=green, blue_content=blue)
+            db['RGB LED Status'] = [red, green, blue]
 
         # Get the UV light data for the current hour
-        if db['UV_data'][hour]:
-            controls['UV LED'].turn_on()
-            db['UV LED Status'] = "ON"
-        else:
-            controls['UV LED'].turn_off()
-            db['UV LED Status'] = "OFF"
+        # Check for manual overrides
+        if not db['Manual Overrides']['UV LED']:
+            if db['UV_data'][hour]:
+                controls['UV LED'].turn_on()
+                db['UV LED Status'] = "ON"
+            else:
+                controls['UV LED'].turn_off()
+                db['UV LED Status'] = "OFF"
     except Exception as err:
         return err
     return 0
