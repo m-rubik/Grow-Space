@@ -2,16 +2,28 @@
 Contains all functions related to JSON operations.
 """
 
+
 import json
 
 
 def load_from_json(filename):
+    """!
+    Loads a json file into a python object
+    @param filename: Path to the json object
+    """
+
     with open(filename+".json", "r") as f:
         data = json.load(f)
     return data
 
 
 def save_as_json(filename, data):
+    """!
+    Saves python object to a json object.
+    @param filename: Name of the json object you wish to create/overwrite
+    @param data: Python object you wish to save
+    """
+
     try:
         with open(filename+".json", 'w+') as file:
             file.write(json.dumps(data, sort_keys=True, indent=4, default=str))
@@ -20,8 +32,7 @@ def save_as_json(filename, data):
         return 1
     return 0
 
-
-if __name__ == "__main__":
+def manually_generate_config_file(name):
     RGB_data = {}
     RGB_data['0'] = {"R": 0, "G": 0, "B": 0}
     RGB_data['1'] = {"R": 0, "G": 0, "B": 0}
@@ -48,7 +59,6 @@ if __name__ == "__main__":
     RGB_data['22'] = {"R": 0, "G": 0, "B": 0}
     RGB_data['23'] = {"R": 0, "G": 0, "B": 0}
 
-
     UV_data = {}
     UV_data['0'] = 0
     UV_data['1'] = 0
@@ -60,12 +70,12 @@ if __name__ == "__main__":
     UV_data['7'] = 0
     UV_data['8'] = 0
     UV_data['9'] = 0
-    UV_data['10'] = 1
-    UV_data['11'] = 1
-    UV_data['12'] = 1
-    UV_data['13'] = 1
-    UV_data['14'] = 1
-    UV_data['15'] = 1
+    UV_data['10'] = 0
+    UV_data['11'] = 0
+    UV_data['12'] = 0
+    UV_data['13'] = 0
+    UV_data['14'] = 0
+    UV_data['15'] = 0
     UV_data['16'] = 0
     UV_data['17'] = 0
     UV_data['18'] = 0
@@ -74,7 +84,6 @@ if __name__ == "__main__":
     UV_data['21'] = 0
     UV_data['22'] = 0
     UV_data['23'] = 0
-
 
     data = {}
     data['Temperature_Low'] = 21
@@ -89,6 +98,10 @@ if __name__ == "__main__":
     data['UV_data'] = UV_data
     data['Soak_Minutes'] = 0.5
 
-    save_as_json("./configuration_files/basil", data)
+    save_as_json("./configuration_files/"+name, data)
+
+
+if __name__ == "__main__":
+    manually_generate_config_file("basil_no_UV")
 
 

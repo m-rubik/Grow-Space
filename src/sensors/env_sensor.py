@@ -11,6 +11,17 @@ from src.utilities.sensor_template import Sensor
 
 
 class EnvironmentSensor(Sensor):
+    """!
+    The environment sensor measures:
+    1. Temperature
+    2. Volatile Organic Compounds (VOC/gas)
+    3. Humidity
+    4. Pressure
+    5. Altitude
+    @param i2c_interface: The sensor communicates to the RPi via I2C. This is the interface.
+    @param sensor_board: This is the "board" object of the sensor board.
+    @param data_dict: This is the dictionary containing all the sensor readings.
+    """
 
     i2c_interface = None
     sensor_board = None
@@ -27,6 +38,11 @@ class EnvironmentSensor(Sensor):
         self.sensor_board.sea_level_pressure = sea_level_pressure
 
     def poll(self):
+        """!
+        This method is called periodically to read sensor data and report
+        it back to the main thread.
+        """
+
         # Step 1: Take the readings
         try:
             self.data_dict['temperature'] = self.sensor_board.temperature   # [Celcius]
@@ -36,8 +52,6 @@ class EnvironmentSensor(Sensor):
             self.data_dict['altitude'] = self.sensor_board.altitude         # [m]
         except Exception as err:
             print(err)
-
-        # TODO Step 1.5: Run algorithms with the data??? 
 
         # Step 2: Relay the readings
         self.queue.put(self.data_dict)
@@ -51,10 +65,13 @@ class EnvironmentSensor(Sensor):
             f.write("\n")
 
     def shutdown(self):
+        """!
+        Shutdown event bound to the atexit condition.
+        Currently does not have any special functionality.
+        """
         print(self.name, "shutting down.")
 
-
-if __name__ == "__main__":
+def unit_test():
     """
     Code from:
     https://learn.adafruit.com/adafruit-bme680-humidity-temperature-barometic-pressure-voc-gas/python-circuitpython
@@ -72,3 +89,7 @@ if __name__ == "__main__":
         print("Pressure: %0.3f hPa" % bme680.pressure)
         print("Altitude = %0.2f meters" % bme680.altitude)
         time.sleep(1)
+
+
+if __name__ == "__main__":
+    unit_test()

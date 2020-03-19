@@ -4,8 +4,9 @@ ws281 LED strip.
 """
 
 
-from rpi_ws281x import * # TODO: Fix this wildcard import
+from rpi_ws281x import *
 import atexit
+
 
 class LEDStrip():
     """!
@@ -18,13 +19,14 @@ class LEDStrip():
     @param LED_INVERT: Set True only when needed to invert the signal (when using NPN transistor level shift)
     @param LED_CHANNEL: Set to 1 for GPIOs 13, 19, 41, 45 or 53, otherwise set 0
     @param strip: The light strip object
+    @param name: The name of the device
     """
 
     LED_COUNT: int = 144
-    LED_PIN: int = 18 # pin 12
+    LED_PIN: int = 18 # NOTE: Corresponds to pin 12 on a RPi4b
     LED_FREQ_HQ: int = 800000
     LED_DMA: int = 10
-    LED_BRIGHTNESS: int = 100 # In testing, for the full strip (before cutting), we find: {75, 1.60A}, {100, 2.11A}, {125, 2.61A}
+    LED_BRIGHTNESS: int = 100 # NOTE: In testing, for the full strip (before cutting), we find: {75, 1.60A}, {100, 2.11A}, {125, 2.61A}
     LED_INVERT: bool = False
     LED_CHANNEL: int = 0
     strip = None
@@ -32,6 +34,7 @@ class LEDStrip():
 
     def __init__(self, LED_PIN, name="Default", LED_COUNT=144, LED_FREQ_HQ=800000, LED_DMA=10, LED_BRIGHTNESS=100, LED_INVERT=False):
 
+        # Ensure initialization brightness is within the appropriate bounds
         if LED_BRIGHTNESS < 0:
             self.LED_BRIGHTNESS = 0
         elif LED_BRIGHTNESS > 255:
@@ -39,7 +42,7 @@ class LEDStrip():
         else:
             self.LED_BRIGHTNESS = LED_BRIGHTNESS
 
-        if LED_PIN in [13, 19, 41, 45, 53]: # see: https://tutorials-raspberrypi.com/connect-control-raspberry-pi-ws2812-rgb-led-strips/ 
+        if LED_PIN in [13, 19, 41, 45, 53]: # NOTE: see https://tutorials-raspberrypi.com/connect-control-raspberry-pi-ws2812-rgb-led-strips/ 
             self.LED_CHANNEL = 1
         else:
             self.LED_CHANNEL = 0
@@ -63,6 +66,16 @@ class LEDStrip():
         atexit.register(self.shutdown)
 
     def adjust_color(self, pixel_range="All", red_content=255, green_content=255, blue_content=255):
+        """!
+        This function is called whenever it is desired to change
+        the LED strip RGB status.
+        The strip is turned off simply by setting all values to 0
+        @param pixel_range: Either "All" for all the pixels in the strip, OR a single range
+        @param red_content: Red brightness from 0-255
+        @param green_content: Green brightness from 0-255
+        @param blue_content: Blue brightness from 0-255
+        """
+
         if pixel_range == "All":
             pixel_range = range(0, self.LED_COUNT)
         for LED in pixel_range:
@@ -70,9 +83,13 @@ class LEDStrip():
         self.strip.show()
             
     def shutdown(self):
+        """!
+        Method registered to the shutdown event.
+        Turns off the LED strip before shutdown
+        """
         print(self.name, "shutting down.")
         self.adjust_color(red_content=0, green_content=0, blue_content=0)
-        
+
 
 if __name__ == "__main__":
     """

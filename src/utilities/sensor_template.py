@@ -23,6 +23,7 @@ class Sensor(ABC):
     @param _current_val: The current value that the sensor just read.
     @param queue: The queue between the main thread and the sensor process.
     @param polling_interval: The time between sensor measurements in seconds.
+    @param log_file_name: The unique filename for logging the sensor's readings.
     """
 
     name: str = "Default"

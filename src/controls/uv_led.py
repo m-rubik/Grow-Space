@@ -6,12 +6,14 @@ from src.utilities.relay_template import Relay
 
 
 class UVLed(Relay):
+    """!
+    The UV LED is simply controlled by a relay
+    """
 
     def __init__(self, pin, name="default", is_off=False, queue=None):
         super().__init__(pin, name, is_off)
        
-
-if __name__ == "__main__":
+def unit_test():
     import time
     import RPi.GPIO as GPIO
 
@@ -25,3 +27,6 @@ if __name__ == "__main__":
     GPIO.output(in1, False) # Turn it on
     time.sleep(3)
     GPIO.output(in1, True) # Turn it off
+
+if __name__ == "__main__":
+    unit_test()

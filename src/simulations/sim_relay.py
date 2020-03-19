@@ -1,5 +1,5 @@
 """!
-This code is for the simulation of relays
+This code is for the simulation of relays.
 """
 
 import atexit

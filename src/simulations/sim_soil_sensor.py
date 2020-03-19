@@ -1,5 +1,5 @@
 """!
-Code for simulating a Soil Moisture Sensor
+Code for simulating a Soil Moisture Sensor.
 """
 
 import random
@@ -7,6 +7,9 @@ from src.utilities.sensor_template import Sensor
 from datetime import datetime
 
 class SoilMoistureSensor(Sensor):
+    """!
+    Contains the code for the simulation of a soil moisture sensor
+    """
 
     def __init__(self, name="default", queue=None, polling_interval=2):
         super().__init__(name, queue, polling_interval)
@@ -53,4 +56,8 @@ class SoilMoistureSensor(Sensor):
             f.write(str(current_time)+": "+str(self._current_val)+"\n")
 
     def shutdown(self):
+        """!
+        Shutdown event bound to the atexit condition.
+        Currently does not have any special functionality.
+        """
         print(self.name, "shutting down.")

@@ -47,6 +47,9 @@ class LEDStrip():
         self.LED_INVERT = LED_INVERT
 
     def adjust_color(self, pixel_range="All", red_content=255, green_content=255, blue_content=255):
+        """!
+        Since it is a simulation, adjust color doesn't actually do anything.
+        """
         pass
 
 if __name__ == "__main__":

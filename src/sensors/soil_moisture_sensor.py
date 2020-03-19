@@ -54,7 +54,6 @@ class SoilMoistureSensor(Sensor):
             self._current_val[2] = 0.00
             
         self.queue.put(round(self._current_val[2], 2))
-        # print(self.name, self._current_val[2])
 
         # Step 3: Log the reading
         current_time = datetime.now()
@@ -62,11 +61,13 @@ class SoilMoistureSensor(Sensor):
             f.write(str(current_time)+": "+str(self._current_val)+"\n")
 
     def shutdown(self):
+        """!
+        Shutdown event bound to the atexit condition.
+        Currently does not have any special functionality.
+        """
         print(self.name, "shutting down.")
 
-
-if __name__ == "__main__":
-
+def unit_test():
     import time
     import board
     from busio import I2C
@@ -83,21 +84,6 @@ if __name__ == "__main__":
         print("{:>5}\t{:>5.3f}".format(chan.value, chan.voltage))
         time.sleep(0.5)
 
-    # CODE FOR DIGITAL SIGNAL ONLY
-    # import RPi.GPIO as GPIO
-    # import time
-    # import datetime
-    # channel = 16
-    # GPIO.setmode(GPIO.BCM)
-    # GPIO.setup(channel, GPIO.IN)
-    # def callback(channel):
-    #     time = datetime.datetime.now()
-    #     reading = GPIO.input(channel)
-    #     if reading == 1:
-    #         print(time, "Reading is", str(reading)+". No water")
-    #     else:
-    #         print(time, "Reading is", str(reading)+". Water detected")
-    # GPIO.add_event_detect(channel, GPIO.BOTH, bouncetime=300)
-    # GPIO.add_event_callback(channel, callback)
-    # while True:
-    #     time.sleep(0.1)
+
+if __name__ == "__main__":
+    unit_test()

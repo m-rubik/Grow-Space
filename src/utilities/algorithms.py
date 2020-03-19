@@ -8,11 +8,18 @@ These message are passed back to the main thread, so that the information can be
 2. Used to start up control processes.
 """
 
+
 import statistics
 import numbers
 
 
 def environment_algorithm(db):
+    """!
+    This algorithm interprets the data obtained from the environment sensors.
+    @param db: The master database
+    """
+
+    # Check Temperature level
     msg = ["environment_sensor", {}]
     temperature = int(db['latest']['environment_sensor']['temperature'])
     if temperature >= db['Temperature_High']:
@@ -23,6 +30,7 @@ def environment_algorithm(db):
         flag = None
     msg[1]['temperature'] = {'value': temperature, 'flag': flag}
 
+    #  Check Humidity level
     humidity = int(db['latest']['environment_sensor']['humidity'])
     if humidity >= db['Humidity_High']:
         flag = "HIGH" # As we are not controlling humidity and only measuring, no action needed
@@ -32,11 +40,12 @@ def environment_algorithm(db):
         flag = None
     msg[1]['humidity'] = {'value': humidity, 'flag': flag}
 
+    # Check VOC/gas level
     gas = round(int(db['latest']['environment_sensor']['gas'])/1000, 2)
     if gas >= db['VOC_High']:
-        flag = "HIGH" # TODO: What to do about high VOC? Turn on fan?
+        flag = "HIGH" # NOTE: In future iterations, poor VOC readings may result in the fan being turned on
     elif gas <= db['VOC_Low']:
-        flag = "LOW" # if VOC is low, then no action needed
+        flag = "LOW" # If VOC is acceptable, no need to take any action.
     else:
         flag = None
     msg[1]['gas'] = {'value': gas, 'flag': flag}
@@ -48,7 +57,8 @@ def watering_algorithm(db, water_list):
     The watering algorithm takes the raw sensor data and determines
     if the soil moisture within the enclosure is within the acceptable range
     (as provided by the configuraiton file).
-     Physical Parameters dictate that the sensors should be 12cm apart (center2center), centred in the enclosure.
+    @param db: The master database
+    @param water_list: List of water values recorded over time
     """
     try:
         # Get the most recent soil_moisture_levels
@@ -77,12 +87,6 @@ def watering_algorithm(db, water_list):
             water_average = statistics.mean([x for x in water_list if isinstance(x, numbers.Number)])
         except statistics.StatisticsError:
             print("System initialization: No values for water average")
-
-        # current_level_2 = int(db['latest']['soil_moisture_sensor_2'])
-
-        # Calculate the overall soil moisture level
-        #  TODO: Find a better way of calculating the level or maybe don't even do it this way idk
-        #  calculated_level = int(statistics.mean([current_level_1, current_level_2]))
 
         measured_level = int(current_level_1)
 

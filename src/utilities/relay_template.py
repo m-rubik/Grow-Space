@@ -3,6 +3,7 @@ This code is for the intialization and control of relays through
 RPi GPIO pins.
 """
 
+
 import RPi.GPIO as GPIO
 from abc import ABC, abstractmethod
 import atexit
@@ -59,8 +60,7 @@ class Relay(ABC):
         self.is_off = True
         GPIO.output(self.pin, self.is_off)
 
-
-if __name__ == "__main__":
+def unit_test():
     import time
 
     in1 = 17
@@ -86,5 +86,9 @@ if __name__ == "__main__":
 
     GPIO.output(in1, True)
     GPIO.output(in2, True)
-    GPIO.output(in3, True)
+    GPIO.output(in3, True)   
+
+
+if __name__ == "__main__":
+    unit_test()
 

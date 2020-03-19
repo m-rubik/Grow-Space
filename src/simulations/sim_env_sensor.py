@@ -7,6 +7,12 @@ from datetime import datetime
 from src.utilities.sensor_template import Sensor
 
 class EnvironmentSensor(Sensor):
+    """!
+    Contains the code for simulating the environment sensor.
+    Since this is for a simulated sensor, there is no I2C interface,
+    nor board object.
+    @param data_dict: Dictionary that stores the simualted sensor readings.
+    """
 
     data_dict: dict = {}
 
@@ -14,22 +20,18 @@ class EnvironmentSensor(Sensor):
         super().__init__(name, queue, polling_interval)
 
     def poll(self):
+        """!
+        This method is called periodically to read sensor data and report
+        it back to the main thread.
+        """
 
-        # Step 1: Generate random readings
+        # Step 1: Generate pseudorandom readings (within a range)
         self.data_dict['temperature'] = random.randrange(10, 40)    # [Celcius]
         self.data_dict['gas'] = random.randrange(100000, 900000)    # [Ohm]
         self.data_dict['humidity'] = random.randrange(0, 100)       # [%]
         self.data_dict['pressure'] = random.randrange(500, 1500)    # [hPa]
         self.data_dict['altitude'] = random.randrange(0, 2000)      # [m]
        
-        # print("\nTemperature: %0.1f C" % self.data_dict['temperature'])
-        # print("Gas: %d ohm" % self.data_dict['gas'])
-        # print("Humidity: %0.1f %%" % self.data_dict['humidity'])
-        # print("Pressure: %0.3f hPa" % self.data_dict['pressure'])
-        # print("Altitude = %0.2f meters" % self.data_dict['altitude'])
-
-        # TODO Step 1.5: Run algorithms with the data??? 
-
         # Step 2: Relay the readings
         self.queue.put(self.data_dict)
 
@@ -42,4 +44,8 @@ class EnvironmentSensor(Sensor):
             f.write("\n")
 
     def shutdown(self):
+        """!
+        Shutdown event bound to the atexit condition.
+        Currently does not have any special functionality.
+        """
         print(self.name, "shutting down.")
