@@ -549,29 +549,29 @@ class GrowSpaceGUI:
 
         for i in self.createfile_win.RedList:
             if i == '' or i.isdigit() == False:
-                messagebox.showerror(title="Error - Red LED Values",message="Please enter an integer from 0 to 100 for the red LED intensities", icon="error")
+                messagebox.showerror(title="Error - Red LED Values",message="Please enter an integer from 0 to 255 for the red LED intensities", icon="error")
                 return
 
-        if any( i > 100 for i in list(map(int, self.createfile_win.RedList))) or any(i < 0 for i in list(map(int, self.createfile_win.RedList))):
-            messagebox.showerror(title="Error - Red LED Values",message="Please enter an integer from 0 to 100 for the red LED intensities", icon="error")
+        if any( i > 255 for i in list(map(int, self.createfile_win.RedList))) or any(i < 0 for i in list(map(int, self.createfile_win.RedList))):
+            messagebox.showerror(title="Error - Red LED Values",message="Please enter an integer from 0 to 255 for the red LED intensities", icon="error")
             return
 
         for i in self.createfile_win.GreenList:
             if i == '' or i.isdigit() == False:
-                messagebox.showerror(title="Error - Green LED Values",message="Please enter an integer from 0 to 100 for the green LED intensities", icon="error")
+                messagebox.showerror(title="Error - Green LED Values",message="Please enter an integer from 0 to 255 for the green LED intensities", icon="error")
                 return
 
-        if any(i > 100 for i in list(map(int, self.createfile_win.GreenList))) or any(i < 0 for i in list(map(int, self.createfile_win.GreenList))):
-            messagebox.showerror(title="Error - Green LED Values", message="Please enter an integer from 0 to 100 for the green LED intensities", icon="error")
+        if any(i > 255 for i in list(map(int, self.createfile_win.GreenList))) or any(i < 0 for i in list(map(int, self.createfile_win.GreenList))):
+            messagebox.showerror(title="Error - Green LED Values", message="Please enter an integer from 0 to 255 for the green LED intensities", icon="error")
             return
 
         for i in self.createfile_win.BlueList:
             if i == '' or i.isdigit() == False:
-                messagebox.showerror(title="Error - Blue LED Values",message="Please enter an integer from 0 to 100 for the blue LED intensities", icon="error")
+                messagebox.showerror(title="Error - Blue LED Values",message="Please enter an integer from 0 to 255 for the blue LED intensities", icon="error")
                 return
 
-        if any(i > 100 for i in list(map(int, self.createfile_win.BlueList))) or any(i < 0 for i in list(map(int, self.createfile_win.BlueList))):
-            messagebox.showerror(title="Error - Blue LED Values",message="Please enter an integer from 0 to 100 for the blue LED intensities", icon="error")
+        if any(i > 255 for i in list(map(int, self.createfile_win.BlueList))) or any(i < 0 for i in list(map(int, self.createfile_win.BlueList))):
+            messagebox.showerror(title="Error - Blue LED Values",message="Please enter an integer from 0 to 255 for the blue LED intensities", icon="error")
             return
 
         ##### Verification Box ######

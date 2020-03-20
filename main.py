@@ -296,12 +296,12 @@ class ThreadedClient:
 
                             # Check if the pump is currently being manually overridden
                             if self.db_master['Manual Overrides']['Pump']:
-                                self.logger.debug("Moisture detected low, but pump is in manual override")
+                                self.logger.debug("Soil Moisture flagged, but pump is in manual override")
                                 do_process = False
 
                             # Check if the pump is already running from a previous algorithm check
                             elif self.control_statuses['pump'] == "Busy":
-                                self.logger.debug("Moisture detected low, but pump is already running")
+                                self.logger.debug("Soil Moisture flagged, but pump is already running")
                                 do_process = False
 
                             # Check if the system is still waiting for the previous watering to soak into the soil
@@ -522,9 +522,9 @@ def check_terminate_process(process):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('-r', '--refresh', type=int, default=200, help='GUI refresh interval (ms)')
-    parser.add_argument('-p', '--polling', type=int, default=2, help='Sensor polling interval (s)')
+    parser.add_argument('-p', '--polling', type=int, default=300, help='Sensor polling interval (s)')
     parser.add_argument('-s', '--simulate', action='store_true', help='Boolean for simulating the environment')
-    parser.add_argument('-c', '--config', type=str, default="basil", help="Name of the environment configuration file")
+    parser.add_argument('-c', '--config', type=str, default="radishes", help="Name of the environment configuration file")
     args = parser.parse_args()
 
     ROOT = Tk()

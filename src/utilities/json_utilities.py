@@ -34,30 +34,30 @@ def save_as_json(filename, data):
 
 def manually_generate_config_file(name):
     RGB_data = {}
-    RGB_data['0'] = {"R": 0, "G": 0, "B": 0}
-    RGB_data['1'] = {"R": 0, "G": 0, "B": 0}
-    RGB_data['2'] = {"R": 0, "G": 0, "B": 0}
-    RGB_data['3'] = {"R": 0, "G": 0, "B": 0}
-    RGB_data['4'] = {"R": 0, "G": 0, "B": 0}
-    RGB_data['5'] = {"R": 0, "G": 0, "B": 0}
-    RGB_data['6'] = {"R": 52, "G": 52, "B": 52}
-    RGB_data['7'] = {"R": 52, "G": 52, "B": 52}
-    RGB_data['8'] = {"R": 105, "G": 105, "B": 105}
-    RGB_data['9'] = {"R": 154, "G": 154, "B": 154}
-    RGB_data['10'] = {"R": 154, "G": 154, "B": 154}
-    RGB_data['11'] = {"R": 154, "G": 154, "B": 154}
-    RGB_data['12'] = {"R": 154, "G": 154, "B": 154}
-    RGB_data['13'] = {"R": 154, "G": 154, "B": 154}
-    RGB_data['14'] = {"R": 154, "G": 154, "B": 154}
-    RGB_data['15'] = {"R": 154, "G": 154, "B": 154}
-    RGB_data['16'] = {"R": 154, "G": 154, "B": 154}
-    RGB_data['17'] = {"R": 154, "G": 154, "B": 154}
-    RGB_data['18'] = {"R": 105, "G": 105, "B": 105}
-    RGB_data['19'] = {"R": 105, "G": 105, "B": 105}
-    RGB_data['20'] = {"R": 52, "G": 52, "B": 52}
-    RGB_data['21'] = {"R": 52, "G": 52, "B": 52}
-    RGB_data['22'] = {"R": 0, "G": 0, "B": 0}
-    RGB_data['23'] = {"R": 0, "G": 0, "B": 0}
+    RGB_data['0'] = {"R": 100, "G": 0, "B": 100}
+    RGB_data['1'] = {"R": 100, "G": 0, "B": 100}
+    RGB_data['2'] = {"R": 100, "G": 0, "B": 100}
+    RGB_data['3'] = {"R": 100, "G": 0, "B": 100}
+    RGB_data['4'] = {"R": 100, "G": 0, "B": 100}
+    RGB_data['5'] = {"R": 100, "G": 0, "B": 100}
+    RGB_data['6'] = {"R": 100, "G": 25, "B": 100}
+    RGB_data['7'] = {"R": 100, "G": 50, "B": 100}
+    RGB_data['8'] = {"R": 100, "G": 75, "B": 100}
+    RGB_data['9'] = {"R": 100, "G": 100, "B": 100}
+    RGB_data['10'] = {"R": 100, "G": 100, "B": 100}
+    RGB_data['11'] = {"R": 100, "G": 100, "B": 100}
+    RGB_data['12'] = {"R": 100, "G": 100, "B": 100}
+    RGB_data['13'] = {"R": 100, "G": 100, "B": 100}
+    RGB_data['14'] = {"R": 100, "G": 100, "B": 100}
+    RGB_data['15'] = {"R": 100, "G": 100, "B": 100}
+    RGB_data['16'] = {"R": 100, "G": 100, "B": 100}
+    RGB_data['17'] = {"R": 100, "G": 100, "B": 100}
+    RGB_data['18'] = {"R": 100, "G": 75, "B": 100}
+    RGB_data['19'] = {"R": 100, "G": 50, "B": 100}
+    RGB_data['20'] = {"R": 100, "G": 25, "B": 100}
+    RGB_data['21'] = {"R": 100, "G": 0, "B": 100}
+    RGB_data['22'] = {"R": 100, "G": 0, "B": 100}
+    RGB_data['23'] = {"R": 1000, "G": 0, "B": 100}
 
     UV_data = {}
     UV_data['0'] = 0
@@ -86,22 +86,22 @@ def manually_generate_config_file(name):
     UV_data['23'] = 0
 
     data = {}
-    data['Temperature_Low'] = 21
+    data['Temperature_Low'] = 20
     data['Temperature_High'] = 35
-    data['Moisture_Low'] = 55
-    data['Moisture_High'] = 80
+    data['Moisture_Low'] = 80
+    data['Moisture_High'] = 100
     data['Humidity_Low'] = 60
     data['Humidity_High'] = 100
-    data['VOC_Low'] = 400
-    data['VOC_High'] = 800
+    data['VOC_Low'] = 10
+    data['VOC_High'] = 100
     data['RGB_data'] = RGB_data
     data['UV_data'] = UV_data
-    data['Soak_Minutes'] = 0.5
+    data['Soak_Minutes'] = 30
 
     save_as_json("./configuration_files/"+name, data)
 
 
 if __name__ == "__main__":
-    manually_generate_config_file("basil_no_UV")
+    manually_generate_config_file("radishes")
 
 
