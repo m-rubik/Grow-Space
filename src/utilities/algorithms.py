@@ -98,9 +98,9 @@ def watering_algorithm(db, water_list):
 
         # Determine the flag from the accepted range & the calculated level
         flag = None
-        if measured_level < db['Moisture_Low']:
+        if calculated_level < db['Moisture_Low']:
             flag = "LOW"
-        elif measured_level > db['Moisture_High']:
+        elif calculated_level > db['Moisture_High']:
             flag = "HIGH"
 
     except KeyError as err:
