@@ -198,7 +198,7 @@ class ThreadedClient:
             self.logger.debug("Running simulation...")
             from src.simulations import sim_env_sensor, sim_soil_sensor
             self.sensors['environment_sensor'] = sim_env_sensor.EnvironmentSensor(name="sim_environment_sensor", queue=Queue(), polling_interval=polling_interval)
-            self.sensors['soil_moisture_sensor_1'] = sim_soil_sensor.SoilMoistureSensor(name="sim_soil_moisture_sensor_1", queue=Queue(), polling_interval=polling_interval)
+            # self.sensors['soil_moisture_sensor_1'] = sim_soil_sensor.SoilMoistureSensor(name="sim_soil_moisture_sensor_1", queue=Queue(), polling_interval=polling_interval)
             self.sensors['soil_moisture_sensor_2'] = sim_soil_sensor.SoilMoistureSensor(name="sim_soil_moisture_sensor_2", queue=Queue(), polling_interval=polling_interval)
         else:
             self.logger.debug("Running system...")
@@ -455,8 +455,9 @@ class ThreadedClient:
             if msg[0] == "RELOAD":
                 self.configuration_file = msg[1]
                 self.load_configuration()
-            else: # TODO: This isn't exactly the best idea. We really should be checking to ensure this is only for RGB LED and not anything else.
-                self.db_master['Manual Overrides']['RGB LED'] = True
+            else: 
+                self.db_master['Manual Overrides']['RGB LED'] = False # NOTE: ONLY FOR TESTING
+                # self.db_master['Manual Overrides']['RGB LED'] = True
 
                 # Check to ensure all colors are within the accepted range, else default to 0
                 try:

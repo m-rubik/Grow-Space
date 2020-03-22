@@ -8,7 +8,7 @@ import pandas as pd
 import re
 
 environment_sensor_pattern = re.compile(r"([0-9-]+)\s([0-9:.]+)\stemperature:\s([0-9.]+),\sgas:\s([0-9]+),\shumidity:\s([0-9.]+),\spressure:\s([0-9.]+),\saltitude:\s([0-9.]+)", re.MULTILINE)
-soil_moisture_pattern = re.compile(r"([0-9-]+)\s([0-9:.]+)\s\[([0-9]+),\s([0-9.]+),\s([0-9.]+)\]", re.MULTILINE)
+soil_moisture_pattern = re.compile(r"([0-9-]+)\s([0-9.:]+):\s\[([0-9]+),\s([0-9.]+),\s([0-9.]+)\]", re.MULTILINE)
 
 
 def plot_soil_moisture(dict):
@@ -22,8 +22,9 @@ def plot_soil_moisture(dict):
     plt.plot(x, y)
     plt.xticks([])
     plt.yticks([])
-    plt.title("Soil Moisture Percentage Over Time")
-    plt.ylabel("Moisture (%)")
+    # plt.xticks(rotation=45)
+    plt.title("Soil Moisture Sensor Readings Over Time")
+    plt.ylabel("Moisture Percentage (%)")
     plt.xlabel("Time (s)")
     plt.show()
 
@@ -86,24 +87,18 @@ if __name__ == "__main__":
     import time
 
     # Plot soil moisture data
-    max_volt = 3.292
-    min_volt = 1.30
-    with open("./logs/Test_Results/Single_Soil_Sensor/soil_moisture_sensor_1.txt", "r") as myfile:
+    with open("./logs/Test_Results/Radishes_Two/soil_moisture_sensor_1.txt", "r") as myfile:
         data = myfile.readlines()
     matches = extract_data_from_log(data, soil_moisture_pattern)
     data_dict = dict()
     for match in matches:
-        current_val= (-100/(max_volt-min_volt))*(float(match.group(4))-max_volt)
-        if current_val > 99.7:
-            current_val = 100.00
-        elif current_val< 0.3:
-            current_val = 0.00
-        # print(match.group(2))
+        # current_val = float(match.group(4)) # Raw voltage reading
+        current_val = float(match.group(5)) # Percentage reading
         data_dict[match.group(2)] = current_val
     plot_soil_moisture(data_dict)
 
     # Plot temperature data
-    with open("./logs/Test_Results/Single_Soil_Sensor/environment_sensor.txt", "r") as myfile:
+    with open("./logs/Test_Results/Radishes_Two/environment_sensor.txt", "r") as myfile:
         data = myfile.readlines()
     matches = extract_data_from_log(data, environment_sensor_pattern)
     data_dict = dict()
