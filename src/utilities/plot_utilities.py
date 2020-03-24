@@ -6,8 +6,11 @@ All functions providing plotting functionalities.
 import matplotlib.pylab as plt
 import pandas as pd
 import re
+import datetime as dt
 
-environment_sensor_pattern = re.compile(r"([0-9-]+)\s([0-9:.]+)\stemperature:\s([0-9.]+),\sgas:\s([0-9]+),\shumidity:\s([0-9.]+),\spressure:\s([0-9.]+),\saltitude:\s([0-9.]+)", re.MULTILINE)
+plt.rcParams.update({'font.size': 22})
+
+environment_sensor_pattern = re.compile(r"([0-9-]+)\s([0-9:.]+):\stemperature:\s([0-9.]+),\sgas:\s([0-9]+),\shumidity:\s([0-9.]+),\spressure:\s([0-9.]+),\saltitude:\s([0-9.]+)", re.MULTILINE)
 soil_moisture_pattern = re.compile(r"([0-9-]+)\s([0-9.:]+):\s\[([0-9]+),\s([0-9.]+),\s([0-9.]+)\]", re.MULTILINE)
 
 
@@ -16,16 +19,15 @@ def plot_soil_moisture(dict):
     Plots soil moisture data in simple line chart
     @param dict: Dicitonary containing timestamps and associated readings.
     """
-    
+   
     lists = sorted(dict.items()) 
     x, y = zip(*lists)
-    plt.plot(x, y)
-    plt.xticks([])
-    plt.yticks([])
-    # plt.xticks(rotation=45)
+    fig, ax = plt.subplots()
+    ax.plot(x, y, 'k', linewidth=2)
+    ax.grid()
     plt.title("Soil Moisture Sensor Readings Over Time")
     plt.ylabel("Moisture Percentage (%)")
-    plt.xlabel("Time (s)")
+    plt.xlabel("Time (Month-Day Hour)")
     plt.show()
 
 def plot_temperature(dict):
@@ -33,17 +35,17 @@ def plot_temperature(dict):
     Plots temperature data in simple line chart
     @param dict: Dicitonary containing timestamps and associated readings.
     """
-    
+
     lists = sorted(dict.items()) 
     x, y = zip(*lists)
-    plt.plot(x, y)
-    plt.xticks([])
-    plt.yticks([])
+    fig, ax = plt.subplots()
+    ax.plot(x, y, 'k', linewidth=2)
+    ax.grid()
     plt.title("Temperature Over Time")
     plt.ylabel("Temperature (°C)")
-    plt.xlabel("Time (s)")
+    plt.xlabel("Time (Month-Day Hour)")
     plt.show()
-
+    
 def boxplot_environment(df):
     """!
     Creates a boxplot of all the relevant environment sensor data.
@@ -57,14 +59,18 @@ def boxplot_environment(df):
 
     @param df: dataframe object from which we generate a boxplot.
     """
+    df['VOC'] = df['VOC'].div(1000)
 
-    with plt.style.context("seaborn"):
-        fig, ax = plt.subplots(1, 3)
-        fig.suptitle('Environment Sensor Data', fontsize=16)
-        df.boxplot('Temperature', ax=ax[0])
-        df.boxplot('VOC', ax=ax[1])
-        df.boxplot('Humidity', ax=ax[2])
-        plt.show()
+    # with plt.style.context("seaborn"):
+    fig, ax = plt.subplots(1, 3)
+    fig.suptitle('Environment Sensor Data')
+    df.boxplot('Temperature', ax=ax[0])
+    df.boxplot('VOC', ax=ax[1], fontsize=12)
+    df.boxplot('Humidity', ax=ax[2])
+    ax[0].set_ylabel("Temperature (°C)")
+    ax[1].set_ylabel("VOC (kΩ)")
+    ax[2].set_ylabel("Humidity (%)")
+    plt.show()
 
 def extract_data_from_log(data, pattern):
     """!
@@ -81,24 +87,22 @@ def extract_data_from_log(data, pattern):
 
 
 if __name__ == "__main__":
-    from src.utilities.pickle_utilities import import_object, export_object
-    import random
-    import datetime
-    import time
 
     # Plot soil moisture data
-    with open("./logs/Test_Results/Radishes_Two/soil_moisture_sensor_1.txt", "r") as myfile:
+    with open("./logs/Test_Results/soil_moisture_sensor_1.txt", "r") as myfile:
         data = myfile.readlines()
     matches = extract_data_from_log(data, soil_moisture_pattern)
     data_dict = dict()
     for match in matches:
         # current_val = float(match.group(4)) # Raw voltage reading
         current_val = float(match.group(5)) # Percentage reading
-        data_dict[match.group(2)] = current_val
+        index_time = match.group(1) + " " + match.group(2)
+        index_dt = dt.datetime.strptime(index_time, "%Y-%m-%d %H:%M:%S.%f")
+        data_dict[index_dt] = current_val
     plot_soil_moisture(data_dict)
 
     # Plot temperature data
-    with open("./logs/Test_Results/Radishes_Two/environment_sensor.txt", "r") as myfile:
+    with open("./logs/Test_Results/environment_sensor.txt", "r") as myfile:
         data = myfile.readlines()
     matches = extract_data_from_log(data, environment_sensor_pattern)
     data_dict = dict()
@@ -107,9 +111,11 @@ if __name__ == "__main__":
     data_dict['VOC'] = {}
     data_dict['Humidity'] = {}
     for match in matches:
-        data_dict['Temperature'][match.group(2)] = float(match.group(3))
-        data_dict['VOC'][match.group(2)] = float(match.group(4))
-        data_dict['Humidity'][match.group(2)] = float(match.group(5))
+        index_time = match.group(1) + " " + match.group(2)
+        index_dt = dt.datetime.strptime(index_time, "%Y-%m-%d %H:%M:%S.%f")
+        data_dict['Temperature'][index_dt] = float(match.group(3))
+        data_dict['VOC'][index_dt] = float(match.group(4))
+        data_dict['Humidity'][index_dt] = float(match.group(5))
     plot_temperature(data_dict['Temperature'])
 
     # Plot environment sensor data
