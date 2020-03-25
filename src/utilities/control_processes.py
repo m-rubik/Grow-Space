@@ -141,11 +141,11 @@ if __name__ == "__main__":
 
     def calc_flow(calculated_level):
         lh = abs(moisture_low-moisture_high)
-        max_flow = 500  # [mL]
+        max_flow = 50  # [mL]
         if calculated_level >= moisture_high:
             flow = 0
         elif calculated_level < moisture_high:
-            flow = (max_flow/(2*lh))*(moisture_high-calculated_level) + 50
+            flow = (max_flow/(2*lh))*(moisture_low-calculated_level) + 50
             if flow > max_flow:
                 flow = max_flow
         
