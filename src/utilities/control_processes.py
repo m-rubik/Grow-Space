@@ -23,13 +23,15 @@ def watering_process(msg, controls, queue, db):
     # Determine the required watering time
     calculated_level = msg[3]
     moisture_low = db["Moisture_Low"]
-    moisture_high = db["Moisture_High"]
-    lh = abs(moisture_low-moisture_high)
+    # moisture_high = db["Moisture_High"]
+
+    # lh = abs(moisture_low-moisture_high)
     max_flow = 50  # [mL]
-    if calculated_level >= moisture_high:
+    if calculated_level >= moisture_low:
         flow = 0
-    elif calculated_level < moisture_high:
-        flow = (max_flow/(2*lh))*(moisture_high-calculated_level) + 50
+    elif calculated_level < moisture_low:
+        flow = (moisture_low - calculated_level) * 5
+        # flow = (max_flow/(2*lh))*(moisture_low-calculated_level) + 50
         if flow > max_flow:
             flow = max_flow
     flow_per_second = 0.905  # [mL/s]
@@ -137,15 +139,16 @@ def lighting_process(db, controls):
 
 if __name__ == "__main__":
     moisture_low = 80
-    moisture_high = 95
+    # moisture_high = 95
 
     def calc_flow(calculated_level):
-        lh = abs(moisture_low-moisture_high)
+        # lh = abs(moisture_low-moisture_high)
         max_flow = 50  # [mL]
-        if calculated_level >= moisture_high:
+        if calculated_level >= moisture_low:
             flow = 0
-        elif calculated_level < moisture_high:
-            flow = (max_flow/(2*lh))*(moisture_low-calculated_level) + 50
+        elif calculated_level < moisture_low:
+            flow = (moisture_low - calculated_level) * 5
+            # flow = (max_flow/(2*lh))*(moisture_low-calculated_level) + 50
             if flow > max_flow:
                 flow = max_flow
         
