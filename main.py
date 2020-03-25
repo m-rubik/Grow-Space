@@ -19,8 +19,8 @@ from src.utilities.pickle_utilities import export_object
 from src.utilities.json_utilities import save_as_json, load_from_json
 from src.utilities.logger_utilities import get_logger
 from src.utilities.file_utilities import generate_unique_filename
-from src.utilities.algorithms import watering_algorithm, environment_algorithm, lighting_algorithm
-from src.utilities.control_processes import watering_process, fan_process, lighting_process
+from src.utilities.algorithms import watering_algorithm, environment_algorithm, time_keeper
+from src.utilities.control_processes import watering_process, fan_process, lighting_process, fan_hourly_process
 
 
 class ThreadedClient:
@@ -256,9 +256,11 @@ class ThreadedClient:
         # Get the current time and send it to the lighting algorithm
         self.current_time = datetime.now()
         try:
-            light_response = lighting_algorithm(self.current_time, self.previous_time)
-            if light_response:
+            time_response = time_keeper(self.current_time, self.previous_time)
+            if time_response:
                 lighting_process(self.db_master, self.controls)
+                fan_hourly_process(self.db_master, self.controls)
+
         except AttributeError:
             self.logger.debug("Main loop is running its first iteration...")
         self.previous_time = self.current_time

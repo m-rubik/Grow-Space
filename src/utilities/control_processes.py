@@ -21,7 +21,6 @@ def watering_process(msg, controls, queue, db):
     """
 
     # Determine the required watering time
-    measured_level = msg[1] # NOTE: Currenly unused
     calculated_level = msg[3]
     moisture_low = db["Moisture_Low"]
     moisture_high = db["Moisture_High"]
@@ -37,16 +36,17 @@ def watering_process(msg, controls, queue, db):
     pump_time = int(flow/flow_per_second)
 
     # Operate the pump
-    controls['pump'].turn_on()
-    print("Beginning pump for", pump_time, "seconds.")
-    for _ in range(pump_time):
-        if not queue.empty():
-            msg = queue.get()
-            print("Pump is being interrupted by manual override.")
-            controls['pump'].turn_off()
-            sys.exit(0)
-        time.sleep(1)
-    controls['pump'].turn_off()
+    if flow: # a.k.a flow is not 0
+        controls['pump'].turn_on()
+        print("Beginning pump for", pump_time, "seconds.")
+        for _ in range(pump_time):
+            if not queue.empty():
+                msg = queue.get()
+                print("Pump is being interrupted by manual override.")
+                controls['pump'].turn_off()
+                sys.exit(0)
+            time.sleep(1)
+        controls['pump'].turn_off()
 
     # Relay that it is finished
     queue.put("Finished pumping for " + str(pump_time) + "s.")
@@ -76,6 +76,25 @@ def fan_process(msg, controls, queue):
 
     # Terminate the process
     sys.exit(0)
+    
+
+def fan_hourly_process(db, controls):
+    try:
+        # Get the current hour & the corresponding Fan data
+        hour = str(datetime.datetime.now().hour)
+
+        # Check for manual override on the Fan
+        if not db['Manual Overrides']['Fan']:
+            # Get the UV light data for the current hour
+            if db['Fan_Data'][hour]:
+                controls['fan'].turn_on()
+                db['Fan Status'] = "ON"
+            else:
+                controls['fan'].turn_off()
+                db['Fan Status'] = "OFF"
+    except Exception as err:
+        return err
+    return 0
 
 
 def lighting_process(db, controls):

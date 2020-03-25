@@ -85,6 +85,32 @@ def manually_generate_config_file(name):
     UV_data['22'] = 0
     UV_data['23'] = 0
 
+    Fan_data = {}
+    Fan_data['0'] = 0
+    Fan_data['1'] = 0
+    Fan_data['2'] = 0
+    Fan_data['3'] = 0
+    Fan_data['4'] = 0
+    Fan_data['5'] = 0
+    Fan_data['6'] = 0
+    Fan_data['7'] = 0
+    Fan_data['8'] = 1
+    Fan_data['9'] = 1
+    Fan_data['10'] = 1
+    Fan_data['11'] = 1
+    Fan_data['12'] = 1
+    Fan_data['13'] = 1
+    Fan_data['14'] = 1
+    Fan_data['15'] = 1
+    Fan_data['16'] = 1
+    Fan_data['17'] = 1
+    Fan_data['18'] = 1
+    Fan_data['19'] = 1
+    Fan_data['20'] = 1
+    Fan_data['21'] = 1
+    Fan_data['22'] = 1
+    Fan_data['23'] = 0
+
     data = {}
     data['Temperature_Low'] = 20
     data['Temperature_High'] = 35
@@ -96,6 +122,7 @@ def manually_generate_config_file(name):
     data['VOC_High'] = 900
     data['RGB_data'] = RGB_data
     data['UV_data'] = UV_data
+    data['Fan_data'] = Fan_data
     data['Soak_Minutes'] = 30
 
     save_as_json("./configuration_files/"+name, data)

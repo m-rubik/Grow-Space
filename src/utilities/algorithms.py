@@ -113,13 +113,11 @@ def watering_algorithm(db, water_list):
     return msg
 
 
-def lighting_algorithm(curr, prev):
+def time_keeper(curr, prev):
     """!
-    The purpose of the lighting algorithm is to determine what state the RGB and UV LEDs
+    The purpose of the time_keeper is to determine what state the RGB & UV LEDs and the Fan
     should be in at any given time.
-
     The current algorithm detects when the hour changes.
-    It checks for hour changes because the current config files only contain hourly light data.
 
     @param curr: The current time
     @param prev: The previous time that the algorithm ran
