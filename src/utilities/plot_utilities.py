@@ -4,9 +4,11 @@ All functions providing plotting functionalities.
 
 
 import matplotlib.pylab as plt
+import matplotlib.dates as mdates
 import pandas as pd
 import re
 import datetime as dt
+
 
 plt.rcParams.update({'font.size': 22})
 
@@ -24,10 +26,14 @@ def plot_soil_moisture(dict):
     x, y = zip(*lists)
     fig, ax = plt.subplots()
     ax.plot(x, y, 'k', linewidth=2)
+    fig.autofmt_xdate()
+    hours = mdates.HourLocator(interval = 5)
+    ax.xaxis.set_major_locator(hours)
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%d - %H'))
     ax.grid()
     plt.title("Soil Moisture Sensor Readings Over Time")
     plt.ylabel("Moisture Percentage (%)")
-    plt.xlabel("Time (Month-Day Hour)")
+    plt.xlabel("Time (Day - Hour)")
     plt.show()
 
 def plot_temperature(dict):
@@ -40,6 +46,10 @@ def plot_temperature(dict):
     x, y = zip(*lists)
     fig, ax = plt.subplots()
     ax.plot(x, y, 'k', linewidth=2)
+    fig.autofmt_xdate()
+    hours = mdates.HourLocator(interval = 5)
+    ax.xaxis.set_major_locator(hours)
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%d - %H'))
     ax.grid()
     plt.title("Temperature Over Time")
     plt.ylabel("Temperature (°C)")
