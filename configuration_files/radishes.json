@@ -151,7 +151,7 @@
             "R": 200
         }
     },
-    "Soak_Minutes": 30,
+    "Soak_Minutes": 60,
     "Temperature_High": 35,
     "Temperature_Low": 20,
     "UV_data": {

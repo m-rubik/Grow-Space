@@ -123,7 +123,7 @@ def manually_generate_config_file(name):
     data['RGB_data'] = RGB_data
     data['UV_data'] = UV_data
     data['Fan_data'] = Fan_data
-    data['Soak_Minutes'] = 30
+    data['Soak_Minutes'] = 60
 
     save_as_json("./configuration_files/"+name, data)
 
