@@ -25,11 +25,11 @@ def watering_process(msg, controls, queue, db):
     moisture_low = db["Moisture_Low"]
     moisture_high = db["Moisture_High"]
     lh = abs(moisture_low-moisture_high)
-    max_flow = 500  # [mL]
-    if calculated_level > moisture_high:
+    max_flow = 250  # [mL]
+    if calculated_level >= moisture_high:
         flow = 0
-    elif calculated_level <= moisture_high:
-        flow = (max_flow/(2*lh))*calculated_level + 50
+    elif calculated_level < moisture_high:
+        flow = (max_flow/(2*lh))*(moisture_high-calculated_level) + 50
         if flow > max_flow:
             flow = max_flow
     flow_per_second = 0.905  # [mL/s]
@@ -76,7 +76,7 @@ def fan_process(msg, controls, queue):
 
     # Terminate the process
     sys.exit(0)
-    
+
 
 def fan_hourly_process(db, controls):
     try:
@@ -134,3 +134,25 @@ def lighting_process(db, controls):
     except Exception as err:
         return err
     return 0
+
+if __name__ == "__main__":
+    moisture_low = 80
+    moisture_high = 95
+
+    def calc_flow(calculated_level):
+        lh = abs(moisture_low-moisture_high)
+        max_flow = 500  # [mL]
+        if calculated_level >= moisture_high:
+            flow = 0
+        elif calculated_level < moisture_high:
+            flow = (max_flow/(2*lh))*(moisture_high-calculated_level) + 50
+            if flow > max_flow:
+                flow = max_flow
+        
+        flow_per_second = 0.905  # [mL/s]
+        pump_time = int(flow/flow_per_second)
+        return pump_time
+
+    for i in range(65,100):
+        flow = calc_flow(i)
+        print("Input level:", i, "calculated pump time:",flow)
