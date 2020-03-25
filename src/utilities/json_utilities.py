@@ -89,11 +89,11 @@ def manually_generate_config_file(name):
     data['Temperature_Low'] = 20
     data['Temperature_High'] = 35
     data['Moisture_Low'] = 80
-    data['Moisture_High'] = 100
+    data['Moisture_High'] = 95
     data['Humidity_Low'] = 60
     data['Humidity_High'] = 100
-    data['VOC_Low'] = 10
-    data['VOC_High'] = 100
+    data['VOC_Low'] = 100
+    data['VOC_High'] = 900
     data['RGB_data'] = RGB_data
     data['UV_data'] = UV_data
     data['Soak_Minutes'] = 30

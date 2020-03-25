@@ -1,7 +1,7 @@
 {
     "Humidity_High": 100,
     "Humidity_Low": 60,
-    "Moisture_High": 100,
+    "Moisture_High": 95,
     "Moisture_Low": 80,
     "RGB_data": {
         "0": {
@@ -154,6 +154,6 @@
         "8": 0,
         "9": 0
     },
-    "VOC_High": 100,
-    "VOC_Low": 10
+    "VOC_High": 900,
+    "VOC_Low": 100
 }

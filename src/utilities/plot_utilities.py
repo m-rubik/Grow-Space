@@ -27,7 +27,7 @@ def plot_soil_moisture(dict):
     fig, ax = plt.subplots()
     ax.plot(x, y, 'k', linewidth=2)
     fig.autofmt_xdate()
-    hours = mdates.HourLocator(interval = 5)
+    hours = mdates.HourLocator(interval = 3)
     ax.xaxis.set_major_locator(hours)
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%d - %H'))
     ax.grid()
@@ -47,7 +47,7 @@ def plot_temperature(dict):
     fig, ax = plt.subplots()
     ax.plot(x, y, 'k', linewidth=2)
     fig.autofmt_xdate()
-    hours = mdates.HourLocator(interval = 5)
+    hours = mdates.HourLocator(interval = 3)
     ax.xaxis.set_major_locator(hours)
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%d - %H'))
     ax.grid()
@@ -98,8 +98,10 @@ def extract_data_from_log(data, pattern):
 
 if __name__ == "__main__":
 
+    root_folder = "./logs/Test_Results/Radishes_Till_Tuesday_Night/"
+
     # Plot soil moisture data
-    with open("./logs/Test_Results/soil_moisture_sensor_1.txt", "r") as myfile:
+    with open(root_folder+"soil_moisture_sensor_1.txt", "r") as myfile:
         data = myfile.readlines()
     matches = extract_data_from_log(data, soil_moisture_pattern)
     data_dict = dict()
@@ -112,7 +114,7 @@ if __name__ == "__main__":
     plot_soil_moisture(data_dict)
 
     # Plot temperature data
-    with open("./logs/Test_Results/environment_sensor.txt", "r") as myfile:
+    with open(root_folder+"environment_sensor.txt", "r") as myfile:
         data = myfile.readlines()
     matches = extract_data_from_log(data, environment_sensor_pattern)
     data_dict = dict()
