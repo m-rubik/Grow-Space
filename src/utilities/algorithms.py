@@ -10,7 +10,6 @@ These message are passed back to the main thread, so that the information can be
 
 
 import statistics
-import numbers
 
 
 def environment_algorithm(db):
@@ -62,33 +61,31 @@ def watering_algorithm(db, water_list):
     """
     try:
         # Get the most recent soil_moisture_levels
-        current_level_1 = int(db['latest']['soil_moisture_sensor_1'])
+        measured_level = int(db['latest']['soil_moisture_sensor_1'])
 
-        # Will return the average and std. of numbers only, ignoring "None" entries
+        # Will return the average and std. of numbers only, ignoring Nonetype entries
         try:
-            water_average = statistics.mean([x for x in water_list if isinstance(x, numbers.Number)])
-            water_std = statistics.stdev([x for x in water_list if isinstance(x, numbers.Number)])
+            water_average = statistics.mean([x for x in water_list if isinstance(x, float)])
+            water_std = statistics.stdev([x for x in water_list if isinstance(x, float)])
         except statistics.StatisticsError:
             print("System initialization: No values for water average")
-        # for x in [x for x in water_list if isinstance(x, numbers.Number)]:
         try:
-            for x in range(len(water_list)):
-                if isinstance(water_list[x], numbers.Number):
+            for x in range(0, len(water_list)):
+                if water_list[x] is not None:
                     if water_std < abs(water_average-water_list[x]):
-                        water_list[x] = "None"
+                        water_list[x] = None # Reject "bad" entries
                     else:
-                        pass
+                        pass # Pass "good" entries
                 else:
-                    pass
+                    pass # Ignore None entries
         except UnboundLocalError:
             print("System initialization: No values for water average")
 
+        # Compute the new average
         try:
-            water_average = statistics.mean([x for x in water_list if isinstance(x, numbers.Number)])
+            water_average = statistics.mean([x for x in water_list if isinstance(x, float)])
         except statistics.StatisticsError:
             print("System initialization: No values for water average")
-
-        measured_level = int(current_level_1)
 
         #  First run the calculated level won't work as the water_average won't work. Set to raw value.
         try:
@@ -98,6 +95,7 @@ def watering_algorithm(db, water_list):
 
         # Determine the flag from the accepted range & the calculated level
         flag = None
+        print("Calculated Level:", calculated_level)
         if calculated_level < db['Moisture_Low']:
             flag = "LOW"
         elif calculated_level > db['Moisture_High']:
@@ -106,6 +104,7 @@ def watering_algorithm(db, water_list):
     except KeyError as err:
         print("Unable to obtain latest sensor data for", str(err) + ". Likely due to the system just starting up.")
         measured_level = '-'
+        calculated_level = '-'
         flag = None
 
     # Generate & relay the message containing the calculated level for the GUI to display

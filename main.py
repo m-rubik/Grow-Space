@@ -126,7 +126,7 @@ class ThreadedClient:
         self.periodic_call(gui_refresh_interval)
 
         # Initialize list of previous 10 moisture sensor readings
-        self.water_list = ["None"] * 10
+        self.water_list = [None] * 10
 
     def load_configuration(self):
         """!
@@ -198,8 +198,8 @@ class ThreadedClient:
             self.logger.debug("Running simulation...")
             from src.simulations import sim_env_sensor, sim_soil_sensor
             self.sensors['environment_sensor'] = sim_env_sensor.EnvironmentSensor(name="sim_environment_sensor", queue=Queue(), polling_interval=polling_interval)
-            # self.sensors['soil_moisture_sensor_1'] = sim_soil_sensor.SoilMoistureSensor(name="sim_soil_moisture_sensor_1", queue=Queue(), polling_interval=polling_interval)
-            self.sensors['soil_moisture_sensor_2'] = sim_soil_sensor.SoilMoistureSensor(name="sim_soil_moisture_sensor_2", queue=Queue(), polling_interval=polling_interval)
+            self.sensors['soil_moisture_sensor_1'] = sim_soil_sensor.SoilMoistureSensor(name="sim_soil_moisture_sensor_1", queue=Queue(), polling_interval=polling_interval)
+            # self.sensors['soil_moisture_sensor_2'] = sim_soil_sensor.SoilMoistureSensor(name="sim_soil_moisture_sensor_2", queue=Queue(), polling_interval=polling_interval)
         else:
             self.logger.debug("Running system...")
             from src.sensors.soil_moisture_sensor import SoilMoistureSensor
@@ -282,7 +282,7 @@ class ThreadedClient:
                 if 'soil_moisture_sensor' in sensor_name:
                     # First, run the watering algorithm to generate the control message.
                     msg = watering_algorithm(self.db_master, self.water_list)
-                    self.water_list.append(msg[1])
+                    self.water_list.append(float(msg[1]))
                     # self.logger.debug(self.water_list)
                     self.water_list.pop(0)
 
