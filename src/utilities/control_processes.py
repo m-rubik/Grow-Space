@@ -86,7 +86,7 @@ def fan_hourly_process(db, controls):
         # Check for manual override on the Fan
         if not db['Manual Overrides']['Fan']:
             # Get the UV light data for the current hour
-            if db['Fan_Data'][hour]:
+            if db['Fan_data'][hour]:
                 controls['fan'].turn_on()
                 db['Fan Status'] = "ON"
             else:
