@@ -1017,7 +1017,6 @@ class HoverButton(Button):
 
 if __name__ == "__main__":
     ROOT = Tk()
-    # ROOT.resizable()
     ROOT.geometry("1024x600")
     endCommand = lambda: sys.exit(0)
     app = GrowSpaceGUI(ROOT, Queue(), Queue(), endCommand)

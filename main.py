@@ -283,7 +283,6 @@ class ThreadedClient:
                     # First, run the watering algorithm to generate the control message.
                     msg = watering_algorithm(self.db_master, self.water_list)
                     self.water_list.append(float(msg[1]))
-                    # self.logger.debug(self.water_list)
                     self.water_list.pop(0)
 
                     # Relay the message to the GUI so the values can be updated
@@ -458,8 +457,7 @@ class ThreadedClient:
                 self.configuration_file = msg[1]
                 self.load_configuration()
             else: 
-                self.db_master['Manual Overrides']['RGB LED'] = False # NOTE: ONLY FOR TESTING
-                # self.db_master['Manual Overrides']['RGB LED'] = True
+                self.db_master['Manual Overrides']['RGB LED'] = True
 
                 # Check to ensure all colors are within the accepted range, else default to 0
                 try:
@@ -531,9 +529,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     ROOT = Tk()
-    # WIDTH, HEIGHT = ROOT.winfo_screenwidth(), ROOT.winfo_screenheight()
-    # ROOT.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
-    # ROOT.resizable()
     ROOT.geometry("1024x600")
 
     if args.simulate:
