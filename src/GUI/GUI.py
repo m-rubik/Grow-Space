@@ -982,7 +982,7 @@ class GrowSpaceGUI:
                         self.HumidityCondition_value.config(fg="Green")
                         self.HumidityStatus_value.configure(text="OK")
 
-                    received_gas = round(msg[1]['gas']['value'], 2)
+                    received_gas = int(round(msg[1]['gas']['value']))
                     self.VOCCondition_value.configure(text=str(received_gas)+"kΩ")
                     if msg[1]['gas']['flag'] is not None:
                         self.VOCCondition_value.config(fg="Red")
