@@ -296,7 +296,7 @@ class GrowSpaceGUI:
             data['RGB_data'] = RGB_data
             data['UV_data'] = UV_data
             data['Fan_data'] = Fan_data
-            data['Soak_Minutes'] = 0.5
+            data['Soak_Minutes'] = 60
 
             filename = "./configuration_files/"+(config_file.name.split(".json")[0]).split("configuration_files/")[1]
             save_as_json(filename, data)
