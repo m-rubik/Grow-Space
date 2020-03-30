@@ -181,9 +181,9 @@ class GrowSpaceGUI:
 
     def loadfile_into_config(self):
 
+        self.db_GUI = {}
         files = [("JSON files", "*.json")]
-        config_file = askopenfile(filetypes=files, defaultextension = files)
-        print(config_file.name)
+        config_file = askopenfile(filetypes=files, defaultextension=files)
 
         if config_file is None: # User closes the dialog with "cancel"
             self.logger.warning("User did not chose a configuration file to load")
@@ -194,8 +194,6 @@ class GrowSpaceGUI:
             # Transfer configuration file data into temporary GUI database
             for item, value in configuration_dict.items():
                 self.db_GUI[item] = value
-
-
 
 
     def save_file(self):
@@ -259,6 +257,32 @@ class GrowSpaceGUI:
             UV_data['22'] = int(self.createfile_win.UVList[22])
             UV_data['23'] = int(self.createfile_win.UVList[23])
 
+            Fan_data = {}
+            Fan_data['0'] = 0
+            Fan_data['1'] = 0
+            Fan_data['2'] = 0
+            Fan_data['3'] = 0
+            Fan_data['4'] = 0
+            Fan_data['5'] = 0
+            Fan_data['6'] = 0
+            Fan_data['7'] = 0
+            Fan_data['8'] = 1
+            Fan_data['9'] = 1
+            Fan_data['10'] = 1
+            Fan_data['11'] = 1
+            Fan_data['12'] = 1
+            Fan_data['13'] = 1
+            Fan_data['14'] = 1
+            Fan_data['15'] = 1
+            Fan_data['16'] = 1
+            Fan_data['17'] = 1
+            Fan_data['18'] = 1
+            Fan_data['19'] = 1
+            Fan_data['20'] = 1
+            Fan_data['21'] = 1
+            Fan_data['22'] = 1
+            Fan_data['23'] = 0
+
 
             data = {}
             data['Temperature_Low'] = int(self.createfile_win.TemperatureList[0])
@@ -271,6 +295,7 @@ class GrowSpaceGUI:
             data['VOC_High'] = int(self.createfile_win.VOCList[1])
             data['RGB_data'] = RGB_data
             data['UV_data'] = UV_data
+            data['Fan_data'] = Fan_data
             data['Soak_Minutes'] = 0.5
 
             filename = "./configuration_files/"+(config_file.name.split(".json")[0]).split("configuration_files/")[1]
@@ -496,12 +521,115 @@ class GrowSpaceGUI:
 
         ## Inserting values into entries ##
 
-        print(self.db_GUI)
+        self.createfile_win.SoilMoistureMinEntry.insert(0, self.db_GUI['Moisture_Low'])
+        self.createfile_win.SoilMoistureMaxEntry.insert(0, self.db_GUI['Moisture_High'])
+        self.createfile_win.TemperatureMinEntry.insert(0, self.db_GUI['Temperature_Low'])
+        self.createfile_win.TemperatureMaxEntry.insert(0, self.db_GUI['Temperature_High'])
+        self.createfile_win.HumidityMinEntry.insert(0, self.db_GUI['Humidity_Low'])
+        self.createfile_win.HumidityMaxEntry.insert(0, self.db_GUI['Humidity_High'])
+        self.createfile_win.VOCMinEntry.insert(0, self.db_GUI['VOC_Low'])
+        self.createfile_win.VOCMaxEntry.insert(0, self.db_GUI['VOC_High'])
 
+        self.createfile_win.UVEntry00.insert(0, self.db_GUI['UV_data']['0'])
+        self.createfile_win.UVEntry01.insert(0, self.db_GUI['UV_data']['1'])
+        self.createfile_win.UVEntry02.insert(0, self.db_GUI['UV_data']['2'])
+        self.createfile_win.UVEntry03.insert(0, self.db_GUI['UV_data']['3'])
+        self.createfile_win.UVEntry04.insert(0, self.db_GUI['UV_data']['4'])
+        self.createfile_win.UVEntry05.insert(0, self.db_GUI['UV_data']['5'])
+        self.createfile_win.UVEntry06.insert(0, self.db_GUI['UV_data']['6'])
+        self.createfile_win.UVEntry07.insert(0, self.db_GUI['UV_data']['7'])
+        self.createfile_win.UVEntry08.insert(0, self.db_GUI['UV_data']['8'])
+        self.createfile_win.UVEntry09.insert(0, self.db_GUI['UV_data']['9'])
+        self.createfile_win.UVEntry10.insert(0, self.db_GUI['UV_data']['10'])
+        self.createfile_win.UVEntry11.insert(0, self.db_GUI['UV_data']['11'])
+        self.createfile_win.UVEntry12.insert(0, self.db_GUI['UV_data']['12'])
+        self.createfile_win.UVEntry13.insert(0, self.db_GUI['UV_data']['13'])
+        self.createfile_win.UVEntry14.insert(0, self.db_GUI['UV_data']['14'])
+        self.createfile_win.UVEntry15.insert(0, self.db_GUI['UV_data']['15'])
+        self.createfile_win.UVEntry16.insert(0, self.db_GUI['UV_data']['16'])
+        self.createfile_win.UVEntry17.insert(0, self.db_GUI['UV_data']['17'])
+        self.createfile_win.UVEntry18.insert(0, self.db_GUI['UV_data']['18'])
+        self.createfile_win.UVEntry19.insert(0, self.db_GUI['UV_data']['19'])
+        self.createfile_win.UVEntry20.insert(0, self.db_GUI['UV_data']['20'])
+        self.createfile_win.UVEntry21.insert(0, self.db_GUI['UV_data']['21'])
+        self.createfile_win.UVEntry22.insert(0, self.db_GUI['UV_data']['22'])
+        self.createfile_win.UVEntry23.insert(0, self.db_GUI['UV_data']['23'])
 
+        self.createfile_win.RedEntry00.insert(0, self.db_GUI['RGB_data']['0']['R'])
+        self.createfile_win.RedEntry01.insert(0, self.db_GUI['RGB_data']['1']['R'])
+        self.createfile_win.RedEntry02.insert(0, self.db_GUI['RGB_data']['2']['R'])
+        self.createfile_win.RedEntry03.insert(0, self.db_GUI['RGB_data']['3']['R'])
+        self.createfile_win.RedEntry04.insert(0, self.db_GUI['RGB_data']['4']['R'])
+        self.createfile_win.RedEntry05.insert(0, self.db_GUI['RGB_data']['5']['R'])
+        self.createfile_win.RedEntry06.insert(0, self.db_GUI['RGB_data']['6']['R'])
+        self.createfile_win.RedEntry07.insert(0, self.db_GUI['RGB_data']['7']['R'])
+        self.createfile_win.RedEntry08.insert(0, self.db_GUI['RGB_data']['8']['R'])
+        self.createfile_win.RedEntry09.insert(0, self.db_GUI['RGB_data']['9']['R'])
+        self.createfile_win.RedEntry10.insert(0, self.db_GUI['RGB_data']['10']['R'])
+        self.createfile_win.RedEntry11.insert(0, self.db_GUI['RGB_data']['11']['R'])
+        self.createfile_win.RedEntry12.insert(0, self.db_GUI['RGB_data']['12']['R'])
+        self.createfile_win.RedEntry13.insert(0, self.db_GUI['RGB_data']['13']['R'])
+        self.createfile_win.RedEntry14.insert(0, self.db_GUI['RGB_data']['14']['R'])
+        self.createfile_win.RedEntry15.insert(0, self.db_GUI['RGB_data']['15']['R'])
+        self.createfile_win.RedEntry16.insert(0, self.db_GUI['RGB_data']['16']['R'])
+        self.createfile_win.RedEntry17.insert(0, self.db_GUI['RGB_data']['17']['R'])
+        self.createfile_win.RedEntry18.insert(0, self.db_GUI['RGB_data']['18']['R'])
+        self.createfile_win.RedEntry19.insert(0, self.db_GUI['RGB_data']['19']['R'])
+        self.createfile_win.RedEntry20.insert(0, self.db_GUI['RGB_data']['20']['R'])
+        self.createfile_win.RedEntry21.insert(0, self.db_GUI['RGB_data']['21']['R'])
+        self.createfile_win.RedEntry22.insert(0, self.db_GUI['RGB_data']['22']['R'])
+        self.createfile_win.RedEntry23.insert(0, self.db_GUI['RGB_data']['23']['R'])
 
+        self.createfile_win.GreenEntry00.insert(0, self.db_GUI['RGB_data']['0']['G'])
+        self.createfile_win.GreenEntry01.insert(0, self.db_GUI['RGB_data']['1']['G'])
+        self.createfile_win.GreenEntry02.insert(0, self.db_GUI['RGB_data']['2']['G'])
+        self.createfile_win.GreenEntry03.insert(0, self.db_GUI['RGB_data']['3']['G'])
+        self.createfile_win.GreenEntry04.insert(0, self.db_GUI['RGB_data']['4']['G'])
+        self.createfile_win.GreenEntry05.insert(0, self.db_GUI['RGB_data']['5']['G'])
+        self.createfile_win.GreenEntry06.insert(0, self.db_GUI['RGB_data']['6']['G'])
+        self.createfile_win.GreenEntry07.insert(0, self.db_GUI['RGB_data']['7']['G'])
+        self.createfile_win.GreenEntry08.insert(0, self.db_GUI['RGB_data']['8']['G'])
+        self.createfile_win.GreenEntry09.insert(0, self.db_GUI['RGB_data']['9']['G'])
+        self.createfile_win.GreenEntry10.insert(0, self.db_GUI['RGB_data']['10']['G'])
+        self.createfile_win.GreenEntry11.insert(0, self.db_GUI['RGB_data']['11']['G'])
+        self.createfile_win.GreenEntry12.insert(0, self.db_GUI['RGB_data']['12']['G'])
+        self.createfile_win.GreenEntry13.insert(0, self.db_GUI['RGB_data']['13']['G'])
+        self.createfile_win.GreenEntry14.insert(0, self.db_GUI['RGB_data']['14']['G'])
+        self.createfile_win.GreenEntry15.insert(0, self.db_GUI['RGB_data']['15']['G'])
+        self.createfile_win.GreenEntry16.insert(0, self.db_GUI['RGB_data']['16']['G'])
+        self.createfile_win.GreenEntry17.insert(0, self.db_GUI['RGB_data']['17']['G'])
+        self.createfile_win.GreenEntry18.insert(0, self.db_GUI['RGB_data']['18']['G'])
+        self.createfile_win.GreenEntry19.insert(0, self.db_GUI['RGB_data']['19']['G'])
+        self.createfile_win.GreenEntry20.insert(0, self.db_GUI['RGB_data']['20']['G'])
+        self.createfile_win.GreenEntry21.insert(0, self.db_GUI['RGB_data']['21']['G'])
+        self.createfile_win.GreenEntry22.insert(0, self.db_GUI['RGB_data']['22']['G'])
+        self.createfile_win.GreenEntry23.insert(0, self.db_GUI['RGB_data']['23']['G'])
 
-    
+        self.createfile_win.BlueEntry00.insert(0, self.db_GUI['RGB_data']['0']['B'])
+        self.createfile_win.BlueEntry01.insert(0, self.db_GUI['RGB_data']['1']['B'])
+        self.createfile_win.BlueEntry02.insert(0, self.db_GUI['RGB_data']['2']['B'])
+        self.createfile_win.BlueEntry03.insert(0, self.db_GUI['RGB_data']['3']['B'])
+        self.createfile_win.BlueEntry04.insert(0, self.db_GUI['RGB_data']['4']['B'])
+        self.createfile_win.BlueEntry05.insert(0, self.db_GUI['RGB_data']['5']['B'])
+        self.createfile_win.BlueEntry06.insert(0, self.db_GUI['RGB_data']['6']['B'])
+        self.createfile_win.BlueEntry07.insert(0, self.db_GUI['RGB_data']['7']['B'])
+        self.createfile_win.BlueEntry08.insert(0, self.db_GUI['RGB_data']['8']['B'])
+        self.createfile_win.BlueEntry09.insert(0, self.db_GUI['RGB_data']['9']['B'])
+        self.createfile_win.BlueEntry10.insert(0, self.db_GUI['RGB_data']['10']['B'])
+        self.createfile_win.BlueEntry11.insert(0, self.db_GUI['RGB_data']['11']['B'])
+        self.createfile_win.BlueEntry12.insert(0, self.db_GUI['RGB_data']['12']['B'])
+        self.createfile_win.BlueEntry13.insert(0, self.db_GUI['RGB_data']['13']['B'])
+        self.createfile_win.BlueEntry14.insert(0, self.db_GUI['RGB_data']['14']['B'])
+        self.createfile_win.BlueEntry15.insert(0, self.db_GUI['RGB_data']['15']['B'])
+        self.createfile_win.BlueEntry16.insert(0, self.db_GUI['RGB_data']['16']['B'])
+        self.createfile_win.BlueEntry17.insert(0, self.db_GUI['RGB_data']['17']['B'])
+        self.createfile_win.BlueEntry18.insert(0, self.db_GUI['RGB_data']['18']['B'])
+        self.createfile_win.BlueEntry19.insert(0, self.db_GUI['RGB_data']['19']['B'])
+        self.createfile_win.BlueEntry20.insert(0, self.db_GUI['RGB_data']['20']['B'])
+        self.createfile_win.BlueEntry21.insert(0, self.db_GUI['RGB_data']['21']['B'])
+        self.createfile_win.BlueEntry22.insert(0, self.db_GUI['RGB_data']['22']['B'])
+        self.createfile_win.BlueEntry23.insert(0, self.db_GUI['RGB_data']['23']['B'])
+
     def saving_configuration(self):
 
         ## Setting lists to equal entries ##
@@ -624,7 +752,6 @@ class GrowSpaceGUI:
         self.createfile_win.BlueList.append(self.createfile_win.BlueEntry22.get())
         self.createfile_win.BlueList.append(self.createfile_win.BlueEntry23.get())
 
-        print(self.createfile_win.SoilMoistureList)
 
         ## Ensuring all values are correctly inputted ##
 
@@ -665,7 +792,7 @@ class GrowSpaceGUI:
             messagebox.showerror(title="Error - Humidity Values", message="Please enter an integer from 0 to 100 for the humidity thresholds", icon="error")
             return
 
-        if int(self.createfile_win.HumidityList[0] >= self.createfile_win.HumidityList[1]):
+        if int(self.createfile_win.HumidityList[0]) >= int(self.createfile_win.HumidityList[1]):
             messagebox.showerror(title="Error - Humidity Values", message="Please ensure the humidity maximum is greater than the humidity minimum", icon="error")
             return
 
