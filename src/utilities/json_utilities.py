@@ -129,6 +129,6 @@ def manually_generate_config_file(name):
 
 
 if __name__ == "__main__":
-    manually_generate_config_file("radishes")
+    manually_generate_config_file("test")
 
 

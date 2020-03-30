@@ -11,7 +11,7 @@ from tkinter import *
 from tkinter.filedialog import askopenfile, asksaveasfile
 from tkinter import colorchooser
 from tkinter import messagebox
-from src.utilities.json_utilities import save_as_json
+from src.utilities.json_utilities import load_from_json, save_as_json
 from src.utilities.logger_utilities import get_logger
 
 
@@ -178,6 +178,25 @@ class GrowSpaceGUI:
             self.logger.warning("User did not chose a configuration file to load")
         else:
             self.queue_out.put(["RELOAD", (config_file.name.split(".json")[0]).split("configuration_files/")[1]])
+
+    def loadfile_into_config(self):
+
+        files = [("JSON files", "*.json")]
+        config_file = askopenfile(filetypes=files, defaultextension = files)
+        print(config_file.name)
+
+        if config_file is None: # User closes the dialog with "cancel"
+            self.logger.warning("User did not chose a configuration file to load")
+        else:
+            self.loaded_file = (config_file.name.split(".json")[0]).split("configuration_files/")[1]
+            configuration_dict = load_from_json("./configuration_files/" + self.loaded_file)
+
+            # Transfer configuration file data into temporary GUI database
+            for item, value in configuration_dict.items():
+                self.db_GUI[item] = value
+
+
+
 
     def save_file(self):
         files = [("JSON files", "*.json")]
@@ -357,6 +376,131 @@ class GrowSpaceGUI:
             if blue_value == 256:
                 blue_value == 255
             self.control_win.Blue_Entry.insert(0,blue_value)
+
+    def load_into_configuration(self):
+
+        ## Deleting previous entries ##
+
+        self.createfile_win.SoilMoistureMinEntry.delete(0, END)
+        self.createfile_win.SoilMoistureMaxEntry.delete(0, END)
+        self.createfile_win.TemperatureMinEntry.delete(0, END)
+        self.createfile_win.TemperatureMaxEntry.delete(0, END)
+        self.createfile_win.HumidityMinEntry.delete(0, END)
+        self.createfile_win.HumidityMaxEntry.delete(0, END)
+        self.createfile_win.VOCMinEntry.delete(0, END)
+        self.createfile_win.VOCMaxEntry.delete(0, END)
+
+        self.createfile_win.UVEntry00.delete(0, END)
+        self.createfile_win.UVEntry01.delete(0, END)
+        self.createfile_win.UVEntry02.delete(0, END)
+        self.createfile_win.UVEntry03.delete(0, END)
+        self.createfile_win.UVEntry04.delete(0, END)
+        self.createfile_win.UVEntry05.delete(0, END)
+        self.createfile_win.UVEntry06.delete(0, END)
+        self.createfile_win.UVEntry07.delete(0, END)
+        self.createfile_win.UVEntry08.delete(0, END)
+        self.createfile_win.UVEntry09.delete(0, END)
+        self.createfile_win.UVEntry10.delete(0, END)
+        self.createfile_win.UVEntry11.delete(0, END)
+        self.createfile_win.UVEntry12.delete(0, END)
+        self.createfile_win.UVEntry13.delete(0, END)
+        self.createfile_win.UVEntry14.delete(0, END)
+        self.createfile_win.UVEntry15.delete(0, END)
+        self.createfile_win.UVEntry16.delete(0, END)
+        self.createfile_win.UVEntry17.delete(0, END)
+        self.createfile_win.UVEntry18.delete(0, END)
+        self.createfile_win.UVEntry19.delete(0, END)
+        self.createfile_win.UVEntry20.delete(0, END)
+        self.createfile_win.UVEntry21.delete(0, END)
+        self.createfile_win.UVEntry22.delete(0, END)
+        self.createfile_win.UVEntry23.delete(0, END)
+
+        self.createfile_win.RedEntry00.delete(0, END)
+        self.createfile_win.RedEntry01.delete(0, END)
+        self.createfile_win.RedEntry02.delete(0, END)
+        self.createfile_win.RedEntry03.delete(0, END)
+        self.createfile_win.RedEntry04.delete(0, END)
+        self.createfile_win.RedEntry05.delete(0, END)
+        self.createfile_win.RedEntry06.delete(0, END)
+        self.createfile_win.RedEntry07.delete(0, END)
+        self.createfile_win.RedEntry08.delete(0, END)
+        self.createfile_win.RedEntry09.delete(0, END)
+        self.createfile_win.RedEntry10.delete(0, END)
+        self.createfile_win.RedEntry11.delete(0, END)
+        self.createfile_win.RedEntry12.delete(0, END)
+        self.createfile_win.RedEntry13.delete(0, END)
+        self.createfile_win.RedEntry14.delete(0, END)
+        self.createfile_win.RedEntry15.delete(0, END)
+        self.createfile_win.RedEntry16.delete(0, END)
+        self.createfile_win.RedEntry17.delete(0, END)
+        self.createfile_win.RedEntry18.delete(0, END)
+        self.createfile_win.RedEntry19.delete(0, END)
+        self.createfile_win.RedEntry20.delete(0, END)
+        self.createfile_win.RedEntry21.delete(0, END)
+        self.createfile_win.RedEntry22.delete(0, END)
+        self.createfile_win.RedEntry23.delete(0, END)
+
+        self.createfile_win.GreenEntry00.delete(0, END)
+        self.createfile_win.GreenEntry01.delete(0, END)
+        self.createfile_win.GreenEntry02.delete(0, END)
+        self.createfile_win.GreenEntry03.delete(0, END)
+        self.createfile_win.GreenEntry04.delete(0, END)
+        self.createfile_win.GreenEntry05.delete(0, END)
+        self.createfile_win.GreenEntry06.delete(0, END)
+        self.createfile_win.GreenEntry07.delete(0, END)
+        self.createfile_win.GreenEntry08.delete(0, END)
+        self.createfile_win.GreenEntry09.delete(0, END)
+        self.createfile_win.GreenEntry10.delete(0, END)
+        self.createfile_win.GreenEntry11.delete(0, END)
+        self.createfile_win.GreenEntry12.delete(0, END)
+        self.createfile_win.GreenEntry13.delete(0, END)
+        self.createfile_win.GreenEntry14.delete(0, END)
+        self.createfile_win.GreenEntry15.delete(0, END)
+        self.createfile_win.GreenEntry16.delete(0, END)
+        self.createfile_win.GreenEntry17.delete(0, END)
+        self.createfile_win.GreenEntry18.delete(0, END)
+        self.createfile_win.GreenEntry19.delete(0, END)
+        self.createfile_win.GreenEntry20.delete(0, END)
+        self.createfile_win.GreenEntry21.delete(0, END)
+        self.createfile_win.GreenEntry22.delete(0, END)
+        self.createfile_win.GreenEntry23.delete(0, END)
+
+        self.createfile_win.BlueEntry00.delete(0, END)
+        self.createfile_win.BlueEntry01.delete(0, END)
+        self.createfile_win.BlueEntry02.delete(0, END)
+        self.createfile_win.BlueEntry03.delete(0, END)
+        self.createfile_win.BlueEntry04.delete(0, END)
+        self.createfile_win.BlueEntry05.delete(0, END)
+        self.createfile_win.BlueEntry06.delete(0, END)
+        self.createfile_win.BlueEntry07.delete(0, END)
+        self.createfile_win.BlueEntry08.delete(0, END)
+        self.createfile_win.BlueEntry09.delete(0, END)
+        self.createfile_win.BlueEntry10.delete(0, END)
+        self.createfile_win.BlueEntry11.delete(0, END)
+        self.createfile_win.BlueEntry12.delete(0, END)
+        self.createfile_win.BlueEntry13.delete(0, END)
+        self.createfile_win.BlueEntry14.delete(0, END)
+        self.createfile_win.BlueEntry15.delete(0, END)
+        self.createfile_win.BlueEntry16.delete(0, END)
+        self.createfile_win.BlueEntry17.delete(0, END)
+        self.createfile_win.BlueEntry18.delete(0, END)
+        self.createfile_win.BlueEntry19.delete(0, END)
+        self.createfile_win.BlueEntry20.delete(0, END)
+        self.createfile_win.BlueEntry21.delete(0, END)
+        self.createfile_win.BlueEntry22.delete(0, END)
+        self.createfile_win.BlueEntry23.delete(0, END)
+
+        ## Loading appropriate file into GUI database ##
+
+        self.loadfile_into_config()
+
+        ## Inserting values into entries ##
+
+        print(self.db_GUI)
+
+
+
+
     
     def saving_configuration(self):
 
@@ -775,6 +919,7 @@ class GrowSpaceGUI:
             #####################Defining Buttons###############################
 
             self.createfile_win.BackButton = HoverButton(self.createfile_win, bg="White", fg="Black", activebackground='grey', text="BACK", font="Helvetica 16 bold", command=on_closing_configure)
+            self.createfile_win.LoadButton = HoverButton(self.createfile_win, bg="White", fg="Black", activebackground='yellow', text = "LOAD FILE", font="Helvetica 16 bold", command=self.load_into_configuration)
             self.createfile_win.SaveButton = HoverButton(self.createfile_win, bg="White", fg="Black", activebackground='yellow', text="SAVE", font="Helvetica 16 bold", command=self.saving_configuration)
             ####################Placing Widgets##################################
 
@@ -937,8 +1082,10 @@ class GrowSpaceGUI:
             self.createfile_win.BlueEntry23.grid(row=25, column=x + 23, sticky=W)
 
 
-            self.createfile_win.BackButton.grid(row = 26, column = 9, columnspan=7, pady=(20,0))
+            self.createfile_win.BackButton.grid(row = 26, column = 8, columnspan=7, pady=(20,0))
+            self.createfile_win.LoadButton.grid(row = 26, column = 12, columnspan = 7, pady=(20,0))
             self.createfile_win.SaveButton.grid(row=26, column=16, columnspan=7, pady=(20, 0))
+
 
 
     def process_incoming(self):
