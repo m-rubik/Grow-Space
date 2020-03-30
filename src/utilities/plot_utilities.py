@@ -2,11 +2,11 @@
 All functions providing plotting functionalities.
 """
 
-
 import matplotlib.pylab as plt
 import matplotlib.dates as mdates
 import pandas as pd
 import re
+import argparse
 import datetime as dt
 
 
@@ -98,10 +98,19 @@ def extract_data_from_log(data, pattern):
 
 if __name__ == "__main__":
 
-    root_folder = "./logs/Test_Results/"
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('-r', '--root', type=str, default="", help='Root filepath of the log data')
+    parser.add_argument('-s', '--soil', type=str, default="soil_moisture_sensor_1.txt", help='Name of soil moisture sensor log file')
+    parser.add_argument('-e', '--environment', type=str, default="environment_sensor.txt", help='Name of the envrionment sensor log file')
+    args = parser.parse_args()
+
+    if args.root:
+        root_folder = "./logs/"+args.root+"/"
+    else:
+        root_folder = "./logs/"
 
     # Plot soil moisture data
-    with open(root_folder+"soil_moisture_sensor_1_3.txt", "r") as myfile:
+    with open(root_folder+args.soil, "r") as myfile:
         data = myfile.readlines()
     matches = extract_data_from_log(data, soil_moisture_pattern)
     data_dict = dict()
@@ -114,7 +123,7 @@ if __name__ == "__main__":
     plot_soil_moisture(data_dict)
 
     # Plot temperature data
-    with open(root_folder+"environment_sensor_3.txt", "r") as myfile:
+    with open(root_folder+args.environment, "r") as myfile:
         data = myfile.readlines()
     matches = extract_data_from_log(data, environment_sensor_pattern)
     data_dict = dict()
