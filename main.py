@@ -154,7 +154,6 @@ class ThreadedClient:
         self.gui.VOCRange_value.\
             configure(text=str(self.db_master["VOC_Low"])+"kΩ - "+str(self.db_master["VOC_High"])+"kΩ")
 
-        # TODO: Insert RGB and UV LEDs once algorithm is created
         self.logger.debug("Configuration file loaded. System is now running on new environment parameters.")
     
     def add_controllers(self):
@@ -325,7 +324,7 @@ class ThreadedClient:
                                                 args=(msg, self.controls, self.control_processes['watering']['Queue'],
                                                       self.db_master))
                                     self.control_processes['watering']['Process'].start()
-                                elif flag == "HIGH":  # TODO: Are we going to do anything in this circumstance?
+                                elif flag == "HIGH":  # NOTE: Are we going to do anything in these circumstances?
                                     pass
                                 else:  # Water level is good, so no need to do anything
                                     pass
