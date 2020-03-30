@@ -31,7 +31,7 @@ def plot_soil_moisture(dict):
     ax.xaxis.set_major_locator(hours)
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%d - %H'))
     ax.grid()
-    plt.title("Soil Moisture Sensor Readings Over Time")
+    plt.title("Soil Moisture Percentage Over Time")
     plt.ylabel("Moisture Percentage (%)")
     plt.xlabel("Time (Day - Hour)")
     plt.show()
@@ -98,10 +98,10 @@ def extract_data_from_log(data, pattern):
 
 if __name__ == "__main__":
 
-    root_folder = "./logs/Test_Results/Radishes_Till_Tuesday_Night/"
+    root_folder = "./logs/Test_Results/"
 
     # Plot soil moisture data
-    with open(root_folder+"soil_moisture_sensor_1.txt", "r") as myfile:
+    with open(root_folder+"soil_moisture_sensor_1_3.txt", "r") as myfile:
         data = myfile.readlines()
     matches = extract_data_from_log(data, soil_moisture_pattern)
     data_dict = dict()
@@ -114,7 +114,7 @@ if __name__ == "__main__":
     plot_soil_moisture(data_dict)
 
     # Plot temperature data
-    with open(root_folder+"environment_sensor.txt", "r") as myfile:
+    with open(root_folder+"environment_sensor_3.txt", "r") as myfile:
         data = myfile.readlines()
     matches = extract_data_from_log(data, environment_sensor_pattern)
     data_dict = dict()
