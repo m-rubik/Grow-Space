@@ -4,19 +4,17 @@ All functions providing plotting functionalities.
 
 import matplotlib.pylab as plt
 import matplotlib.dates as mdates
+import matplotlib.image as image
 import pandas as pd
 import re
 import argparse
 import datetime as dt
-from pandas.plotting import register_matplotlib_converters
-register_matplotlib_converters()
 import numpy as np
-import matplotlib.image as image
+from pandas.plotting import register_matplotlib_converters
 
 
-
+register_matplotlib_converters()
 plt.rcParams.update({'font.size': 22})
-
 environment_sensor_pattern = re.compile(r"([0-9-]+)\s([0-9:.]+):\stemperature:\s([0-9.]+),\sgas:\s([0-9]+),\shumidity:\s([0-9.]+),\spressure:\s([0-9.]+),\saltitude:\s([0-9.]+)", re.MULTILINE)
 soil_moisture_pattern = re.compile(r"([0-9-]+)\s([0-9.:]+):\s\[([0-9]+),\s([0-9.]+),\s([0-9.]+)\]", re.MULTILINE)
 
@@ -26,9 +24,6 @@ def plot_soil_moisture(dict, past24):
     Plots soil moisture data in simple line chart
     @param dict: Dicitonary containing timestamps and associated readings.
     """
-
-    import os
-    print(os.getcwd())
    
     lists = sorted(dict.items()) 
     x, y = zip(*lists)
@@ -37,8 +32,8 @@ def plot_soil_moisture(dict, past24):
     fig.autofmt_xdate()
     hours6 = mdates.HourLocator(interval=6)
     hours3 = mdates.HourLocator(interval=3)
-    im = image.imread('./icons/Grow_Space_Logo.png')
-    fig.figimage(im, 650, 0, zorder=3, alpha=0.2)
+    # im = image.imread('./icons/Grow_Space_Logo.png')
+    # fig.figimage(im, 300, 0, zorder=3, alpha=0.2)
     ax.xaxis.set_minor_locator(hours3)
     ax.tick_params(which='major', length=7, width=2, color='black')
     ax.tick_params(which='minor', length=4, width=2, color='black')
@@ -71,8 +66,8 @@ def plot_temperature(dict, past24):
     ax.plot(x, y, 'k', linewidth=2)
     fig.autofmt_xdate()
     hours = mdates.HourLocator(interval=3)
-    im = image.imread('./icons/Grow_Space_Logo.png')
-    fig.figimage(im, 650, 0, zorder=3, alpha=0.2)
+    # im = image.imread('./icons/Grow_Space_Logo.png')
+    # fig.figimage(im, 650, 0, zorder=3, alpha=0.2)
     ax.xaxis.set_major_locator(hours)
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%d - %H'))
     ax.grid()
