@@ -42,7 +42,6 @@ class GrowSpaceGUI:
 
         self.master.title("Grow Space")
         self.master.configure(background="Black")
-        #self.master.iconbitmap('./icons/Grow-Space-Icon.ico')
 
         ############################### Declare Labels ####################################################
 
@@ -325,7 +324,6 @@ class GrowSpaceGUI:
             self.control_win.configure(bg="Slate Gray")
             self.control_win.geometry("400x600")
             self.control_win.protocol("WM_DELETE_WINDOW", on_closing)
-            #self.control_win.iconbitmap('./icons/Grow-Space-Icon.ico')
 
 
             self.Red_val = StringVar()
@@ -878,8 +876,6 @@ class GrowSpaceGUI:
             self.createfile_win.configure(bg="Black")
             self.createfile_win.geometry("1024x600")
             self.createfile_win.protocol("WM_DELETE_WINDOW", on_closing_configure)
-            #self.createfile_win.iconbitmap('./icons/Grow-Space-Icon.ico')
-
 
             self.createfile_win.SoilMoisture_thresholds = [StringVar(), StringVar()]
             self.createfile_win.Temperature_thresholds = [StringVar(), StringVar()]
