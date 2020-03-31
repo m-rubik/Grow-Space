@@ -13,6 +13,7 @@ from tkinter import colorchooser
 from tkinter import messagebox
 from src.utilities.json_utilities import load_from_json, save_as_json
 from src.utilities.logger_utilities import get_logger
+import src.utilities.plot_utilities as plotting
 
 
 class GrowSpaceGUI:
@@ -94,11 +95,13 @@ class GrowSpaceGUI:
         self.UVLEDIntensity_value = Label(self.master, bg="Black", fg="White", text=None, font="Helvetica 22")
 
 
-        #Creating Buttons
+        #  Creating Buttons
         self.LoadButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="LOAD", width=7, font="Helvetica 24 bold", command=self.load_file)
         self.PowerButton = HoverButton(self.master, bg="White", activebackground='red', fg="Black", text="\u23FB", font="Helvetica 24 bold", command=endCommand)
         self.CreateFileButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="CREATE FILE", font="Helvetica 24 bold", command=self.createfile_window)
         self.ControlButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="CONTROL", font="Helvetica 24 bold", command=self.control_window)
+        self.PlotButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="PLOT",
+                                         font="Helvetica 24 bold", command=self.plot_command)
 
         # creates a grid 50 x 50 in the main window
         rows = 0
@@ -168,6 +171,7 @@ class GrowSpaceGUI:
         self.PowerButton.grid(row=45, column=5, columnspan=1, sticky=W+E, padx=(40, 40))
         self.CreateFileButton.grid(row=45, column=22, columnspan=1)
         self.ControlButton.grid(row=45, column=29, columnspan=1)
+        self.PlotButton.grid(row=45, column=17, columnspan=1)
 
     ##################### FUNCTIONS ################################################################
 
@@ -194,6 +198,10 @@ class GrowSpaceGUI:
             # Transfer configuration file data into temporary GUI database
             for item, value in configuration_dict.items():
                 self.db_GUI[item] = value
+
+    def plot_command(self):
+         #exec(open(r"C:\Users\pablo\PycharmProjects\Grow-Space\src\utilities/plot_utilities.py").read())
+        pass
 
 
     def save_file(self):
