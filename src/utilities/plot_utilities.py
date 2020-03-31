@@ -8,6 +8,12 @@ import pandas as pd
 import re
 import argparse
 import datetime as dt
+from pandas.plotting import register_matplotlib_converters
+register_matplotlib_converters()
+import numpy as np
+import matplotlib.cbook as cbook
+import matplotlib.image as image
+
 
 
 plt.rcParams.update({'font.size': 22})
@@ -16,7 +22,7 @@ environment_sensor_pattern = re.compile(r"([0-9-]+)\s([0-9:.]+):\stemperature:\s
 soil_moisture_pattern = re.compile(r"([0-9-]+)\s([0-9.:]+):\s\[([0-9]+),\s([0-9.]+),\s([0-9.]+)\]", re.MULTILINE)
 
 
-def plot_soil_moisture(dict):
+def plot_soil_moisture(dict, past24):
     """!
     Plots soil moisture data in simple line chart
     @param dict: Dicitonary containing timestamps and associated readings.
@@ -27,16 +33,32 @@ def plot_soil_moisture(dict):
     fig, ax = plt.subplots()
     ax.plot(x, y, 'k', linewidth=2)
     fig.autofmt_xdate()
-    hours = mdates.HourLocator(interval = 3)
-    ax.xaxis.set_major_locator(hours)
+    hours6 = mdates.HourLocator(interval=6)
+    hours3 = mdates.HourLocator(interval=3)
+    with cbook.get_sample_data('logo2.png') as file:
+        im = image.imread(file)
+    fig.figimage(im, 650, 0, zorder=3, alpha=0.2)
+    ax.xaxis.set_minor_locator(hours3)
+    ax.tick_params(which='major', length=7, width=2, color='black')
+    ax.tick_params(which='minor', length=4, width=2, color='black')
+    ax.xaxis.set_major_locator(hours6)
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%d - %H'))
     ax.grid()
-    plt.title("Soil Moisture Percentage Over Time")
+    plt.xlabel("Day - Hour")
+    plt.title("Soil Moisture % vs Time")
+    if past24:
+        datemin = np.datetime64(x[-1], 'h') - np.timedelta64(24, 'h')
+        datemax = np.datetime64(x[-1], 'h')
+        ax.set_xlim(datemin, datemax)
+        plt.xlabel("Hour")
+        plt.title("Soil Moisture % Past 24 Hrs")
+        ax.xaxis.set_major_locator(hours3)
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
     plt.ylabel("Moisture Percentage (%)")
-    plt.xlabel("Time (Day - Hour)")
+
     plt.show()
 
-def plot_temperature(dict):
+def plot_temperature(dict, past24):
     """!
     Plots temperature data in simple line chart
     @param dict: Dicitonary containing timestamps and associated readings.
@@ -47,13 +69,24 @@ def plot_temperature(dict):
     fig, ax = plt.subplots()
     ax.plot(x, y, 'k', linewidth=2)
     fig.autofmt_xdate()
-    hours = mdates.HourLocator(interval = 3)
+    hours = mdates.HourLocator(interval=3)
+    with cbook.get_sample_data('logo2.png') as file:
+        im = image.imread(file)
+    fig.figimage(im, 650, 0, zorder=3, alpha=0.2)
     ax.xaxis.set_major_locator(hours)
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%d - %H'))
     ax.grid()
     plt.title("Temperature Over Time")
-    plt.ylabel("Temperature (°C)")
     plt.xlabel("Time (Month-Day Hour)")
+    if past24:
+        datemin = np.datetime64(x[-1], 'h') - np.timedelta64(24, 'h')
+        datemax = np.datetime64(x[-1], 'h')
+        ax.set_xlim(datemin, datemax)
+        plt.xlabel("Hour")
+        plt.title('Temperature Past 24 Hrs')
+        ax.xaxis.set_major_locator(hours)
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    plt.ylabel("Temperature (°C)")
     plt.show()
     
 def boxplot_environment(df):
@@ -120,7 +153,8 @@ if __name__ == "__main__":
         index_time = match.group(1) + " " + match.group(2)
         index_dt = dt.datetime.strptime(index_time, "%Y-%m-%d %H:%M:%S.%f")
         data_dict[index_dt] = current_val
-    plot_soil_moisture(data_dict)
+    plot_soil_moisture(data_dict, True)
+    plot_soil_moisture(data_dict, False)
 
     # Plot temperature data
     with open(root_folder+args.environment, "r") as myfile:
@@ -137,7 +171,8 @@ if __name__ == "__main__":
         data_dict['Temperature'][index_dt] = float(match.group(3))
         data_dict['VOC'][index_dt] = float(match.group(4))
         data_dict['Humidity'][index_dt] = float(match.group(5))
-    plot_temperature(data_dict['Temperature'])
+    plot_temperature(data_dict['Temperature'], True)
+    plot_temperature(data_dict['Temperature'], False)
 
     # Plot environment sensor data
     df = pd.DataFrame.from_dict(data_dict, orient='columns')
