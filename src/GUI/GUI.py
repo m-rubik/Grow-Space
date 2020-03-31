@@ -210,8 +210,6 @@ class GrowSpaceGUI:
         if config_file is None: # User closes the dialog with "cancel"
             self.logger.warning("User cancelled configuration file save")
         else:
-            # TODO: Obtain the data that they entered in the Entry boxes (that are yet to be made), and format it as
-            # a dictionnary (see the main call in src.utilities.json_utilities as an example of how the data should be structured).
             RGB_data = {}
             RGB_data['0'] = {"R": int(self.createfile_win.RedList[0]), "G": int(self.createfile_win.GreenList[0]), "B": int(self.createfile_win.BlueList[0])}
             RGB_data['1'] = {"R": int(self.createfile_win.RedList[1]), "G": int(self.createfile_win.GreenList[1]), "B": int(self.createfile_win.BlueList[1])}
