@@ -11,7 +11,6 @@ import argparse
 import datetime as dt
 import numpy as np
 from pandas.plotting import register_matplotlib_converters
-import os
 from datetime import datetime
 
 
@@ -43,7 +42,10 @@ def plot_soil_moisture(dict, past24):
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%d - %H'))
     ax.grid()
     plt.xlabel("Day - Hour")
+    plt.ylabel("Moisture Percentage (%)")
     plt.title("Soil Moisture % vs Time")
+    DPI = fig.get_dpi()
+    fig.set_size_inches(2400.0/float(DPI),1220.0/float(DPI))
     if past24:
         datemin = np.datetime64(x[-1], 'h') - np.timedelta64(24, 'h')
         datemax = np.datetime64(x[-1], 'h')
@@ -52,9 +54,9 @@ def plot_soil_moisture(dict, past24):
         plt.title("Soil Moisture % Past 24 Hrs")
         ax.xaxis.set_major_locator(hours3)
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
-    plt.ylabel("Moisture Percentage (%)")
-
-
+        plt.savefig('Moisture_vs_Time_24H.png', dpi=500)
+    plt.savefig('Moisture_vs_Time.png', dpi=500)
+    # plt.show()
 
 def plot_temperature(dict, past24):
     """!
@@ -79,6 +81,9 @@ def plot_temperature(dict, past24):
     ax.grid()
     plt.title("Temperature Over Time")
     plt.xlabel("Time (Month-Day Hour)")
+    plt.ylabel("Temperature (°C)")
+    DPI = fig.get_dpi()
+    fig.set_size_inches(2400.0/float(DPI),1220.0/float(DPI))
     if past24:
         datemin = np.datetime64(x[-1], 'h') - np.timedelta64(24, 'h')
         datemax = np.datetime64(x[-1], 'h')
@@ -87,8 +92,9 @@ def plot_temperature(dict, past24):
         plt.title('Temperature Past 24 Hrs')
         ax.xaxis.set_major_locator(hours3)
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
-    plt.ylabel("Temperature (°C)")
-    plt.show()
+        plt.savefig('Temperature_vs_Time_24H.png', dpi=500)
+    plt.savefig('Temperature_vs_Time.png', dpi=500)
+    # plt.show()
     
 def boxplot_environment(df):
     """!
@@ -115,7 +121,10 @@ def boxplot_environment(df):
     ax[1].set_ylabel("VOC (kΩ)")
     ax[2].set_ylabel("Humidity (%)")
     plt.subplots_adjust(top=0.95)
-    plt.show()
+    DPI = fig.get_dpi()
+    fig.set_size_inches(2400.0/float(DPI),1220.0/float(DPI))
+    plt.savefig('Environment_Boxplot.png', dpi=500)
+    # plt.show()
 
 def extract_data_from_log(data, pattern):
     """!
@@ -130,22 +139,9 @@ def extract_data_from_log(data, pattern):
         matches.append(re.match(pattern, line))
     return matches
 
-
-if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('-r', '--root', type=str, default="", help='Root filepath of the log data')
-    parser.add_argument('-s', '--soil', type=str, default="soil_moisture_sensor_1.txt", help='Name of soil moisture sensor log file')
-    parser.add_argument('-e', '--environment', type=str, default="environment_sensor.txt", help='Name of the envrionment sensor log file')
-    args = parser.parse_args()
-    print(os.getcwd())
-    if args.root:
-        root_folder = "./logs/"+args.root+"/"
-    else:
-        root_folder = "./logs/"
-
+def generate_plots(root="./logs/", soil_sensor_log="soil_moisture_sensor_1.txt", environment_sensor_log="environment_sensor.txt"):
     # Plot soil moisture data
-    with open(root_folder+args.soil, "r") as myfile:
+    with open(root+soil_sensor_log, "r") as myfile:
         data = myfile.readlines()
     matches = extract_data_from_log(data, soil_moisture_pattern)
     data_dict = dict()
@@ -159,7 +155,7 @@ if __name__ == "__main__":
     plot_soil_moisture(data_dict, False)
 
     # Plot temperature data
-    with open(root_folder+args.environment, "r") as myfile:
+    with open(root+environment_sensor_log, "r") as myfile:
         data = myfile.readlines()
     matches = extract_data_from_log(data, environment_sensor_pattern)
     data_dict = dict()
@@ -180,4 +176,20 @@ if __name__ == "__main__":
     df = pd.DataFrame.from_dict(data_dict, orient='columns')
     df.reset_index(inplace=True)
     boxplot_environment(df)
+
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('-r', '--root', type=str, default="", help='Root filepath of the log data')
+    parser.add_argument('-s', '--soil', type=str, default="soil_moisture_sensor_1.txt", help='Name of soil moisture sensor log file')
+    parser.add_argument('-e', '--environment', type=str, default="environment_sensor.txt", help='Name of the envrionment sensor log file')
+    args = parser.parse_args()
+
+    if args.root:
+        root_folder = "./logs/"+args.root+"/"
+    else:
+        root_folder = "./logs/"
+
+    generate_plots(root_folder, args.soil, args.environment)
 

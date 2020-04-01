@@ -13,7 +13,7 @@ from tkinter import colorchooser
 from tkinter import messagebox
 from src.utilities.json_utilities import load_from_json, save_as_json
 from src.utilities.logger_utilities import get_logger
-import src.utilities.plot_utilities as plotting
+import src.utilities.plot_utilities as plot_utilities
 
 
 class GrowSpaceGUI:
@@ -199,8 +199,8 @@ class GrowSpaceGUI:
                 self.db_GUI[item] = value
 
     def plot_command(self):
-         #exec(open(r"C:\Users\pablo\PycharmProjects\Grow-Space\src\utilities/plot_utilities.py").read())
-        pass
+        # NOTE: Could add additional features here
+        plot_utilities.generate_plots()
 
 
     def save_file(self):
