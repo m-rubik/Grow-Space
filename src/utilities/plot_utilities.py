@@ -11,6 +11,8 @@ import argparse
 import datetime as dt
 import numpy as np
 from pandas.plotting import register_matplotlib_converters
+import os
+from datetime import datetime
 
 
 register_matplotlib_converters()
@@ -52,7 +54,7 @@ def plot_soil_moisture(dict, past24):
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
     plt.ylabel("Moisture Percentage (%)")
 
-    plt.show()
+
 
 def plot_temperature(dict, past24):
     """!
@@ -65,11 +67,15 @@ def plot_temperature(dict, past24):
     fig, ax = plt.subplots()
     ax.plot(x, y, 'k', linewidth=2)
     fig.autofmt_xdate()
-    hours = mdates.HourLocator(interval=3)
+    hours6 = mdates.HourLocator(interval=6)
+    hours3 = mdates.HourLocator(interval=3)
     # im = image.imread('./icons/Grow_Space_Logo.png')
     # fig.figimage(im, 650, 0, zorder=3, alpha=0.2)
-    ax.xaxis.set_major_locator(hours)
+    ax.xaxis.set_major_locator(hours6)
+    ax.xaxis.set_minor_locator(hours3)
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%d - %H'))
+    ax.tick_params(which='major', length=7, width=2, color='black')
+    ax.tick_params(which='minor', length=4, width=2, color='black')
     ax.grid()
     plt.title("Temperature Over Time")
     plt.xlabel("Time (Month-Day Hour)")
@@ -79,7 +85,7 @@ def plot_temperature(dict, past24):
         ax.set_xlim(datemin, datemax)
         plt.xlabel("Hour")
         plt.title('Temperature Past 24 Hrs')
-        ax.xaxis.set_major_locator(hours)
+        ax.xaxis.set_major_locator(hours3)
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
     plt.ylabel("Temperature (°C)")
     plt.show()
@@ -108,6 +114,7 @@ def boxplot_environment(df):
     ax[0].set_ylabel("Temperature (°C)")
     ax[1].set_ylabel("VOC (kΩ)")
     ax[2].set_ylabel("Humidity (%)")
+    plt.subplots_adjust(top=0.95)
     plt.show()
 
 def extract_data_from_log(data, pattern):
@@ -131,7 +138,7 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--soil', type=str, default="soil_moisture_sensor_1.txt", help='Name of soil moisture sensor log file')
     parser.add_argument('-e', '--environment', type=str, default="environment_sensor.txt", help='Name of the envrionment sensor log file')
     args = parser.parse_args()
-
+    print(os.getcwd())
     if args.root:
         root_folder = "./logs/"+args.root+"/"
     else:
