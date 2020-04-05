@@ -9,6 +9,7 @@ import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn 
 from src.utilities.sensor_template import Sensor
 from datetime import datetime
+import RPi.GPIO as GPIO
 
 
 class SoilMoistureSensor(Sensor):
@@ -27,6 +28,12 @@ class SoilMoistureSensor(Sensor):
         self.min_volt = min_v
         self.voltage_list = []
 
+        self.pin = 26
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.pin, GPIO.OUT)
+        self.is_off = True 
+        GPIO.output(self.pin, self.is_off)
+
         if channel == 0:
             self.channel = AnalogIn(self.ads, ADS.P0)
         elif channel == 1:
@@ -44,7 +51,10 @@ class SoilMoistureSensor(Sensor):
 
         # Step 1: Take a reading and normalize voltage value
         self._previous_val = self._current_val
+        self.turn_on()
+        time.sleep(0.1)
         self._current_val = [self.channel.value, self.channel.voltage, 0]
+        self.turn_off()
 
         # Step 2: Relay the reading
         self._current_val[2] = (-100/(self.max_volt-self.min_volt))*(self._current_val[1]-self.max_volt)
@@ -60,12 +70,30 @@ class SoilMoistureSensor(Sensor):
         with open(self.log_file_name, "a+") as f:
             f.write(str(current_time)+": "+str(self._current_val)+"\n")
 
+    def toggle(self):
+        if self.is_off:
+            self.turn_on()
+            self.is_off = False
+        else:
+            self.turn_off()
+
+    def turn_on(self):
+        self.is_off = False
+        GPIO.output(self.pin, self.is_off)
+        print("Turning on", self.name)
+
+    def turn_off(self):
+        self.is_off = True
+        GPIO.output(self.pin, self.is_off)
+        print("Turning off", self.name)
+
     def shutdown(self):
         """!
         Shutdown event bound to the atexit condition.
         Currently does not have any special functionality.
         """
         print(self.name, "shutting down.")
+        self.turn_off()
 
 def unit_test():
     import time
