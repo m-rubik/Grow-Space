@@ -19,7 +19,7 @@ class SoilMoistureSensor(Sensor):
     sensor_board = None
     channel = None 
 
-    def __init__(self, name="default", queue=None, polling_interval=2, channel=None, max_v=3.20, min_v=0.9):
+    def __init__(self, name="default", queue=None, polling_interval=2, channel=None, max_v=3.0, min_v=0.8):
         super().__init__(name, queue, polling_interval)
 
         self.i2c_interface = I2C(board.SCL, board.SDA)
@@ -51,10 +51,11 @@ class SoilMoistureSensor(Sensor):
 
         # Step 1: Take a reading and normalize voltage value
         self._previous_val = self._current_val
-        self.turn_on()
+        self.turn_off() # Inverted logic???
         time.sleep(0.1)
         self._current_val = [self.channel.value, self.channel.voltage, 0]
-        self.turn_off()
+        print("==================================", self._current_val)
+        self.turn_on()
 
         # Step 2: Relay the reading
         self._current_val[2] = (-100/(self.max_volt-self.min_volt))*(self._current_val[1]-self.max_volt)
@@ -93,7 +94,7 @@ class SoilMoistureSensor(Sensor):
         Currently does not have any special functionality.
         """
         print(self.name, "shutting down.")
-        self.turn_off()
+        self.turn_on()
 
 def unit_test():
     import time
