@@ -52,7 +52,7 @@ class SoilMoistureSensor(Sensor):
         # Step 1: Take a reading and normalize voltage value
         self._previous_val = self._current_val
         self.turn_off() # Inverted logic???
-        time.sleep(0.1)
+        time.sleep(0.2)
         self._current_val = [self.channel.value, self.channel.voltage, 0]
         print("==================================", self._current_val)
         self.turn_on()
