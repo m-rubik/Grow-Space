@@ -55,6 +55,7 @@ class SoilMoistureSensor(Sensor):
         time.sleep(0.2)
         self._current_val = [self.channel.value, self.channel.voltage, 0]
         print("==================================", self._current_val)
+        time.sleep(0.1)
         self.turn_on()
 
         # Step 2: Relay the reading
