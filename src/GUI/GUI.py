@@ -13,6 +13,7 @@ from tkinter import colorchooser
 from tkinter import messagebox
 from src.utilities.json_utilities import load_from_json, save_as_json
 from src.utilities.logger_utilities import get_logger
+import src.utilities.plot_utilities as plot_utilities
 
 
 class GrowSpaceGUI:
@@ -41,7 +42,6 @@ class GrowSpaceGUI:
 
         self.master.title("Grow Space")
         self.master.configure(background="Black")
-        #self.master.iconbitmap('./icons/Grow-Space-Icon.ico')
 
         ############################### Declare Labels ####################################################
 
@@ -94,11 +94,13 @@ class GrowSpaceGUI:
         self.UVLEDIntensity_value = Label(self.master, bg="Black", fg="White", text=None, font="Helvetica 22")
 
 
-        #Creating Buttons
+        #  Creating Buttons
         self.LoadButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="LOAD", width=7, font="Helvetica 24 bold", command=self.load_file)
         self.PowerButton = HoverButton(self.master, bg="White", activebackground='red', fg="Black", text="\u23FB", font="Helvetica 24 bold", command=endCommand)
         self.CreateFileButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="CREATE FILE", font="Helvetica 24 bold", command=self.createfile_window)
         self.ControlButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="CONTROL", font="Helvetica 24 bold", command=self.control_window)
+        self.PlotButton = HoverButton(self.master, bg="White", activebackground='grey', fg="Black", text="PLOT",
+                                         font="Helvetica 24 bold", command=self.plot_command)
 
         # creates a grid 50 x 50 in the main window
         rows = 0
@@ -168,6 +170,7 @@ class GrowSpaceGUI:
         self.PowerButton.grid(row=45, column=5, columnspan=1, sticky=W+E, padx=(40, 40))
         self.CreateFileButton.grid(row=45, column=22, columnspan=1)
         self.ControlButton.grid(row=45, column=29, columnspan=1)
+        self.PlotButton.grid(row=45, column=17, columnspan=1)
 
     ##################### FUNCTIONS ################################################################
 
@@ -195,6 +198,10 @@ class GrowSpaceGUI:
             for item, value in configuration_dict.items():
                 self.db_GUI[item] = value
 
+    def plot_command(self):
+        # NOTE: Could add additional features here
+        plot_utilities.generate_plots()
+
 
     def save_file(self):
         files = [("JSON files", "*.json")]
@@ -202,8 +209,6 @@ class GrowSpaceGUI:
         if config_file is None: # User closes the dialog with "cancel"
             self.logger.warning("User cancelled configuration file save")
         else:
-            # TODO: Obtain the data that they entered in the Entry boxes (that are yet to be made), and format it as
-            # a dictionnary (see the main call in src.utilities.json_utilities as an example of how the data should be structured).
             RGB_data = {}
             RGB_data['0'] = {"R": int(self.createfile_win.RedList[0]), "G": int(self.createfile_win.GreenList[0]), "B": int(self.createfile_win.BlueList[0])}
             RGB_data['1'] = {"R": int(self.createfile_win.RedList[1]), "G": int(self.createfile_win.GreenList[1]), "B": int(self.createfile_win.BlueList[1])}
@@ -296,7 +301,7 @@ class GrowSpaceGUI:
             data['RGB_data'] = RGB_data
             data['UV_data'] = UV_data
             data['Fan_data'] = Fan_data
-            data['Soak_Minutes'] = 0.5
+            data['Soak_Minutes'] = 60
 
             filename = "./configuration_files/"+(config_file.name.split(".json")[0]).split("configuration_files/")[1]
             save_as_json(filename, data)
@@ -319,7 +324,6 @@ class GrowSpaceGUI:
             self.control_win.configure(bg="Slate Gray")
             self.control_win.geometry("400x600")
             self.control_win.protocol("WM_DELETE_WINDOW", on_closing)
-            #self.control_win.iconbitmap('./icons/Grow-Space-Icon.ico')
 
 
             self.Red_val = StringVar()
@@ -872,8 +876,6 @@ class GrowSpaceGUI:
             self.createfile_win.configure(bg="Black")
             self.createfile_win.geometry("1024x600")
             self.createfile_win.protocol("WM_DELETE_WINDOW", on_closing_configure)
-            #self.createfile_win.iconbitmap('./icons/Grow-Space-Icon.ico')
-
 
             self.createfile_win.SoilMoisture_thresholds = [StringVar(), StringVar()]
             self.createfile_win.Temperature_thresholds = [StringVar(), StringVar()]

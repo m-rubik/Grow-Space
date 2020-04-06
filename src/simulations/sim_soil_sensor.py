@@ -3,6 +3,7 @@ Code for simulating a Soil Moisture Sensor.
 """
 
 import random
+import time
 from src.utilities.sensor_template import Sensor
 from datetime import datetime
 
@@ -14,12 +15,17 @@ class SoilMoistureSensor(Sensor):
     def __init__(self, name="default", queue=None, polling_interval=2):
         super().__init__(name, queue, polling_interval)
         self._previous_val = random.randint(40, 90)
+
+        self.is_off = True
     
     def poll(self):
         """!
         This method is called periodically to read sensor data and report
         it back to the main thread.
         """
+
+        self.turn_on()
+        time.sleep(0.1)
 
         # Step 1: Generate a reading
         sudden_change = random.randint(0,100) <= 10 # 10% chance of a sudden change
@@ -47,6 +53,8 @@ class SoilMoistureSensor(Sensor):
                 self._current_val = 0
             self._previous_val = self._current_val
 
+        self.turn_off()
+
         # Step 2: Relay the reading
         self.queue.put(self._current_val)
         
@@ -55,9 +63,25 @@ class SoilMoistureSensor(Sensor):
         with open(self.log_file_name,"a+") as f:
             f.write(str(current_time)+": "+str(self._current_val)+"\n")
 
+    def toggle(self):
+        if self.is_off:
+            self.turn_on()
+            self.is_off = False
+        else:
+            self.turn_off()
+
+    def turn_on(self):
+        self.is_off = False
+        print("Turning on", self.name)
+
+    def turn_off(self):
+        self.is_off = True
+        print("Turning off", self.name)
+
     def shutdown(self):
         """!
         Shutdown event bound to the atexit condition.
         Currently does not have any special functionality.
         """
         print(self.name, "shutting down.")
+        self.turn_off()

@@ -2,21 +2,25 @@
 All functions providing plotting functionalities.
 """
 
-
 import matplotlib.pylab as plt
 import matplotlib.dates as mdates
+import matplotlib.image as image
 import pandas as pd
 import re
+import argparse
 import datetime as dt
+import numpy as np
+from pandas.plotting import register_matplotlib_converters
+from datetime import datetime
 
 
+register_matplotlib_converters()
 plt.rcParams.update({'font.size': 22})
-
 environment_sensor_pattern = re.compile(r"([0-9-]+)\s([0-9:.]+):\stemperature:\s([0-9.]+),\sgas:\s([0-9]+),\shumidity:\s([0-9.]+),\spressure:\s([0-9.]+),\saltitude:\s([0-9.]+)", re.MULTILINE)
 soil_moisture_pattern = re.compile(r"([0-9-]+)\s([0-9.:]+):\s\[([0-9]+),\s([0-9.]+),\s([0-9.]+)\]", re.MULTILINE)
 
 
-def plot_soil_moisture(dict):
+def plot_soil_moisture(dict, past24):
     """!
     Plots soil moisture data in simple line chart
     @param dict: Dicitonary containing timestamps and associated readings.
@@ -27,16 +31,34 @@ def plot_soil_moisture(dict):
     fig, ax = plt.subplots()
     ax.plot(x, y, 'k', linewidth=2)
     fig.autofmt_xdate()
-    hours = mdates.HourLocator(interval = 3)
-    ax.xaxis.set_major_locator(hours)
+    hours6 = mdates.HourLocator(interval=6)
+    hours3 = mdates.HourLocator(interval=3)
+    # im = image.imread('./icons/Grow_Space_Logo.png')
+    # fig.figimage(im, 300, 0, zorder=3, alpha=0.2)
+    ax.xaxis.set_minor_locator(hours3)
+    ax.tick_params(which='major', length=7, width=2, color='black')
+    ax.tick_params(which='minor', length=4, width=2, color='black')
+    ax.xaxis.set_major_locator(hours6)
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%d - %H'))
     ax.grid()
-    plt.title("Soil Moisture Percentage Over Time")
+    plt.xlabel("Day - Hour")
     plt.ylabel("Moisture Percentage (%)")
-    plt.xlabel("Time (Day - Hour)")
-    plt.show()
+    plt.title("Soil Moisture % vs Time")
+    DPI = fig.get_dpi()
+    fig.set_size_inches(2400.0/float(DPI),1220.0/float(DPI))
+    if past24:
+        datemin = np.datetime64(x[-1], 'h') - np.timedelta64(24, 'h')
+        datemax = np.datetime64(x[-1], 'h')
+        ax.set_xlim(datemin, datemax)
+        plt.xlabel("Hour")
+        plt.title("Soil Moisture % Past 24 Hrs")
+        ax.xaxis.set_major_locator(hours3)
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+        plt.savefig('Moisture_vs_Time_24H.png', dpi=500)
+    plt.savefig('Moisture_vs_Time.png', dpi=500)
+    # plt.show()
 
-def plot_temperature(dict):
+def plot_temperature(dict, past24):
     """!
     Plots temperature data in simple line chart
     @param dict: Dicitonary containing timestamps and associated readings.
@@ -47,14 +69,32 @@ def plot_temperature(dict):
     fig, ax = plt.subplots()
     ax.plot(x, y, 'k', linewidth=2)
     fig.autofmt_xdate()
-    hours = mdates.HourLocator(interval = 3)
-    ax.xaxis.set_major_locator(hours)
+    hours6 = mdates.HourLocator(interval=6)
+    hours3 = mdates.HourLocator(interval=3)
+    # im = image.imread('./icons/Grow_Space_Logo.png')
+    # fig.figimage(im, 650, 0, zorder=3, alpha=0.2)
+    ax.xaxis.set_major_locator(hours6)
+    ax.xaxis.set_minor_locator(hours3)
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%d - %H'))
+    ax.tick_params(which='major', length=7, width=2, color='black')
+    ax.tick_params(which='minor', length=4, width=2, color='black')
     ax.grid()
     plt.title("Temperature Over Time")
-    plt.ylabel("Temperature (°C)")
     plt.xlabel("Time (Month-Day Hour)")
-    plt.show()
+    plt.ylabel("Temperature (°C)")
+    DPI = fig.get_dpi()
+    fig.set_size_inches(2400.0/float(DPI),1220.0/float(DPI))
+    if past24:
+        datemin = np.datetime64(x[-1], 'h') - np.timedelta64(24, 'h')
+        datemax = np.datetime64(x[-1], 'h')
+        ax.set_xlim(datemin, datemax)
+        plt.xlabel("Hour")
+        plt.title('Temperature Past 24 Hrs')
+        ax.xaxis.set_major_locator(hours3)
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+        plt.savefig('Temperature_vs_Time_24H.png', dpi=500)
+    plt.savefig('Temperature_vs_Time.png', dpi=500)
+    # plt.show()
     
 def boxplot_environment(df):
     """!
@@ -80,7 +120,11 @@ def boxplot_environment(df):
     ax[0].set_ylabel("Temperature (°C)")
     ax[1].set_ylabel("VOC (kΩ)")
     ax[2].set_ylabel("Humidity (%)")
-    plt.show()
+    plt.subplots_adjust(top=0.95)
+    DPI = fig.get_dpi()
+    fig.set_size_inches(2400.0/float(DPI),1220.0/float(DPI))
+    plt.savefig('Environment_Boxplot.png', dpi=500)
+    # plt.show()
 
 def extract_data_from_log(data, pattern):
     """!
@@ -95,13 +139,9 @@ def extract_data_from_log(data, pattern):
         matches.append(re.match(pattern, line))
     return matches
 
-
-if __name__ == "__main__":
-
-    root_folder = "./logs/Test_Results/"
-
+def generate_plots(root="./logs/", soil_sensor_log="soil_moisture_sensor_1.txt", environment_sensor_log="environment_sensor.txt"):
     # Plot soil moisture data
-    with open(root_folder+"soil_moisture_sensor_1_3.txt", "r") as myfile:
+    with open(root+soil_sensor_log, "r") as myfile:
         data = myfile.readlines()
     matches = extract_data_from_log(data, soil_moisture_pattern)
     data_dict = dict()
@@ -111,10 +151,11 @@ if __name__ == "__main__":
         index_time = match.group(1) + " " + match.group(2)
         index_dt = dt.datetime.strptime(index_time, "%Y-%m-%d %H:%M:%S.%f")
         data_dict[index_dt] = current_val
-    plot_soil_moisture(data_dict)
+    plot_soil_moisture(data_dict, True)
+    plot_soil_moisture(data_dict, False)
 
     # Plot temperature data
-    with open(root_folder+"environment_sensor_3.txt", "r") as myfile:
+    with open(root+environment_sensor_log, "r") as myfile:
         data = myfile.readlines()
     matches = extract_data_from_log(data, environment_sensor_pattern)
     data_dict = dict()
@@ -128,10 +169,27 @@ if __name__ == "__main__":
         data_dict['Temperature'][index_dt] = float(match.group(3))
         data_dict['VOC'][index_dt] = float(match.group(4))
         data_dict['Humidity'][index_dt] = float(match.group(5))
-    plot_temperature(data_dict['Temperature'])
+    plot_temperature(data_dict['Temperature'], True)
+    plot_temperature(data_dict['Temperature'], False)
 
     # Plot environment sensor data
     df = pd.DataFrame.from_dict(data_dict, orient='columns')
     df.reset_index(inplace=True)
     boxplot_environment(df)
+
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('-r', '--root', type=str, default="", help='Root filepath of the log data')
+    parser.add_argument('-s', '--soil', type=str, default="soil_moisture_sensor_1.txt", help='Name of soil moisture sensor log file')
+    parser.add_argument('-e', '--environment', type=str, default="environment_sensor.txt", help='Name of the envrionment sensor log file')
+    args = parser.parse_args()
+
+    if args.root:
+        root_folder = "./logs/"+args.root+"/"
+    else:
+        root_folder = "./logs/"
+
+    generate_plots(root_folder, args.soil, args.environment)
 

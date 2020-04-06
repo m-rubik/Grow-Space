@@ -9,6 +9,7 @@ import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn 
 from src.utilities.sensor_template import Sensor
 from datetime import datetime
+import RPi.GPIO as GPIO
 
 
 class SoilMoistureSensor(Sensor):
@@ -18,7 +19,7 @@ class SoilMoistureSensor(Sensor):
     sensor_board = None
     channel = None 
 
-    def __init__(self, name="default", queue=None, polling_interval=2, channel=None, max_v=3.20, min_v=0.9):
+    def __init__(self, name="default", queue=None, polling_interval=2, channel=None, max_v=3.0, min_v=0.8):
         super().__init__(name, queue, polling_interval)
 
         self.i2c_interface = I2C(board.SCL, board.SDA)
@@ -26,6 +27,12 @@ class SoilMoistureSensor(Sensor):
         self.max_volt = max_v
         self.min_volt = min_v
         self.voltage_list = []
+
+        self.pin = 26
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.pin, GPIO.OUT)
+        self.is_off = True 
+        GPIO.output(self.pin, self.is_off)
 
         if channel == 0:
             self.channel = AnalogIn(self.ads, ADS.P0)
@@ -44,7 +51,12 @@ class SoilMoistureSensor(Sensor):
 
         # Step 1: Take a reading and normalize voltage value
         self._previous_val = self._current_val
+        self.turn_off() # Inverted logic???
+        time.sleep(0.2)
         self._current_val = [self.channel.value, self.channel.voltage, 0]
+        print("==================================", self._current_val)
+        time.sleep(0.1)
+        self.turn_on()
 
         # Step 2: Relay the reading
         self._current_val[2] = (-100/(self.max_volt-self.min_volt))*(self._current_val[1]-self.max_volt)
@@ -60,12 +72,30 @@ class SoilMoistureSensor(Sensor):
         with open(self.log_file_name, "a+") as f:
             f.write(str(current_time)+": "+str(self._current_val)+"\n")
 
+    def toggle(self):
+        if self.is_off:
+            self.turn_on()
+            self.is_off = False
+        else:
+            self.turn_off()
+
+    def turn_on(self):
+        self.is_off = False
+        GPIO.output(self.pin, self.is_off)
+        print("Turning on", self.name)
+
+    def turn_off(self):
+        self.is_off = True
+        GPIO.output(self.pin, self.is_off)
+        print("Turning off", self.name)
+
     def shutdown(self):
         """!
         Shutdown event bound to the atexit condition.
         Currently does not have any special functionality.
         """
         print(self.name, "shutting down.")
+        self.turn_on()
 
 def unit_test():
     import time

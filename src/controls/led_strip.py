@@ -117,7 +117,7 @@ if __name__ == "__main__":
     Just run this as sudo. Check the howto.txt
     """
 
-    from rpi_ws281x import * # TODO: Fix this wildcard import
+    from rpi_ws281x import *
     import time
 
     LED_COUNT = 144
